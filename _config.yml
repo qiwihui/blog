@@ -3,13 +3,12 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: qiwihui
-subtitle:
-description:
-keywords:
+title: QIWIHUI
+subtitle: Don't be evil or greedy.
+description: Don't be evil or greedy.
 author: qiwihui
-language:
-timezone:
+language: zh-CN
+timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -17,6 +16,8 @@ url: https://blog.qiwihui.com
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
+
+cname: blog.qiwihui.com
 
 # Directory
 source_dir: source
@@ -40,19 +41,10 @@ relative_link: false
 future: true
 highlight:
   enable: true
-  line_number: true
+  line_number: false
   auto_detect: false
   tab_replace:
-  
-# Home page setting
-# path: Root path for your blogs index page. (default = '')
-# per_page: Posts displayed per page. (0 = disable pagination)
-# order_by: Posts order. (Order by date descending by default)
-index_generator:
-  path: ''
-  per_page: 10
-  order_by: -date
-  
+
 # Category & Tag
 default_category: uncategorized
 category_map:
@@ -72,10 +64,35 @@ pagination_dir: page
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/
+## RSS订阅
+## git deploy
+plugin:
+  - hexo-generator-feed
+  - hexo-deployer-git
+
+#Feed Atom
+feed:
+  type: atom
+  path: atom.xml
+  limit: 0
+  hub:
+  content: true
 ## Themes: https://hexo.io/themes/
 theme: seventeen
+theme_config:
+  keywords: "qiwihui, blog, 博客, 独立博客, Hexo"
+  disqus: qiwihui
+  google_analytics: UA-46660488-3
+  twitter_id: real_qiwihui
+  social:
+    Twitter: https://twitter.com/real_qiwihui
+    GitHub: https://github.com/qiwihui
+  avatar: /images/avatar.jpg
+  url: https://blog.qiwihui.com
 
 # Deployment
-## Docs: https://hexo.io/docs/deployment.html
+## Docs: http://hexo.io/docs/deployment.html
 deploy:
-  type:
+  type: git
+  repo: git@github.com:qiwihui/blog.git
+  branch: gh-pages
