@@ -13,7 +13,7 @@ install:
 - npm install
 script:
 - git clone https://github.com/qiwihui/hexo-theme-seventeen.git themes/seventeen
-- node src/cli.js qiwihui/blog -d source/_posts/ -u qiwihui -p ${GH_TOKEN} -t blog -c markdown
+- offline-issues qiwihui/blog -d source/_posts/ -u qiwihui -p ${GH_TOKEN} -t blog -c markdown
 - hexo clean
 - hexo generate --deploy --quiet
 branches:
