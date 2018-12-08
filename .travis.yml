@@ -14,6 +14,7 @@ install:
 script:
 - git clone -b custom https://github.com/qiwihui/hexo-theme-seventeen.git themes/seventeen
 - offline-issues qiwihui/blog -d source/_posts/ -u qiwihui -p ${GH_TOKEN} -t blog -c markdown
+- cp hacks/generator.js node_modules/hexo-generator-index/lib/generator.js
 - hexo clean
 - hexo generate --deploy --quiet
 branches:
