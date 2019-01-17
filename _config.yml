@@ -78,14 +78,13 @@ feed:
   hub:
   content: true
 
-theme: apollo
+theme: nella
 archive_generator:
     per_page: 0
     yearly: false
     monthly: false
     daily: false
 
-# theme: seventeen
 theme_config:
   keywords: "qiwihui, blog, 博客, 独立博客, Hexo"
   disqus: blog-qiwihui-com
