@@ -7,7 +7,6 @@ title: QIWIHUI
 subtitle: Don't be evil or greedy.
 description: Don't be evil or greedy.
 author: qiwihui
-language: zh-CN
 timezone: Asia/Shanghai
 
 # URL
@@ -79,13 +78,24 @@ feed:
   content: true
 
 theme: nella
-archive_generator:
-    per_page: 0
-    yearly: false
-    monthly: false
-    daily: false
 
 theme_config:
+  menu:
+    # Home: /
+    Archive: /archives/
+    # Tags: /tags/
+    # Categories: /categories/
+    About: /about/
+    # Rss: /atom.xml
+    Search: /search/
+  archive_generator:
+      per_page: 0
+      yearly: false
+      monthly: false
+      daily: false
+  ga: UA-46660488-3
+  logo: /images/avatar.jpg
+  startyear: 2016
   keywords: "qiwihui, blog, 博客, 独立博客, Hexo"
   disqus: blog-qiwihui-com
   google_analytics: UA-46660488-3
@@ -93,7 +103,6 @@ theme_config:
   social:
     Twitter: https://twitter.com/real_qiwihui
     GitHub: https://github.com/qiwihui
-  avatar: /images/avatar.jpg
   url: https://blog.qiwihui.com
 
 # Deployment
