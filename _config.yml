@@ -81,18 +81,20 @@ theme: nella
 
 theme_config:
   menu:
-    # Home: /
+    Home: /
     Archive: /archives/
     # Tags: /tags/
     # Categories: /categories/
     About: /about/
-    # Rss: /atom.xml
+    Rss: /atom.xml
     Search: /search/
   archive_generator:
       per_page: 0
       yearly: false
       monthly: false
       daily: false
+  gitalk:
+      enable: false
   ga: UA-46660488-3
   logo: /images/avatar.jpg
   startyear: 2016
