@@ -77,8 +77,15 @@ feed:
   limit: 0
   hub:
   content: true
-## Themes: https://hexo.io/themes/
-theme: seventeen
+
+theme: apollo
+archive_generator:
+    per_page: 0
+    yearly: false
+    monthly: false
+    daily: false
+
+# theme: seventeen
 theme_config:
   keywords: "qiwihui, blog, 博客, 独立博客, Hexo"
   disqus: blog-qiwihui-com

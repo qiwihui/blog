@@ -11,8 +11,10 @@ install:
 - npm install hexo-cli -g
 - npm install qiwihui/offline-issues#ghtoken -g
 - npm install
+- npm install --save hexo-renderer-jade hexo-generator-feed hexo-generator-sitemap hexo-browsersync hexo-generator-archive
 script:
-- git clone -b custom https://github.com/qiwihui/hexo-theme-seventeen.git themes/seventeen
+- git clone https://github.com/qiwihui/hexo-theme-apollo.git themes/apollo
+# - git clone -b custom https://github.com/qiwihui/hexo-theme-seventeen.git themes/seventeen
 - offline-issues qiwihui/blog -d source/_posts/ -u qiwihui -p ${GH_TOKEN} -t blog -c markdown
 - cp hacks/generator.js node_modules/hexo-generator-index/lib/generator.js
 - hexo clean
