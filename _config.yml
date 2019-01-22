@@ -99,8 +99,10 @@ theme_config:
   google_adsense:
     enable: true
     data_ad_client: ca-pub-8935595858652656
+  post_copyright:
+    license: 署名-非商业性使用-相同方式共享 | CC BY-NC-SA 4.0
+    license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
   logo: /images/avatar.jpg
-  startyear: 2016
   keywords: "qiwihui, blog, 博客, 独立博客, Hexo"
   disqus: blog-qiwihui-com
   google_analytics: UA-46660488-3
