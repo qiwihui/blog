@@ -96,6 +96,9 @@ theme_config:
   gitalk:
       enable: false
   ga: UA-46660488-3
+  google_adsense:
+    enable: true
+    data_ad_client: ca-pub-8935595858652656
   logo: /images/avatar.jpg
   startyear: 2016
   keywords: "qiwihui, blog, 博客, 独立博客, Hexo"
