@@ -97,9 +97,10 @@ theme_config:
       enable: false
   ga: UA-46660488-3
   google_adsense:
-    enable: false
-    page_level_ads: true
+    page_level_ads: false
+    unit_level_ads: true
     data_ad_client: ca-pub-8935595858652656
+    data_ad_slot: 6325921777
   post_copyright:
     license: 署名-非商业性使用-相同方式共享 | CC BY-NC-SA 4.0
     license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
