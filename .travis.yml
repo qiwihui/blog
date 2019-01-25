@@ -15,14 +15,7 @@ script:
 - git clone -b custom --single-branch https://github.com/qiwihui/hexo-theme-nella.git themes/nella
 - offline-issues qiwihui/blog -d source/_posts/ -u qiwihui -p ${GH_TOKEN} -t blog -c markdown
 - cp hacks/generator.js node_modules/hexo-generator-index/lib/generator.js
-# - hexo clean
-# - hexo generate --deploy --quiet
-deploy:
-  skip_cleanup: true
-  provider: script
-  script: sh deploy.sh
-  on:
-    branch: master
+- sh deploy.sh
 branches:
   only:
   - master
