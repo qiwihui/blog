@@ -12,5 +12,5 @@ find . -path ./.git -prune -o -exec rm -rf {} \; 2> /dev/null
 cd ../
 
 # Run deployment
-- hexo clean
-- hexo generate --deploy --quiet
+hexo clean
+hexo generate --deploy --quiet
