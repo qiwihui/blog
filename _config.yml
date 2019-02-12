@@ -77,6 +77,15 @@ feed:
   hub:
   content: true
 
+markdown:
+  render:
+    html: true
+    xhtmlOut: false
+    breaks: false
+    linkify: true
+    typographer: true
+    quotes: '“”‘’'
+
 theme: nella
 
 theme_config:
