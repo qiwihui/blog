@@ -11,12 +11,12 @@ timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://blog.qiwihui.com
+url: https://qiwihui.com
 root: /
 permalink: :title/
 permalink_defaults:
 
-cname: blog.qiwihui.com
+cname: qiwihui.com
 
 # Directory
 source_dir: source
@@ -121,7 +121,7 @@ theme_config:
   social:
     Twitter: https://twitter.com/real_qiwihui
     GitHub: https://github.com/qiwihui
-  url: https://blog.qiwihui.com
+  url: https://qiwihui.com
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
