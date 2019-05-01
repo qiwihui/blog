@@ -95,10 +95,11 @@ theme_config:
     # Tags: /tags/
     # Categories: /categories/
     About: /about/
-    Rss: /atom.xml
-    Search: /search/
-  archive_generator:
-      per_page: 0
+    RSS: /atom.xml
+    Links: /links/
+    # Search: /search/
+  index_generator:
+      per_page: 100
       yearly: false
       monthly: false
       daily: false

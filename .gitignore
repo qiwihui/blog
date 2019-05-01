@@ -1,6 +1,8 @@
 .DS_Store
+.vscode
 Thumbs.db
 db.json
+comments.json
 *.log
 node_modules/
 public/
