@@ -1,6 +1,12 @@
 name: Hexo Build and Deploy
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  issues:
+    types: [opened, edited, deleted, closed, reopened, labeled, unlabeled]
+
 
 jobs:
     build:
