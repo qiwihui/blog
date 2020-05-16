@@ -107,8 +107,8 @@ theme_config:
       enable: false
   ga: UA-46660488-3
   google_adsense:
-    page_level_ads: false
-    unit_level_ads: true
+    page_level_ads: true
+    unit_level_ads: false
     data_ad_client: ca-pub-8935595858652656
     data_ad_slot: 6325921777
   post_copyright:
