@@ -5,7 +5,7 @@
 # Site
 title: QIWIHUI
 subtitle: Don't be evil or greedy.
-description: Don't be evil or greedy.
+description: 个人技术博客，设计 Python, Rust，数学和生活。
 author: qiwihui
 timezone: Asia/Shanghai
 
@@ -115,7 +115,7 @@ theme_config:
     license: 署名-相同方式共享 | CC BY-SA 4.0
     license_url: https://creativecommons.org/licenses/by-sa/4.0/
   logo: /images/avatar.jpg
-  keywords: "qiwihui, blog, 博客, 独立博客, Hexo"
+  keywords: "qiwihui, blog, 博客, 独立博客, Hexo, gfw, rust, python"
   disqus: blog-qiwihui-com
   google_analytics: UA-46660488-3
   twitter_id: real_qiwihui
