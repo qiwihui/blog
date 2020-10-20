@@ -95,6 +95,7 @@ theme_config:
     # Tags: /tags/
     # Categories: /categories/
     About: /about/
+    Tags: /tags/
     RSS: /atom.xml
     Links: /links/
     # Search: /search/
