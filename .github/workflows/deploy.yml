@@ -6,7 +6,8 @@ on:
       - master
   issues:
     types: [opened, edited, deleted, closed, reopened, labeled, unlabeled]
-
+  repository_dispatch:
+    types: [publish]
 
 jobs:
     build:
