@@ -10,33 +10,44 @@ on:
     types: [publish]
 
 jobs:
-    build:
-      name: Build
-      runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+    - name: Install dependencies
+      run: |
+        npm install hexo-cli -g
+        npm install
+    - name: Get all posts
+      run: |
+        npm install qiwihui/offline-issues#ghtoken -g
+        offline-issues qiwihui/blog -d source/_posts/ -u qiwihui -p ${{ secrets.GITHUB_TOKEN }} -t blog -c markdown
+    - name: Get theme and hack
+      run: |
+        git clone -b custom --single-branch https://github.com/qiwihui/hexo-theme-nella.git themes/nella
+        cp hacks/generator.js node_modules/hexo-generator-index/lib/generator.js
+    - uses: yrpang/github-actions-hexo@master
+      with:
+        deploykey: ${{secrets.DEPLOY_KEY}}
+        username: qiwihui
+        email: qwh005007@gmail.com
+    - name: Cache node modules
+      uses: actions/cache@v1
+      with:
+        path: node_modules
+        key: ${{runner.OS}}-${{hashFiles('**/package-lock.json')}}
+  trigger_publish:
+    needs: build
+    name: update profile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
         with:
-          node-version: '10.x'
-      - name: Install dependencies
-        run: |
-          npm install hexo-cli -g
-          npm install
-      - name: Get all posts
-        run: |
-          npm install qiwihui/offline-issues#ghtoken -g
-          offline-issues qiwihui/blog -d source/_posts/ -u qiwihui -p ${{ secrets.GITHUB_TOKEN }} -t blog -c markdown
-      - name: Get theme and hack
-        run: |
-          git clone -b custom --single-branch https://github.com/qiwihui/hexo-theme-nella.git themes/nella
-          cp hacks/generator.js node_modules/hexo-generator-index/lib/generator.js
-      - uses: yrpang/github-actions-hexo@master
-        with:
-          deploykey: ${{secrets.DEPLOY_KEY}}
-          username: qiwihui
-          email: qwh005007@gmail.com
-      - name: Cache node modules
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: ${{runner.OS}}-${{hashFiles('**/package-lock.json')}}
+          token: ${{ secrets.DEPLOY_KEY }}
+          event-type: update_profile
+          repository: qiwihui/blog
