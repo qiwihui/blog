@@ -48,6 +48,6 @@ jobs:
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v1
         with:
-          token: ${{ secrets.DEPLOY_KEY }}
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
           event-type: update_profile
           repository: qiwihui/blog
