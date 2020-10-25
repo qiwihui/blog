@@ -50,4 +50,4 @@ jobs:
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           event-type: update_profile
-          repository: qiwihui/blog
+          repository: qiwihui/qiwihui
