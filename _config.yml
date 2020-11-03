@@ -86,6 +86,12 @@ markdown:
     typographer: true
     quotes: '“”‘’'
 
+toc:
+  maxdepth: 3
+  class: toc
+  slugify: transliteration
+  decodeEntities: false
+
 theme: nella
 
 theme_config:
