@@ -97,9 +97,8 @@ theme: nella
 theme_config:
   menu:
     Home: /
+    Projects: /projects/
     Archive: /archives/
-    # Tags: /tags/
-    # Categories: /categories/
     About: /about/
     Tags: /tags/
     RSS: /atom.xml
