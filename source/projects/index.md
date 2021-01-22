@@ -22,6 +22,8 @@ title: 我的项目
 
 - [BestNine](https://github.com/qiwihui/bestnine)：Best nine pictures of 2020 on instagram.
 
+- [Yet Another Thread Reader](https://yatr.qiwihui.com)：Another thread reader for twitter.
+
 ## 其他
 
 - [SMSFilters](https://github.com/qiwihui/SMSFilters)：基于机器学习的 iOS 中文垃圾短信过滤 App。
