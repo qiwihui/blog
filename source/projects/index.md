@@ -10,19 +10,21 @@ title: 我的项目
 
 - [pocket_readings](https://github.com/qiwihui/pocket_readings)：每一段时间的 pocket 文章阅读情况的记录。
 
-- [justdeleteme.CN](justdeleteme.qiwihui.com/)：中国互联网帐号注销难易度指南。
+- <del>[justdeleteme.CN](justdeleteme.qiwihui.com/)：中国互联网帐号注销难易度指南。</del>
 
 ## Python 相关
 
 - [每日一题](https://codedays.app/)：通过每天发送一道编程题目邮件联系编程技能。
 
-- [Python 不定期周报](pyweekly.qiwihui.com/)。
+- [文章转播客：Podcastx](https://podcastx.qiwihui.com/)：使用最新文本转语音技术为您喜欢的新闻、博客生成逼真的语音朗读。
+
+- [Yet Another Thread Reader](https://yatr.qiwihui.com)：Another thread reader for twitter.
 
 - [阅读播客](https://rs.qiwihui.com)：每天播报最新的科技相关新闻，Youtube频道：[What Has Happened](https://www.youtube.com/channel/UCtBC7TAJdSvsxT1F_sYceXA)。
 
-- [BestNine](https://github.com/qiwihui/bestnine)：Best nine pictures of 2020 on instagram.
+- [Python 不定期周报](https://pyweekly.qiwihui.com/)。
 
-- [Yet Another Thread Reader](https://yatr.qiwihui.com)：Another thread reader for twitter.
+- <del>[BestNine](https://github.com/qiwihui/bestnine)：Best nine pictures of 2020 on instagram.</del>
 
 ## 其他
 
