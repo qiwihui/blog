@@ -26,6 +26,7 @@ jobs:
       run: |
         npm install qiwihui/offline-issues#ghtoken -g
         offline-issues qiwihui/blog -d source/_posts/ -u qiwihui -p ${{ secrets.GITHUB_TOKEN }} -t blog -c markdown
+        ls source/_posts/
     - name: Get theme and hack
       run: |
         git clone -b custom --single-branch https://github.com/qiwihui/hexo-theme-nella.git themes/nella
