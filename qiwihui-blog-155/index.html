@@ -1,0 +1,247 @@
+<!DOCTYPE html><html lang><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 如何创建一个代币承销商 dApp · QIWIHUI</title><meta name="description" content="如何创建一个代币承销商 dApp - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-155/index.html"><meta property="og:title" content="如何创建一个代币承销商 dApp"><meta property="og:description" content="如何创建一个代币承销商 dApp"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">如何创建一个代币承销商 dApp</h1><div class="post-info">Feb 28, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/技术/" class="post-category">#技术</a><span>33 min. read</span></div><div class="post-content"><p>这篇教程我们来完成 scaffold-eth 项目的第二个挑战：<a href="https://speedrunethereum.com/challenge/token-vendor" target="_blank" rel="noopener">代币承销商</a>，我们可以在网站 <a href="http://speedrunethereum.com/" target="_blank" rel="noopener">speedrunethereum.com</a> 中查看或者直接查看对应的 Github 连接：<a href="https://github.com/scaffold-eth/scaffold-eth-typescript-challenges" target="_blank" rel="noopener">scaffold-eth/scaffold-eth-typescript-challenges</a>。</p>
+<p>这个挑战的目的是创建一个自己的ERC20代币，并编写承销商合约，实现用户对代币的购买和卖出。下面，我们一步步完成这个过程。</p>
+<a id="more"></a>
+<h3><span id="yi-an-zhuang-bing-she-zhi-huan-jing">一、安装并设置环境</span></h3>
+<p>首先，我们下载项目，并初始化环境。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/scaffold-eth/scaffold-eth-typescript-challenges.git challenge-2-token-vendor</span><br><span class="line"><span class="built_in">cd</span> challenge-2-token-vendor</span><br><span class="line">git checkout challenge-2-token-vendor</span><br><span class="line">yarn install</span><br></pre></td></tr></table></figure>
+<p>安装好依赖包之后，我们可以看到项目的主要目录为 <code>packages</code>，包含一下子目录</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">packages/</span><br><span class="line">├── hardhat-ts</span><br><span class="line">├── services</span><br><span class="line">├── subgraph</span><br><span class="line">└── vite-app-ts</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ul>
+<li><code>hardhat-ts</code> 是项目合约代码，包含合约文件以及合约的部署等；</li>
+<li><code>services</code> The Graph 协议的 graph-node 配置；</li>
+<li><code>subgraph</code> The Graph 协议相应的处理设置，包括 mappings，数据结构等；</li>
+<li><code>vite-app-ts</code> 前端项目，主要负责用户与合约交互。</li>
+</ul>
+<p>The Graph 协议是去中心化的区块链数据索引协议，本片教程中暂时不涉及。我们需要启动三个命令终端，分别用于运行以下命令：</p>
+<ul>
+<li><code>yarn chain</code> 使用 hardhat 运行本地区块链，作为合约部署的本地测试链；</li>
+<li><code>yarn deploy</code> 编译、部署和发布合约；</li>
+<li><code>yarn start</code> 启动 react 应用的前端；</li>
+</ul>
+<p>按顺序分别运行上述命令之后，此时我们就可以在 <code>http://localhost:3000</code>中访问我们的应用。如果需要重新部署合约，运行 <code>yarn deploy --reset</code> 即可。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/155913563-c0e773b7-60d1-4e5f-bdf7-2c4b0ae1df74.png" alt="yarn-start"></p>
+<h2><span id="er-bian-xie-erc20-dai-bi-he-yue">二、编写 ERC20 代币合约</span></h2>
+<p>现在我们进入合约编写部分。我们的目标是编写一个 ERC20 代币合约，并为创建者铸造 1000 个代币。</p>
+<h3><span id="shi-me-shi-erc20-he-yue-biao-zhun">什么是 ERC20 合约标准</span></h3>
+<p>代币可以在以太坊中表示任何东西，比如信誉积分，黄金等，而 ERC-20 提供了一个同质化代币的标准，每个代币与另一个代币（在类型和价值上）完全相同。</p>
+<p>ERC20是各个代币的标准接口，包含以下方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 名称</span><br><span class="line">function name() public view returns (string)</span><br><span class="line">// 符号</span><br><span class="line">function symbol() public view returns (string)</span><br><span class="line">// 合约使用的小数位，常见为 18</span><br><span class="line">function decimals() public view returns (uint8)</span><br><span class="line">// 代币总供应量</span><br><span class="line">function totalSupply() public view returns (uint256)</span><br><span class="line">// 地址的代币持有量</span><br><span class="line">function balanceOf(address _owner) public view returns (uint256 balance)</span><br><span class="line">// 代币划转</span><br><span class="line">function transfer(address _to, uint256 _value) public returns (bool success)</span><br><span class="line">// 用于划转代币，但这些代币不一定属于调用合约的用户</span><br><span class="line">function transferFrom(address _from, address _to, uint256 _value) public returns (bool success)</span><br><span class="line">// 合约授予用户代币管理权限，调用者设置 spender 消费自己 amount 数量的代币</span><br><span class="line">function approve(address _spender, uint256 _value) public returns (bool success)</span><br><span class="line">// 检查代币的可消费余额</span><br><span class="line">function allowance(address _owner, address _spender) public view returns (uint256 remaining)</span><br><span class="line"></span><br><span class="line">// 事件</span><br><span class="line">// 代币转移事件</span><br><span class="line">event Transfer(address indexed from, address indexed to, uint256 value);</span><br><span class="line">// 当调用 approve 时，触发 Approval 事件</span><br><span class="line">event Approval(</span><br><span class="line">    address indexed owner,</span><br><span class="line">    address indexed spender,</span><br><span class="line">    uint256 value</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>其中，合约必需设置 <code>totalSupply</code>、 <code>balanceOf</code> 、 <code>transfer</code> 、 <code>transferFrom</code>、 <code>approve</code> 以及 <code>allowance</code> 这六个函数，其他如 <code>name</code>、 <code>symbol</code> 和 <code>decimalsze</code> 则是可选实现。</p>
+<h3><span id="shi-yong-openzeppelin-ku">使用 OpenZeppelin 库</span></h3>
+<p>如果从上述的合约标准开始，我们需要实现这六个函数的方法，幸运的是，OpenZeppelin 库是一个成熟的合约开发库，为我们实现了 ERC20 代币基本功能，我们可以基于这个库开发我们的 ERC20 代币，这将大大减少我们的工作量。我们可以在 <a href="https://docs.openzeppelin.com/contracts/4.x/erc20" target="_blank" rel="noopener">ERC20 标准</a> 页面查到相关的使用方法。</p>
+<p>除了 ERC20，OpenZeppelin 库还提供了其他合约标准的实现，比如 ERC721，ERC777等，以及大量的经过安全审计的库，这些对于我们快速开发和实现安全的合约代码提供了支持。</p>
+<h3><span id="bian-xie-dai-ma">编写代码</span></h3>
+<p>我们使用 ERC20.sol 来实现我们的合约，创见一个名为 <code>GOLD</code> 的代币，代币符号为 <code>GLD</code>，并为创建者铸造 1000 个代币：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pragma solidity &gt;=0.8.0 &lt;0.9.0;</span><br><span class="line">// SPDX-License-Identifier: MIT</span><br><span class="line"></span><br><span class="line">import <span class="string">'@openzeppelin/contracts/token/ERC20/ERC20.sol'</span>;</span><br><span class="line"></span><br><span class="line">// learn more: https://docs.openzeppelin.com/contracts/3.x/erc20</span><br><span class="line"></span><br><span class="line">  constructor() public ERC20(<span class="string">'Gold'</span>, <span class="string">'GLD'</span>) &#123;</span><br><span class="line">    // 铸造 1000 * 10 ** 18 给 msg.sender</span><br><span class="line">    _mint(msg.sender, 1000 * 10 ** 18);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中， <code>_mint</code> 方法是 ERC20 提供的方法，该方法创建相应数量的代币，并将代币发送给账户：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/** @dev Creates `amount` tokens and assigns them to `account`, increasing</span><br><span class="line"> * the total supply.</span><br><span class="line"> *</span><br><span class="line"> * Emits a &#123;Transfer&#125; event with `from` set to the zero address.</span><br><span class="line"> *</span><br><span class="line"> * Requirements:</span><br><span class="line"> *</span><br><span class="line"> * - `account` cannot be the zero address.</span><br><span class="line"> */</span><br><span class="line">function _mint(address account, uint256 amount) internal virtual &#123;</span><br><span class="line">    require(account != address(0), &quot;ERC20: mint to the zero address&quot;);</span><br><span class="line"></span><br><span class="line">    _beforeTokenTransfer(address(0), account, amount);</span><br><span class="line"></span><br><span class="line">    _totalSupply += amount;</span><br><span class="line">    _balances[account] += amount;</span><br><span class="line">    emit Transfer(address(0), account, amount);</span><br><span class="line"></span><br><span class="line">    _afterTokenTransfer(address(0), account, amount);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码地址：<a href="https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol#L248" target="_blank" rel="noopener">https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol#L248</a></p>
+<h3><span id="bu-shu-jiao-ben">部署脚本</span></h3>
+<p>接着我们使用脚本进行部署，并向地址发送 1000 代币，地址可以在 <code>http://localhost:3000</code> 中连接我们的 Metamask 得到。部署脚本地址：<code>packages/hardhat-ts/deploy/00_deploy_your_token.ts</code>。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line">  const yourToken = await ethers.getContract(&apos;YourToken&apos;, deployer);</span><br><span class="line"></span><br><span class="line">  // 发送代币</span><br><span class="line">  const result = await yourToken.transfer(&apos;0x169841AA3024cfa570024Eb7Dd6Bf5f774092088&apos;, ethers.utils.parseEther(&apos;1000&apos;));</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>然后我们运行 <code>yarn deploy --reset</code> 部署合约。</p>
+<h3><span id="yan-zheng">验证</span></h3>
+<ol>
+<li>
+<p>使用 Debug 页面功能进行检查，查看用户账户中的代币余额，可以看到账户中有 1000 个代币；</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/155913531-951312e7-ea2e-497e-a323-722ecd295ca4.png" alt="balance"></p>
+</li>
+<li>
+<p>使用 <code>transfer()</code> 将代币转给另一个账户；</p>
+<p>在 Debug 中，使用 <code>transfer</code> 功能，输入目标钱包地址 <code>0xc12ae5Ba30Da6eB11978939379D383beb5Df9b33</code>，以及发送的数量 <code>1000000000000000000000</code>（1000*1E18，1后边有21个0），点击发送。等交易完成之后，可以分别查看原来账户和目标账户的代币数量，可以看到原来的变成了 0，目标账户是 1000。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/155913544-122451a0-8533-46cf-9aa3-7f90e8fa59ab.png" alt="transfer"></p>
+</li>
+</ol>
+<p>注意：</p>
+<ul>
+<li>如果发送时出现余额不足的提示，可以使用页面左下角的 Faucet 为账户充值。</li>
+<li>验证完成之后，需要将 <code>00_deploy_your_token.ts</code> 中的 transfer 代码注释了，不然会影响之后的步骤。</li>
+</ul>
+<h2><span id="san-cheng-xiao-shang-he-yue-gou-mai">三、承销商合约 — 购买</span></h2>
+<p>接下来，我们创建一个承销商合约，这个合约允许用户通过以太购买代币。</p>
+<p>为了完成这个功能，我们需要：</p>
+<ol>
+<li>设置兑换比例，教程中为 <code>tokensPerEth=100</code> ，也就是 1个以太可以兑换 100 GLD；</li>
+<li>实现 <code>buyTokens</code> 函数，这个函数必须是 <code>payable</code>，可以接受发送的以太，计算对应的 <code>GLD</code> 数量，然后使用 <code>transfer</code> 将相应的 <code>GLD</code> 代币发送给购买者 <code>msg.sender</code>；</li>
+<li>触发一个 <code>BuyTokens</code> 事件，记录购买者，使用的 ETH 数量以及购买的 GLD 数量；</li>
+<li>实现第二个函数 <code>withdraw</code>，用来将合约中的 ETH 全部提取到合约的所有者（owner）地址。我们可以使用两种方式设置合约的所有者：
+<ol>
+<li>部署时，使用我们能控制的钱包地址进行部署，并设置所有者；</li>
+<li>使用任意地址部署，部署结束之后进行合约所有权转移；</li>
+</ol>
+</li>
+</ol>
+<p>在这个教程中，我们使用第二个方式，这样我们可以不用将我们控制的地址的私钥添加到项目配置中，降低暴露。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pragma solidity &gt;=0.8.0 &lt;0.9.0;</span><br><span class="line">// SPDX-License-Identifier: MIT</span><br><span class="line"></span><br><span class="line">import &quot;@openzeppelin/contracts/access/Ownable.sol&quot;;</span><br><span class="line">import &apos;./YourToken.sol&apos;;</span><br><span class="line"></span><br><span class="line">contract Vendor is Ownable &#123;</span><br><span class="line">  YourToken yourToken;</span><br><span class="line">  uint256 public tokensPerEth = 100;</span><br><span class="line"></span><br><span class="line">  // 购买代币事件</span><br><span class="line">  event BuyTokens(address buyer, uint256 amountOfEth, uint256 amountOfTokens);</span><br><span class="line"></span><br><span class="line">  constructor(address tokenAddress) public &#123;</span><br><span class="line">    yourToken = YourToken(tokenAddress);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 允许用户使用 EHT 购买代币</span><br><span class="line">  function buyTokens() payable public &#123;</span><br><span class="line">    // 检查是否有足够的 ETH</span><br><span class="line">    require(msg.value &gt; 0, &quot;Not enought ether&quot;);</span><br><span class="line"></span><br><span class="line">    uint256 amountOfTokens = msg.value * tokensPerEth;</span><br><span class="line"></span><br><span class="line">    // 检查承销商是否有足够的代币</span><br><span class="line">    uint256 tokenBalance = yourToken.balanceOf(address(this));</span><br><span class="line">    require(tokenBalance &gt; amountOfTokens, &quot;Not enought tokens&quot;);</span><br><span class="line">    </span><br><span class="line">    // 发送代币</span><br><span class="line">    bool sent =  yourToken.transfer(msg.sender, amountOfTokens);</span><br><span class="line">    require(sent, &quot;Failed to transfer token to the buyer&quot;);</span><br><span class="line"></span><br><span class="line">    emit BuyTokens(msg.sender, msg.value, amountOfTokens);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 允许所有者取出所有代币</span><br><span class="line">  function withdraw() public onlyOwner &#123;</span><br><span class="line"></span><br><span class="line">    uint256 balance = address(this).balance;</span><br><span class="line">    require(balance &gt; 0, &quot;No ether to withdraw&quot;);</span><br><span class="line">    </span><br><span class="line">    // 发送代币给所有者</span><br><span class="line">    (bool sent, ) = msg.sender.call&#123;value: balance&#125;(&quot;&quot;);</span><br><span class="line">    require(sent, &quot;Failed to withdraw balance&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">  // ToDo: create a sellTokens() function:</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中， <code>Ownable</code> 可以进行权限控制，合约提供的<code>onlyOwner</code>修改器可以用来限制某些特定合约函数的访问权限。在这里，我们的 <code>withdraw</code> 函数必需限制合约的所有这才能提取所有的资金。同时，这个合约提供了 <code>transferOwnership</code> 函数，可以用来转移合约的所有者，这个将在我们的脚本部分中使用。</p>
+<p>对于部署脚本，我们需要完成以下功能：</p>
+<ol>
+<li>在部署的时候将所有的代币发送到承销商的合约地址 <code>vendor.address</code> ，而不是我们之前的地址；</li>
+<li>为了能将承销商合约中的所有 ETH 提取出来，需要将合约的所有权 <code>ownership</code> 转移到我们能控制的地址，比如我们在前端使用的地址。</li>
+</ol>
+<p>脚本位置： <code>packages/hardhat-ts/deploy/01_deploy_vendor.ts</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> // You might need the previously deployed yourToken:</span><br><span class="line"> const yourToken = await ethers.getContract(&apos;YourToken&apos;, deployer);</span><br><span class="line"></span><br><span class="line"> // 部署承销商合约</span><br><span class="line"> await deploy(&apos;Vendor&apos;, &#123;</span><br><span class="line">   // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy</span><br><span class="line">   from: deployer,</span><br><span class="line">   args: [yourToken.address],</span><br><span class="line">   log: true,</span><br><span class="line"> &#125;);</span><br><span class="line">// 获取部署的合约</span><br><span class="line"> const vendor = await ethers.getContract(&apos;Vendor&apos;, deployer);</span><br><span class="line"></span><br><span class="line"> // 发送 1000 个代币给承销商</span><br><span class="line"> console.log(&apos;\n 🏵  Sending all 1000 tokens to the vendor...\n&apos;);</span><br><span class="line"> await yourToken.transfer(vendor.address, ethers.utils.parseEther(&apos;1000&apos;));</span><br><span class="line"></span><br><span class="line"> // 转移所有权</span><br><span class="line"> await vendor.transferOwnership(&apos;0x169841AA3024cfa570024Eb7Dd6Bf5f774092088&apos;);</span><br></pre></td></tr></table></figure>
+<h3><span id="bu-shu-he-yue">部署合约</span></h3>
+<p>完成上述代码之后，我们重新部署我们的合约：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yarn deploy --reset</span><br></pre></td></tr></table></figure>
+<p>对应的输出结果为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ yarn deploy --reset</span><br><span class="line"></span><br><span class="line">Compiling 7 files with 0.8.6</span><br><span class="line">Generating typings for: 7 artifacts in dir: ../vite-app-ts/src/generated/contract-types for target: ethers-v5</span><br><span class="line">Successfully generated 15 typings!</span><br><span class="line">Compilation finished successfully</span><br><span class="line">deploying &quot;YourToken&quot; (tx: 0x758e492bc71e9de37cf109aa6aa966fc6c042d086babce32ddd76af02ec22acb)...: deployed at 0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82 with 639137 gas</span><br><span class="line">deploying &quot;Vendor&quot; (tx: 0x7b0402937081b72f59abb9994e3773b0283116e1106665766af31bf246b466cc)...: deployed at 0x9A676e781A523b5d0C0e43731313A708CB607508 with 482680 gas</span><br><span class="line"></span><br><span class="line"> 🏵  Sending all 1000 tokens to the vendor...</span><br></pre></td></tr></table></figure>
+<p>可以从命令行输出中看到合约部署的地址为：</p>
+<ul>
+<li>承销商合约地址： <code>0x9A676e781A523b5d0C0e43731313A708CB607508</code></li>
+<li>代币地址： <code>0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82</code></li>
+</ul>
+<h3><span id="yan-zheng">验证</span></h3>
+<p>我们通过以下步骤进行验证：</p>
+<ol>
+<li>
+<p>通过 Debug 页面查看承销商 （Vendor）合约地址初始时是否有 1000 个代币；</p>
+</li>
+<li>
+<p>使用 0.1 ETH 购买 10 个 GLD：我们使用 Buy Tokens 功能购买 10 个代币，可以看到此时的价格约为 0.1 ETH（ETH 价格为 2766.7 美元）。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/155913532-492474ae-5a67-4fcc-8c37-eb768c8ae18e.png" alt="buyTokens"></p>
+</li>
+<li>
+<p>将购买的代币发送给另一个账户：同样使用页面 Transfer Tokens 功能完成；</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/155913543-fe8f7c93-aa6b-4333-8c3f-87dd30ced5d6.png" alt="tokenBalance"></p>
+</li>
+<li>
+<p>使用所有者账户，查看是否能全部取出合约中的 ETH：在 Debug 页面，我们使用 <code>withdraw</code> 功能，尝试将承销商合约中的 ETH 全部取出，可以看到，当交易完成以后，合约的余额变为了0：</p>
+</li>
+</ol>
+<pre><code>![vendorBalanceBefore](https://user-images.githubusercontent.com/3297411/155913554-5f0e78f5-0836-4d53-b0b8-adb44a37413c.png)
+
+变为：
+
+![vendorBalanceAfter](https://user-images.githubusercontent.com/3297411/155913548-289343ef-d51a-4fbb-8134-071918589636.png)
+</code></pre>
+<h2><span id="si-cheng-xiao-shang-he-yue-hui-gou">四、承销商合约 — 回购</span></h2>
+<p>接下来我们添加承销商合约的回购代币功能，也就是允许用户通过发送代币给承销商合约，承销商合约将对应的ETH发给用户账户。但是在以太坊中，合约只能通过 payable 接受 ETH，无法接受直接发送代币，如果直接向合约发送代币，代币将会永久消失。所以在 ERC20 标准中，我们需要使用 <code>approve</code> 和 <code>tranferFrom</code> 者两个函数来完成这个过程。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">approve(address spender, uint256 amount) -&gt; bool</span><br><span class="line">transferFrom(address from, address to, uint256 amount) -&gt; bool</span><br></pre></td></tr></table></figure>
+<p>首先，用户通过调用 <code>approve</code> 函数授权承销商合约（ <code>spender</code> ）处理 <code>amount</code> 数量的代币，然后，调用 <code>transferFrom</code> 函数将代币从用户账户（ <code>from</code> ）转移 <code>amount</code> 数量的代币给承销商合约（ <code>to</code> ）。这其中的难点在于 <code>approve</code> 和 <code>transferFrom</code> 函数。我们来看一下这两个函数在 OpenZeppelin 中具体实现，首先是 <code>approve</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  mapping(address =&gt; mapping(address =&gt; uint256)) private _allowances;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">   * @dev See &#123;IERC20-approve&#125;.</span><br><span class="line">   *</span><br><span class="line">   * NOTE: If `amount` is the maximum `uint256`, the allowance is not updated on</span><br><span class="line">   * `transferFrom`. This is semantically equivalent to an infinite approval.</span><br><span class="line">   *</span><br><span class="line">   * Requirements:</span><br><span class="line">   *</span><br><span class="line">   * - `spender` cannot be the zero address.</span><br><span class="line">   */</span><br><span class="line">  function approve(address spender, uint256 amount) public virtual override returns (bool) &#123;</span><br><span class="line">      address owner = _msgSender();</span><br><span class="line">      _approve(owner, spender, amount);</span><br><span class="line">      return true;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  /**</span><br><span class="line">   * @dev Sets `amount` as the allowance of `spender` over the `owner` s tokens.</span><br><span class="line">   *</span><br><span class="line">   * This internal function is equivalent to `approve`, and can be used to</span><br><span class="line">   * e.g. set automatic allowances for certain subsystems, etc.</span><br><span class="line">   *</span><br><span class="line">   * Emits an &#123;Approval&#125; event.</span><br><span class="line">   *</span><br><span class="line">   * Requirements:</span><br><span class="line">   *</span><br><span class="line">   * - `owner` cannot be the zero address.</span><br><span class="line">   * - `spender` cannot be the zero address.</span><br><span class="line">   */</span><br><span class="line">  function _approve(</span><br><span class="line">      address owner,</span><br><span class="line">      address spender,</span><br><span class="line">      uint256 amount</span><br><span class="line">  ) internal virtual &#123;</span><br><span class="line">      require(owner != address(0), &quot;ERC20: approve from the zero address&quot;);</span><br><span class="line">      require(spender != address(0), &quot;ERC20: approve to the zero address&quot;);</span><br><span class="line"></span><br><span class="line">      _allowances[owner][spender] = amount;</span><br><span class="line">      emit Approval(owner, spender, amount);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>从上面可以看出， <code>approve</code> 函数调用了 <code>_approve</code>， <code>_approve</code> 中用 <code>_allowances</code> 这个哈希记录了 <code>owner</code> 和 <code>spender</code> 之间的授权数量 <code>amount</code>。因此可以推断， <code>transferFrom</code> 函数以及其他需要授权情况的函数都使用了 <code>_allowances</code> 这个变量，比如 <code>allowance</code> 函数。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @dev See &#123;IERC20-allowance&#125;.</span><br><span class="line"> */</span><br><span class="line">function allowance(address owner, address spender) public view virtual override returns (uint256) &#123;</span><br><span class="line">    return _allowances[owner][spender];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @dev Updates `owner` s allowance for `spender` based on spent `amount`.</span><br><span class="line"> *</span><br><span class="line"> * Does not update the allowance amount in case of infinite allowance.</span><br><span class="line"> * Revert if not enough allowance is available.</span><br><span class="line"> *</span><br><span class="line"> * Might emit an &#123;Approval&#125; event.</span><br><span class="line"> */</span><br><span class="line">function _spendAllowance(</span><br><span class="line">    address owner,</span><br><span class="line">    address spender,</span><br><span class="line">    uint256 amount</span><br><span class="line">) internal virtual &#123;</span><br><span class="line">    uint256 currentAllowance = allowance(owner, spender);</span><br><span class="line">    if (currentAllowance != type(uint256).max) &#123;</span><br><span class="line">        require(currentAllowance &gt;= amount, &quot;ERC20: insufficient allowance&quot;);</span><br><span class="line">        unchecked &#123;</span><br><span class="line">            _approve(owner, spender, currentAllowance - amount);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @dev Moves `amount` of tokens from `sender` to `recipient`.</span><br><span class="line"> *</span><br><span class="line"> * This internal function is equivalent to &#123;transfer&#125;, and can be used to</span><br><span class="line"> * e.g. implement automatic token fees, slashing mechanisms, etc.</span><br><span class="line"> *</span><br><span class="line"> * Emits a &#123;Transfer&#125; event.</span><br><span class="line"> *</span><br><span class="line"> * Requirements:</span><br><span class="line"> *</span><br><span class="line"> * - `from` cannot be the zero address.</span><br><span class="line"> * - `to` cannot be the zero address.</span><br><span class="line"> * - `from` must have a balance of at least `amount`.</span><br><span class="line"> */</span><br><span class="line">function _transfer(</span><br><span class="line">    address from,</span><br><span class="line">    address to,</span><br><span class="line">    uint256 amount</span><br><span class="line">) internal virtual &#123;</span><br><span class="line">    require(from != address(0), &quot;ERC20: transfer from the zero address&quot;);</span><br><span class="line">    require(to != address(0), &quot;ERC20: transfer to the zero address&quot;);</span><br><span class="line"></span><br><span class="line">    _beforeTokenTransfer(from, to, amount);</span><br><span class="line"></span><br><span class="line">    uint256 fromBalance = _balances[from];</span><br><span class="line">    require(fromBalance &gt;= amount, &quot;ERC20: transfer amount exceeds balance&quot;);</span><br><span class="line">    unchecked &#123;</span><br><span class="line">        _balances[from] = fromBalance - amount;</span><br><span class="line">    &#125;</span><br><span class="line">    _balances[to] += amount;</span><br><span class="line"></span><br><span class="line">    emit Transfer(from, to, amount);</span><br><span class="line"></span><br><span class="line">    _afterTokenTransfer(from, to, amount);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @dev See &#123;IERC20-transferFrom&#125;.</span><br><span class="line"> *</span><br><span class="line"> * Emits an &#123;Approval&#125; event indicating the updated allowance. This is not</span><br><span class="line"> * required by the EIP. See the note at the beginning of &#123;ERC20&#125;.</span><br><span class="line"> *</span><br><span class="line"> * NOTE: Does not update the allowance if the current allowance</span><br><span class="line"> * is the maximum `uint256`.</span><br><span class="line"> *</span><br><span class="line"> * Requirements:</span><br><span class="line"> *</span><br><span class="line"> * - `from` and `to` cannot be the zero address.</span><br><span class="line"> * - `from` must have a balance of at least `amount`.</span><br><span class="line"> * - the caller must have allowance for ``from``&apos;s tokens of at least</span><br><span class="line"> * `amount`.</span><br><span class="line"> */</span><br><span class="line">function transferFrom(</span><br><span class="line">    address from,</span><br><span class="line">    address to,</span><br><span class="line">    uint256 amount</span><br><span class="line">) public virtual override returns (bool) &#123;</span><br><span class="line">    address spender = _msgSender();</span><br><span class="line">    _spendAllowance(from, spender, amount);</span><br><span class="line">    _transfer(from, to, amount);</span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 <code>transferFrom</code> 函数中，先使用 <code>_spendAllowance</code> 进行授权数量检查并更新授权数量，然后再使用 <code>_transfer</code> 进行代币划转，而 <code>_spendAllowance</code> 中正是调用了 <code>allowance</code> 这个函数。</p>
+<h3><span id="he-yue-shi-xian">合约实现</span></h3>
+<p>合约的函数实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">  event SellTokens(address seller, uint256 amountOfTokens, uint256 amountOfETH);</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">  // 允许用户使用代币换回 ETH</span><br><span class="line">  function sellTokens(uint256 amountToSell) public &#123;</span><br><span class="line">    // 价差是否合理</span><br><span class="line">    require(amountToSell &gt; 0, &quot;Amount to sell must be greater than 0&quot;);</span><br><span class="line">    </span><br><span class="line">    // 检查用户是否有足够的代币</span><br><span class="line">    uint256 userBalance = yourToken.balanceOf(msg.sender));</span><br><span class="line">    require(userBalance &gt;= amountToSell, &quot;Not enought tokens&quot;);</span><br><span class="line"></span><br><span class="line">    // 检查承销商是否有足够的 ETH</span><br><span class="line">    uint256 amountOfEthNeeded = amountToSell / tokensPerEth;</span><br><span class="line">    uint256 venderBalance = address(this).balance;</span><br><span class="line">    require(amountOfEthNeeded &lt;= venderBalance, &quot;Not enought ether&quot;);</span><br><span class="line"></span><br><span class="line">    // 用户发送代币给承销商</span><br><span class="line">    bool sent =  yourToken.transferFrom(msg.sender, address(this), amountToSell);</span><br><span class="line">    require(sent, &quot;Failed to transfer tokens from seller to vender&quot;);</span><br><span class="line"></span><br><span class="line">    // 承销商发送 ETH 给用户</span><br><span class="line">    (bool sent, ) = msg.sender.call&#123;value: amountOfEthNeeded&#125;(&quot;&quot;);</span><br><span class="line">    require(sent, &quot;Failed to send ether from vender to seller&quot;);</span><br><span class="line"></span><br><span class="line">    emit SellTokens(msg.sender, amountToSell, amountOfEthNeeded);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="bu-shu-he-yue">部署合约</span></h3>
+<p>我们再次部署新的合约：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ yarn deploy --reset</span><br><span class="line">Compiling 7 files with 0.8.6</span><br><span class="line"></span><br><span class="line">Generating typings for: 7 artifacts in dir: ../vite-app-ts/src/generated/contract-types for target: ethers-v5</span><br><span class="line">Successfully generated 15 typings!</span><br><span class="line">Compilation finished successfully</span><br><span class="line">deploying &quot;YourToken&quot; (tx: 0xd087814faeb6a8f1a7205d443550419b68d252bcd071e30c7965844105b761ac)...: deployed at 0x68B1D87F95878fE05B998F19b66F4baba5De1aed with 639137 gas</span><br><span class="line">deploying &quot;Vendor&quot; (tx: 0xafaf257948f8c87e0a836eac6e2bbc1ec38026a5c2a0dfc0f71823a4ace635fd)...: deployed at 0x3Aa5ebB10DC797CAC828524e59A333d0A371443c with 694098 gas</span><br><span class="line"></span><br><span class="line"> 🏵  Sending all 1000 tokens to the vendor...</span><br></pre></td></tr></table></figure>
+<p>此时，合约地址变为：</p>
+<ul>
+<li>承销商合约地址： <code>0x3Aa5ebB10DC797CAC828524e59A333d0A371443c</code></li>
+<li>代币地址： <code>0x68B1D87F95878fE05B998F19b66F4baba5De1aed</code></li>
+</ul>
+<h3><span id="yan-zheng">验证</span></h3>
+<p>验证过程需要包含两步：</p>
+<ol>
+<li>
+<p>先在 Debug 页面使用代币的 <code>approve</code> 允许承销商合约处理 10 个代币：</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/155913525-657975ef-e67c-4df6-bf03-36eff6801d7e.png" alt="approve"></p>
+<p>在 <code>编辑权限</code> 中，我们可以查看到授权的代币数量：</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/155913530-117ea47b-8000-4f8c-be5c-cd21a118ed04.png" alt="approveAmount"></p>
+</li>
+<li>
+<p>使用承销商的 <code>sellTokens</code> 将 10 个代币换成 ETH。如果上一步没有使用 <code>approve</code> 的话，程序会报错。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/155913537-c085ad8b-295b-42b8-8755-ae9a43eec4e9.png" alt="sellTokens"></p>
+</li>
+</ol>
+<p>到这一步，我们就完成了合约的编写。</p>
+<h2><span id="wu-bu-shu-dao-ce-shi-wang-luo">五、部署到测试网络</span></h2>
+<p>我们将部署合约到测试网络中，使用的测试网络是 <code>rinkeby</code> ：</p>
+<ol>
+<li>修改以下变量为 <code>rinkeby</code> ：
+<ol>
+<li><code>packages/hardhat-ts/hardhat.config.ts</code> 的 <code>defaultNetwork</code> 变量，</li>
+<li><code>packages/vite-app-ts/src/config/providersConfig.ts</code> 中的 <code>targetNetworkInfo</code> 变量</li>
+</ol>
+</li>
+<li>查看可用账户： <code>yarn account</code> ，如果没有找到可用账户，则使用 <code>yarn generate</code> 生成；</li>
+<li>使用 <a href="https://faucet.paradigm.xyz/" target="_blank" rel="noopener">faucet.paradigm.xyz</a> 获取一些测试用的的 ETH，可以使用对应的区块浏览器查看账户情况，比如 <a href="https://rinkeby.etherscan.io/" target="_blank" rel="noopener">https://rinkeby.etherscan.io/</a>，当我们完成测试用币的申请之后，我们可以看到账户余额为 0.1ETH；</li>
+<li>再次使用 <code>yarn deploy</code> 进行合约部署：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ yarn deploy</span><br><span class="line">Nothing to compile</span><br><span class="line">No need to generate any newer typings.</span><br><span class="line">deploying <span class="string">"YourToken"</span> (tx: 0xa7a89a2917cfa355d1305643dc89f54d776186c0059977b0a237737fa37dff62)...: deployed at 0x0F0D10eF3589cE896E9E54E09568cB7a5371e398 with 639137 gas</span><br><span class="line">deploying <span class="string">"Vendor"</span> (tx: 0x3a1f02b77de29704a16599067c8e10abb0da78e547ea0eea8200761da5d45715)...: deployed at 0xb335Fc61D759C041503dC17266575229E593DE17 with 694098 gas</span><br><span class="line"></span><br><span class="line"> 🏵  Sending all 1000 tokens to the vendor...</span><br></pre></td></tr></table></figure>
+<p>可以看到，合约部署成功，此时我们可以在线上测试网络查看到具体的合约部署情况：</p>
+<ul>
+<li>GLD 合约地址：<a href="https://rinkeby.etherscan.io/address/0x0F0D10eF3589cE896E9E54E09568cB7a5371e398" target="_blank" rel="noopener">https://rinkeby.etherscan.io/address/0x0F0D10eF3589cE896E9E54E09568cB7a5371e398</a></li>
+<li>承销商合约地址： <a href="https://rinkeby.etherscan.io/address/0xb335Fc61D759C041503dC17266575229E593DE17" target="_blank" rel="noopener">https://rinkeby.etherscan.io/address/0xb335Fc61D759C041503dC17266575229E593DE17</a></li>
+</ul>
+<p>并且部署完成了初始化代币分发和所有权转换。详情可以查看部署账户信息： <a href="https://rinkeby.etherscan.io/address/0xccb20d43f62f31dd94436f04a1e90d7d08569e57" target="_blank" rel="noopener">https://rinkeby.etherscan.io/address/0xccb20d43f62f31dd94436f04a1e90d7d08569e57</a>。</p>
+<h2><span id="liu-fa-bu">六、发布</span></h2>
+<p>接下来，我们将发布我们的前端项目到 Surge （或者使用 s3， ipfs 上）。<a href="http://Surge.sh" target="_blank" rel="noopener">Surge.sh</a> 提供了免费的网站的部署，对于我们的测试网站来时再合适不过。</p>
+<ol>
+<li>编译前端项目： <code>yarn build</code></li>
+<li>将项目发布到 surge 上： <code>yarn surge</code></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ yarn surge</span><br><span class="line"></span><br><span class="line">   Welcome to surge! (surge.sh)</span><br><span class="line">   Login (or create surge account) by entering email &amp; password.</span><br><span class="line"></span><br><span class="line">          email: qwh005007@gmail.com</span><br><span class="line">       password: </span><br><span class="line"></span><br><span class="line">   Running as qwh005007@gmail.com (Student)</span><br><span class="line"></span><br><span class="line">        project: ./dist</span><br><span class="line">         domain: qiwihui-scaffold-2.surge.sh</span><br><span class="line">         upload: [====================] 100% eta: 0.0s (83 files, 16080214 bytes)</span><br><span class="line">            CDN: [====================] 100%</span><br><span class="line">     encryption: *.surge.sh, surge.sh (57 days)</span><br><span class="line">             IP: 138.197.235.123</span><br><span class="line"></span><br><span class="line">   Success! - Published to qiwihui-scaffold-2.surge.sh</span><br></pre></td></tr></table></figure>
+<p>Surge 在运行命令的过程中就设置了账户名称，以及可以自定义域名：<a href="http://qiwihui-scaffold-2.surge.sh" target="_blank" rel="noopener">qiwihui-scaffold-2.surge.sh</a>，当完成部署之后，我们就可以在浏览器中访问这个页面，和我们本地运行的结果是一致的。</p>
+<h2><span id="qi-he-yue-yan-zheng">七、合约验证</span></h2>
+<p>当我们向测试网络部署合约时，部署的是合约编译之后的字节码，合约源码不会发布。实际生产中，有时我们需要发布我们的源代码，以保证我们的代码真实可信。此时，我们就可以借助 etherscan 提供的功能进行验证。</p>
+<ol>
+<li>
+<p>首先，我们获取 etherscan 的 API key，地址为 <a href="https://etherscan.io/myapikey" target="_blank" rel="noopener">https://etherscan.io/myapikey</a>，比如 <code>PSW8C433Q667DVEX5BCRMGNAH9FSGFZ7Q8</code> ；</p>
+</li>
+<li>
+<p>更新 <code>packages/hardhat-ts/package.json</code> 中对应的 api-key 参数：</p>
+ <figure class="highlight"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">    "send": "hardhat send",</span><br><span class="line">    "generate": "hardhat generate",</span><br><span class="line">    "account": "hardhat account",</span><br><span class="line">    "etherscan-verify": "hardhat etherscan-verify --api-key PSW8C433Q667DVEX5BCRMGNAH9FSGFZ7Q8"</span><br><span class="line">  &#125;,</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="3">
+<li>
+<p>由于项目中的一个 bug，需要在根目录下的 <code>packages.json</code> 中添加以下命令才能直接使用之后的命令：</p>
+ <figure class="highlight"><table><tr><td class="code"><pre><span class="line">"verify": "yarn workspace @scaffold-eth/hardhat etherscan-verify",</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="4">
+<li>
+<p>运行 <code>yarn verify --network rinkeby</code> ，这个命令将通过 etherscan 接口进行合约验证，输出结果为：</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ yarn verify --network rinkeby</span><br><span class="line">verifying Vendor (0xb335Fc61D759C041503dC17266575229E593DE17) ...</span><br><span class="line">waiting <span class="keyword">for</span> result...</span><br><span class="line"> =&gt; contract Vendor is now verified</span><br><span class="line">verifying YourToken (0x0F0D10eF3589cE896E9E54E09568cB7a5371e398) ...</span><br><span class="line">waiting <span class="keyword">for</span> result...</span><br><span class="line"> =&gt; contract YourToken is now verified</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="5">
+<li>
+<p>验证完成后，我们可以看到 etherscan 中的合约页面已经加上了一个蓝色小钩，在合约中，也可以看到我们合约的源代码：</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/155913533-362162f2-eede-47f6-9c97-6f6e34bc9a70.png" alt="contractVerified"></p>
+</li>
+</ol>
+<p>至此，我们就完成了合约的验证。</p>
+<h2><span id="ba-ti-jiao-jie-guo">八、提交结果</span></h2>
+<p>最后，当我们完成上述的所有步骤之后，我们可以将我们的结果提交到 <a href="https://speedrunethereum.com/" target="_blank" rel="noopener">speedrunethereum.com</a> 上，选择对应的挑战，并提交部署的前端地址和承销商合约的链接即可：</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/155913539-e7c60b5c-261d-488d-a517-0218bf415aa5.png" alt="submitChallenge"></p>
+<p>Congratulations! 你已经完成了这个教程</p>
+<h2><span id="zong-jie">总结</span></h2>
+<p>通过篇教程，我们可以学习到如下内容：</p>
+<ol>
+<li>合约 <code>approve</code> 和 <code>transferFrom</code> 的使用；</li>
+<li>如何使用 OpenZeppelin 创建 ERC20 代币；</li>
+<li>创建承销商合约实现用户对代币的买卖；</li>
+<li>在测试网路 Rinkeby 上部署合约；</li>
+<li>在 <a href="http://Surge.sh" target="_blank" rel="noopener">Surge.sh</a> 上部署前端项目；</li>
+<li>在 etherscan 上查看合约以及验证合约；</li>
+<li>以及关于 web3 开发的知识，包括 hardhat，react 等。</li>
+</ol>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/区块链/">#区块链</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-156/" class="prev">PREV</a><a href="/qiwihui-blog-154/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-155/';
+var disqus_title = '如何创建一个代币承销商 dApp';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-155/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>
