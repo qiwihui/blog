@@ -1,0 +1,204 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 在VirtualBox安装Arch Liux初步指南 · QIWIHUI</title><meta name="description" content="在VirtualBox安装Arch Liux初步指南 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-20/index.html"><meta property="og:title" content="在VirtualBox安装Arch Liux初步指南"><meta property="og:description" content="在VirtualBox安装Arch Liux初步指南"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">在VirtualBox安装Arch Liux初步指南</h1><div class="post-info">Oct 9, 2018<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>8 min. read</span></div><div class="post-content"><p>简单地写一下在VirtualBox上安装Arch Linux的过程，以此为在PC上安装做准备。在PC上安装的过程和下面描述的基本一致。</p>
+<a id="more"></a>
+<p>##0x00 准备</p>
+<ol>
+<li>
+<p>下载iso文件：在Arch官网上<a href="https://www.archlinux.org/download/" target="_blank" rel="noopener">下载</a>最新的镜像，这里
+我选用了<a href="http://mirrors.163.com/archlinux/iso/2015.01.01/" target="_blank" rel="noopener">163.com</a>节点的资源，下载archlinux-2015.01.01-dual.iso；</p>
+</li>
+<li>
+<p>检查文件的完整性：在MAC中使用md5或者sha1检验文件的完整行，并和下载站点提供的值进行比较。</p>
+ <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ openssl sha1 archlinux-2014.12.01-dual.iso </span><br><span class="line">SHA1(archlinux-2014.12.01-dual.iso)= 86085153f97f0097fd0a02496e67cf85138c1ba5</span><br><span class="line"></span><br><span class="line">$ md5 archlinux-2014.12.01-dual.iso </span><br><span class="line">MD5 (archlinux-2014.12.01-dual.iso) = 667ed3c5e935666edfd54a2271e05b72</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>##0x01 创建虚拟机</p>
+<ol>
+<li>
+<p>给虚拟机一个名字
+<img src="/media/files/2015/Jan/0-NameAndOperatingSystem.png"><img></p>
+</li>
+<li>
+<p>内存：最小为256MB
+<img src="/media/files/2015/Jan/1-MemorySize.png"><img></p>
+</li>
+<li>
+<p>创建新的虚拟磁盘
+<img src="/media/files/2015/Jan/2-HardDrive.png"><img></p>
+</li>
+<li>
+<p>文件类型
+<img src="/media/files/2015/Jan/3-HardDriveFileType.png"><img></p>
+</li>
+<li>
+<p>动态分配
+<img src="/media/files/2015/Jan/4-StorageOnPhysicalHardDrive.png"><img></p>
+</li>
+<li>
+<p>文件位置和大小，最小10GB
+<img src="/media/files/2015/Jan/5-FileLocationAndSize.png"><img></p>
+</li>
+<li>
+<p>如果要安装桌面环境的话就勾选<code>Enable 3D Acceleration</code>
+<img src="/media/files/2015/Jan/6-Enable3DAcceleration.png"><img></p>
+</li>
+<li>
+<p>第一次启动虚拟机时，选取之前下载的ISO文件
+<img src="/media/files/2015/Jan/7-SelectISOFile.png"><img></p>
+</li>
+</ol>
+<p>##0x01 开始安装</p>
+<ol>
+<li>
+<p>选择32位或者64位Arch
+<img src="/media/files/2015/Jan/8-BootArchLinux.png"><img></p>
+<p>一旦看到如下提示，就可以开始进行配置了：
+<img src="/media/files/2015/Jan/9-Command.png"><img></p>
+</li>
+<li>
+<p>更改键盘布局和设置语言：</p>
+<p>默认键盘布局为<code>us</code>，非us布局可以用如下命令修改：</p>
+ <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># loadkeys layout</span></span><br></pre></td></tr></table></figure>
+<p>layout可以是<code>uk</code>, <code>dvorak</code>等。设置语言：</p>
+</li>
+<li>
+<p>磁盘分区</p>
+<p>先看一下磁盘状态：</p>
+ <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># ls /dev</span></span><br></pre></td></tr></table></figure>
+<p>开始啦，一般创建四个分区：<code>/</code>, <code>/boot</code>, <code>/home</code>, <code>swap</code></p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># gdisk /dev/sda</span><br></pre></td></tr></table></figure>
+<p>当出现下面命令时, 开始分区，一下以<code>/boot</code>分区为例：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Command (? for help):</span><br></pre></td></tr></table></figure>
+<p>a. 创建新分区：'n’
+b. 分区号码：回车默认从0开始递增
+c. “first sector”: 回车默认从上一个分区结束处开始，初始为0
+d. “last sector”: '+250MB’
+e. “hex code”: 回车默认（8300 为&quot;Linux File System&quot;），<code>swap</code>分区输入8200, 见<a href="http://www.basicconfig.com/hex_codes_system_id" target="_blank" rel="noopener">这儿</a></p>
+<p>依次给<code>swap</code>分配’+1G’（和分配的RAM一样大），<code>/boot</code>分配’+8G’，<code>/home</code>分配’+1G’，再次看一下磁盘的状态，可以看到已经分配好了，
+键入’w’并回车即可保存修改。</p>
+</li>
+<li>
+<p>格式化分区</p>
+<p>再次回到命令行：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root@archiso ~ #</span><br></pre></td></tr></table></figure>
+<p>格式化分区：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># mkfs -t ext4 /dev/sda1</span><br><span class="line"># mkfs -t ext4 /dev/sda3</span><br><span class="line"># mkfs -t ext4 /dev/sda4</span><br><span class="line"></span><br><span class="line"># mkswap /dev/sda2</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>挂载新分区</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># swapon /dev/sda2</span><br><span class="line"></span><br><span class="line"># mount /dev/sda3 /mnt</span><br><span class="line"># cd /mnt</span><br><span class="line"># mkdir boot home</span><br><span class="line"># mount /dev/sda1 boot</span><br><span class="line"># mount /dev/sda4 home</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>安装Arch</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># cd /</span><br><span class="line"># pacstrap /mnt base base-devel</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>生成<code>fstab</code>文件</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># genfstab -p /mnt &gt;&gt; /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
+<p>可以看看fstab里面的内容：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># more /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>初始化安装Boot Loader</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># pacstrap /mnt syslinux</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>配置安装</p>
+<p>运行以下命令：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># arch-chroot /mnt</span><br></pre></td></tr></table></figure>
+<p>得到：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sh-4.2#</span><br></pre></td></tr></table></figure>
+<p>这个shell很基础，用Bash也许更好些：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># bash</span><br></pre></td></tr></table></figure>
+<p>得到：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@archiso /]#</span><br></pre></td></tr></table></figure>
+<p>设置语言：</p>
+ <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># nano /etc/locale.conf</span></span><br></pre></td></tr></table></figure>
+<p>添加：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LANG=&quot;en_US.UTF-8&quot;</span><br></pre></td></tr></table></figure>
+ <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># nano /etc/locale.gen</span></span><br></pre></td></tr></table></figure>
+<p>将下面两行前面<code>#</code>去除：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">en_US.UTF-8 UTF-8</span><br><span class="line">de_DE.UTF-8 UTF-8</span><br></pre></td></tr></table></figure>
+<p>完成语言设置：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># locale-gen</span><br></pre></td></tr></table></figure>
+<p>设置时间：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># ln -s /usr/share/zoneinfo/&lt;your_state&gt;/&lt;your_city&gt; /etc/localtime</span><br></pre></td></tr></table></figure>
+<p>比如我设置的是：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># ln -s /usr/share/zoneinfo/Asia/Chongqing /etc/localtime</span><br></pre></td></tr></table></figure>
+<p>改hostname：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># nano /etc/hostname</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>完成Bootloader安装</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># cd /boot/syslinux/</span><br></pre></td></tr></table></figure>
+<p>打开syslinux.cfg文件，找到&quot;comboot modules&quot;一段：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># more syslinux.cfg</span><br></pre></td></tr></table></figure>
+<p>将其中列举的文件copy到本地，同时还要加上’libutil.c32’:</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># cp /usr/lib/syslinux/bios/menu.c32 .</span><br><span class="line"># cp /usr/lib/syslinux/bios/vesamenu.c32 .</span><br><span class="line"># cp /usr/lib/syslinux/bios/chain.c32 .</span><br><span class="line"># cp /usr/lib/syslinux/bios/hdt.c32 .</span><br><span class="line"># cp /usr/lib/syslinux/bios/reboot.c32 .</span><br><span class="line"># cp /usr/lib/syslinux/bios/poweroff.c32 .</span><br><span class="line"># cp /usr/lib/syslinux/bios/libutil.c32 .</span><br></pre></td></tr></table></figure>
+<p>一旦完成上述设置，</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># extlinux --install /boot/syslinux</span><br><span class="line"># dd conv=notrunc bs=440 count=1 if=/usr/lib/syslinux/bios/gptmbr.bin of=/dev/sda</span><br><span class="line"># mkinitcpio -p linux</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>完成安装</p>
+<p>最后，更改root密码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># passwd</span><br></pre></td></tr></table></figure>
+<p>输入两次<code>exit</code>退回到：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@archiso /]#</span><br></pre></td></tr></table></figure>
+<p>umount所有的分区：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># umount /mnt/boot</span><br><span class="line"># umount /mnt/home</span><br><span class="line"># swapoff /dev/sda2</span><br><span class="line"># umount /mnt</span><br></pre></td></tr></table></figure>
+<p>在重启之前最后一步，设置<code>/boot</code>分区的<a href="http://en.wikipedia.org/wiki/BIOS" target="_blank" rel="noopener">BIOS</a>标识为’bootable’：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># sgdisk /dev/sda --attributes=1:set:2</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>重启Arch</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># reboot</span><br></pre></td></tr></table></figure>
+<p>重启之后会再次进入CD启动，这时，去除安装CD，再次重启：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Devices &gt; CD/DVD Devices &gt; Remove disk from virtual drive</span><br></pre></td></tr></table></figure>
+<p>等待一小会：</p>
+<p><img src="/media/files/2015/Jan/10-ArchLinux.png"><img></p>
+<p>Congradulations!</p>
+</li>
+<li>
+<p>后续工作</p>
+<p>链接网络：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dhcpcd</span><br></pre></td></tr></table></figure>
+<p>安装’sudo’：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># pacman -S sudo</span><br></pre></td></tr></table></figure>
+<p>添加’sudoer’:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># nano /etc/sudoers</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">##</span><br><span class="line">## User privilege specification</span><br><span class="line">##</span><br><span class="line">root ALL=(ALL) ALL</span><br><span class="line">qiwihui ALL=(ALL) ALL</span><br></pre></td></tr></table></figure>
+<p>保存，并log out：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># exit</span><br></pre></td></tr></table></figure>
+<p>以新的ID和密码重新登录。</p>
+<p>最后，每次登录的时候自动获取ip：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># sudo systemctl enable dhcpcd@eth0.service</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这样最基本的Arch Linux就好了，Desktop Environment就不装了。</p>
+<h2><span id="0x02-can-kao-wen-dang">0x02 参考文档</span></h2>
+<ul>
+<li><a href="https://wiki.archlinux.org/index.php/Beginners%27_guide" target="_blank" rel="noopener">Arch Linux Beginners’ guide</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Installation_guide" target="_blank" rel="noopener">Arch Linux Installation Guide</a></li>
+<li><a href="http://wideaperture.net/blog/?p=3851" target="_blank" rel="noopener">A Guide to Installing Arch in VirtualBox</a></li>
+</ul>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-21/" class="prev">PREV</a><a href="/qiwihui-blog-19/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-20/';
+var disqus_title = '在VirtualBox安装Arch Liux初步指南';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-20/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

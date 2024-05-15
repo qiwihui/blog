@@ -1,0 +1,73 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 使用免费的let’s encrypt证书为网站开启https（已过时） · QIWIHUI</title><meta name="description" content="使用免费的let’s encrypt证书为网站开启https（已过时） - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-23/index.html"><meta property="og:title" content="使用免费的let’s encrypt证书为网站开启https（已过时）"><meta property="og:description" content="使用免费的let’s encrypt证书为网站开启https（已过时）"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">使用免费的let’s encrypt证书为网站开启https（已过时）</h1><div class="post-info">Oct 9, 2018<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>5 min. read</span></div><div class="post-content"><p>这篇博客将介绍使用免费的let’s encrypt证书, 为网站开启https。</p>
+<a id="more"></a>
+<h2><span id="https-jian-jie">HTTPS简介</span></h2>
+<p>(https, http over ssl)</p>
+<h2><span id="wei-sha-yao-yong-let-s-encrypt">为啥要用Let’s Encrypt</span></h2>
+<p>(free, easy)</p>
+<h2><span id="let-s-encrypt-jie-shao">Let’s Encrypt介绍</span></h2>
+<p>(directory tree)</p>
+<h2><span id="an-zhuang-shi-jian">安装实践</span></h2>
+<p>我使用的是Debian 7，其他系统类似。</p>
+<ol>
+<li>使用官方推荐的<code>letsencrypt-auto</code>安装：</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/letsencrypt/letsencrypt</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">cd</span> letsencrypt</span><br><span class="line"></span><br><span class="line">$ ./letsencrypt-auto --<span class="built_in">help</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>获取证书</li>
+</ol>
+<p>实验前，我已将<code>www.qiwihui.com</code>站点移到了要安装的服务器上，nginx已经在运行，因此可以使用 webroot 模式来获取证书，
+先安装webroot插件，这是一个可以不用停止 Web 服务就能让 Let’s Encrypt 验证域名的插件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location ~ /.well-known &#123;</span><br><span class="line">    allow all;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>安装证书命令如下：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ ./letsencrypt-auto certonly --webroot --webroot-path /var/www/blog/ -d qiwihui.com -d www.qiwihui.com --agree-tos --email qiwihui@qiwihui.com</span><br></pre></td></tr></table></figure>
+<p>其中<code>/var/www/blog/</code>为网站根目录。证书申请成功后会提示一下信息，包括证书存放目录和证书过期时间：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">IMPORTANT NOTES:</span><br><span class="line"></span><br><span class="line">- Congratulations! Your certificate and chain have been saved at</span><br><span class="line">/etc/letsencrypt/live/qiwihui.com/fullchain.pem. Your cert will</span><br><span class="line">expire on 2016-07-08. To obtain a new version of the certificate <span class="keyword">in</span></span><br><span class="line">the future, simply run Let<span class="string">'s Encrypt again.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">- If you like Let'</span>s Encrypt, please consider supporting our work by:</span><br><span class="line"></span><br><span class="line">Donating to ISRG / Let<span class="string">'s Encrypt:  https://letsencrypt.org/donate</span></span><br><span class="line"><span class="string">Donating to EFF:                    https://eff.org/donate-le</span></span><br></pre></td></tr></table></figure>
+<p><em>重要提示</em>：需要将站点的DNS指向对用的服务器，否则会提示申请不过。</p>
+<ol start="3">
+<li>配置Nginx</li>
+</ol>
+<p>首先生成2048位 DH parameters：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ mkdir -p /var/www/ssl/</span><br><span class="line">$ sudo openssl dhparam -out /var/www/ssl/dhparam.pem 2048</span><br></pre></td></tr></table></figure>
+<p>Nginx的配置如下：</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span> <span class="number">443</span> ssl;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">server_name</span> qiwihui.com www.qiwihui.com;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">ssl_protocols</span> TLSv1 TLSv1.<span class="number">1</span> TLSv1.<span class="number">2</span>;</span><br><span class="line">        <span class="attribute">ssl_certificate</span>     /etc/letsencrypt/live/qiwihui.com/fullchain.pem;</span><br><span class="line">        <span class="attribute">ssl_certificate_key</span> /etc/letsencrypt/live/qiwihui.com/privkey.pem;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">ssl_dhparam</span> /var/www/ssl/dhparam.pem;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">ssl_prefer_server_ciphers</span>  <span class="literal">on</span>;</span><br><span class="line">        <span class="attribute">ssl_ciphers</span> <span class="string">'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA'</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">#网站其他配置</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果想要开启全站 https 的话，需要将 http 转向到 https，再添加一个 server 就好了：</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> qiwihui.com www.qiwihui.com;</span><br><span class="line">    <span class="attribute">return</span> <span class="number">301</span> https://<span class="variable">$server_name</span><span class="variable">$request_uri</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改完成后reload nginx 就可以了：<code>nginx -s reload</code></p>
+<h3><span id="yan-zheng-jian-ce">验证检测</span></h3>
+<ol>
+<li>用浏览器打开目标网址<code>https://qiwihui.com</code>，可以查看到证书信息：</li>
+</ol>
+<img width="792" alt="10-https-on-qiwihui-com" src="https://user-images.githubusercontent.com/3297411/45278285-064a6880-b4ff-11e8-9ff2-24cce84cdec8.png">
+<ol start="2">
+<li>使用 <a href="https://www.ssllabs.com/ssltest/index.html" target="_blank" rel="noopener">Qualys ssllabs</a> 在线测试服务器证书强度以及配置正确性：</li>
+</ol>
+<img width="1374" alt="10-ssllabs-results" src="https://user-images.githubusercontent.com/3297411/45278293-0cd8e000-b4ff-11e8-80c6-a6cd4c8ce89e.png">
+<h3><span id="hou-xu-geng-xin">后续更新</span></h3>
+<p>Let’s Encrypt 的有效期只有90天，官方客户端不支持持续更新，所以要设置自动更新，让证书一直有效。</p>
+<p>在crontab 中设置定时任务：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">30 2 * * 1 /root/letsencrypt/letsencrypt-auto renew &gt;&gt; /var/<span class="built_in">log</span>/le-renew.log</span><br><span class="line">35 2 * * 1 /etc/init.d/nginx reload</span><br></pre></td></tr></table></figure>
+<p>上述配置会再每周一凌晨2:30执行<code>letsencrypt-auto renew</code>，在2点35分重新加载nginx配置，同时更新日志会在写在<code>/var/log/le-renewal.log</code>中。</p>
+<h2><span id="zong-jie">总结</span></h2>
+<p>Let’s Encrypt TLS/SSL is free.</p>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-27/" class="prev">PREV</a><a href="/qiwihui-blog-22/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-23/';
+var disqus_title = '使用免费的let’s encrypt证书为网站开启https（已过时）';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-23/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

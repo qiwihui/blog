@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> GitHub Actions 第2天：矩阵工作流 · QIWIHUI</title><meta name="description" content="GitHub Actions 第2天：矩阵工作流 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-85/index.html"><meta property="og:title" content="GitHub Actions 第2天：矩阵工作流"><meta property="og:description" content="GitHub Actions 第2天：矩阵工作流"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">GitHub Actions 第2天：矩阵工作流</h1><div class="post-info">Aug 13, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>6 min. read</span></div><div class="post-content"><p>拥有 CI/CD 系统的最大优势之一是，它使你可以高效地构建和测试多种配置。在推送之前，你在机器上进行构建和测试当然是必要的，但这几乎是不够的。毕竟，你可能只安装了一个版本的节点。但是，在各种平台上构建将使你充满信心和洞察力，使你的更改可以在你支持的整个生态系统中发挥作用。</p>
+<a id="more"></a>
+<p><a href="https://www.jwz.org/blog/2011/08/weaponized-tinderbox/" target="_blank" rel="noopener">Mozilla Tinderbox</a> 是最早引入跨多个配置构建概念的 CI 系统之一。这是革命性的──当我使用 <a href="https://www.abisource.com/" target="_blank" rel="noopener">AbiWord</a> 时，我负责了 Tinderbox 的设置。我们有一个充满机器的实验室，以便我们可以测试 Motif 构建和 GTK 构建，并可以针对不同的依赖项进行测试（这是在从可怕的 libc5 到 libc6 迁移的时候），甚至是不同的 C ++ 编译器。</p>
+<p>那时，我的工作很大一部分是维护这个装有昂贵计算机的实验室。因此，我最喜欢的 GitHub Actions 特性之一就是矩阵工作流功能也就不足为奇了，它使我能够快速运行多个构建以支持各种配置。</p>
+<p>我仍然在编写代码，因此仍然需要使用不同的编译器和不同的依赖项进行构建。但是现在我不需要一个充满机器的实验室，我只需要在 GitHub Actions 中使用矩阵工作流设置即可。</p>
+<p>矩阵工作流一开始可能看起来有些让人不知所措，但这实际上只是简单的变量替换。您定义了一组变量，以及应分配给每个变量的一组值。然后，GitHub Actions 将使用这些变量的所有不同扩展来执行工作流。</p>
+<p>假设你要测试三个不同的变量，这很快变得非常强大。就我而言，我想用两个不同的 C 编译器（gcc和clang），三个不同的 SSL 后端（OpenSSL，GnuTLS和NSS）以及两个不同的 Kerberos 后端（MIT和Heimdal）进行测试。要测试所有这些不同的组合，那就是2 * 3 * 2 = 12种不同的配置。</p>
+<p>但是，我不必定义十二个不同的工作（或更糟的是，必须像在糟糕的过去那样在实验室中设置十二个不同的机器），我只需指定一个包含三个变量的矩阵即可。如果在作业中指定矩阵，则实际上将获得十二个以不同排列运行的作业：</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">matrix:</span></span><br><span class="line">  <span class="attr">cc:</span> <span class="string">[gcc,</span> <span class="string">clang]</span></span><br><span class="line">  <span class="attr">curl:</span> <span class="string">[openssl,</span> <span class="string">gnutls,</span> <span class="string">nss]</span></span><br><span class="line">  <span class="attr">kerberos:</span> <span class="string">[libkrb5,</span> <span class="string">heimdal]</span></span><br></pre></td></tr></table></figure>
+<p>现在在我的工作中，我可以使用<a href="https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions" target="_blank" rel="noopener">矩阵上下文</a>引用这些变量中的每一个。例如，<code>$</code> 将扩展为 cc 变量的当前值。</p>
+<p>以下是一个示例工作流，该工作流安装每个依赖项，并运行我的 autoconf 设置，然后运行 make：</p>
+<script src="https://gist.github.com/ethomson/5570201b04670fb90c1b0450db19e01a.js"></script>
+<p>当你运行此工作流程时，你可以快速查看它如何扩展到12个不同的作业。在工作流运行的左侧，你可以看到它们中的每一个。 这样，简单的工作流程就可以迅速扩展。</p>
+<p>在其中一个运行中打开步骤时，你可以看到确实我们能够安装依赖项。 如果打开 <code>build (clang, openssl, libkrb5)</code> 任务，实际上正在运行 <code>clang</code>（由 <code>${CC} --version</code> 显示），libcurl的OpenSSL版本（由 <code>curl-config</code> 显示）和 MIT krb5（由 <code>krb5-config</code> 显示）。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/77169169-07952200-6af4-11ea-8770-f381ddfaa7eb.png" alt="image"></p>
+<p>因此，你可以看到，你只需使用工作流中的几行矩阵定义就可以构建具有多种配置的强大工作流。</p>
+<p>原文链接：<a href="https://www.edwardthomson.com/blog/github_actions_2_matrixes.html" target="_blank" rel="noopener">https://www.edwardthomson.com/blog/github_actions_2_matrixes.html</a></p>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E7%BF%BB%E8%AF%91/">#翻译</a><a href="/tags/tips/">#tips</a><a href="/tags/github-actions/">#github actions</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-66/" class="prev">PREV</a><a href="/qiwihui-blog-95/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-85/';
+var disqus_title = 'GitHub Actions 第2天：矩阵工作流';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-85/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

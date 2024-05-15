@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Git 小结 · QIWIHUI</title><meta name="description" content="Git 小结 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-13/index.html"><meta property="og:title" content="Git 小结"><meta property="og:description" content="Git 小结"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">Git 小结</h1><div class="post-info">Oct 9, 2018<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>4 min. read</span></div><div class="post-content"><p>整理自<a href="http://www.cnblogs.com/tugenhua0707/p/4050072.html" target="_blank" rel="noopener">手把手教你用git</a>.</p>
+<a id="more"></a>
+<ol>
+<li><code>git reflog</code> 查看历史记录的版本号id</li>
+<li>Discard:
+<ul>
+<li><code>git reset --hard HEAD^</code></li>
+<li><code>git reset --hard HEAD~100</code></li>
+<li><code>git reset --hard &lt;one commit&gt;</code></li>
+</ul>
+</li>
+<li><code>git checkout -- &lt;file&gt;</code>
+<ul>
+<li>修改后，还没有放到暂存区，使用 撤销修改就回到和版本库一模一样的状态。</li>
+<li>另外一种是第一次修改已经放入暂存区了，接着又作了修改，撤销修改就回到添加暂存区后的状态。</li>
+</ul>
+</li>
+<li>暂存区 -&gt; 工作区
+<ul>
+<li><code>git reset HEAD &lt;file&gt;</code></li>
+<li>HEAD严格来说不是指向提交，而是指向master，master才是指向提交的，所以，HEAD指向的就是当前分支。</li>
+</ul>
+</li>
+<li>push
+<ul>
+<li><code>git remote add origin https://github.com/username/project_name.git</code> 关联一个远程库</li>
+<li><code>git push –u origin master</code> (第一次要用-u, 以后不需要)</li>
+</ul>
+</li>
+<li>分支管理策略:
+<ul>
+<li>通常合并分支时，git一般使用”Fast forward”模式，在这种模式下，删除分支后，会丢掉分支信息。可以使用带参数 –no-ff来禁用”Fast forward”模式。<code>git merge --no-ff -m &quot;comments&quot; &lt;branch_name&gt;</code></li>
+<li>分支策略：首先master主分支应该是非常稳定的，也就是用来发布新版本，一般情况下不允许在上面干活，干活一般情况下在新建的dev分支上干活，干完后，比如上要发布，或者说dev分支代码稳定后可以合并到主分支master上来。</li>
+</ul>
+</li>
+<li><code>git stash</code>: 可以把当前工作现场 ”隐藏起来”，等以后恢复现场后继续工作。
+<ul>
+<li><code>git stash list</code>: 查看</li>
+<li>恢复：
+<ol>
+<li><code>git stash apply</code> 恢复，恢复后，stash内容并不删除，你需要使用命令<code>git stash drop</code>来删除。</li>
+<li>另一种方式是使用<code>git stash pop</code>,恢复的同时把stash内容也删除了。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>多人协作：
+<ul>
+<li>推送分支：
+<ol>
+<li>master分支是主分支，因此要时刻与远程同步。</li>
+<li>一些修复bug分支不需要推送到远程去，可以先合并到主分支上，然后把主分支master推送到远程去。</li>
+</ol>
+</li>
+<li>抓取分支：
+<ol>
+<li>push非master分支(e.g. dev)：<code>git checkout –b dev origin/dev</code>, edit something, <code>git push origin dev</code></li>
+<li>另一个同伴更新：<code>git branch --set-upstream dev origin/dev</code>, <code>git pull</code>, edit something, <code>git push origin dev</code></li>
+</ol>
+</li>
+<li>协作模式：
+<ol>
+<li>首先，可以试图用<code>git push origin &lt;branch-name&gt;</code>推送自己的修改.</li>
+<li>如果推送失败，则因为远程分支比你的本地更新早，需要先用git pull试图合并。</li>
+<li>如果合并有冲突，则需要解决冲突，并在本地提交。再用<code>git push origin &lt;branch-name&gt;</code>推送。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>delete remote branch
+<ul>
+<li><code>git push origin —delete &lt;branch_name&gt;</code></li>
+</ul>
+</li>
+<li>get remote branch locally
+<ul>
+<li><code>git branch --set-upstream dev origin/dev</code></li>
+</ul>
+</li>
+</ol>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/tips/">#tips</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-14/" class="prev">PREV</a><a href="/qiwihui-blog-12/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-13/';
+var disqus_title = 'Git 小结';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-13/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

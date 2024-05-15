@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> GitHub Actions 第10天：路径触发器 · QIWIHUI</title><meta name="description" content="GitHub Actions 第10天：路径触发器 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-93/index.html"><meta property="og:title" content="GitHub Actions 第10天：路径触发器"><meta property="og:description" content="GitHub Actions 第10天：路径触发器"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">GitHub Actions 第10天：路径触发器</h1><div class="post-info">Aug 13, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>2 min. read</span></div><div class="post-content"><p>前面我们看到可以限制<a href="https://qiwihui.com/qiwihui-blog-84/">基于分支过滤器的</a>工作流运行。对于由 <code>push</code> 或 <code>pull_request</code> 触发的工作流，你可以对其进行限制，以使其仅在推送到特定分支或针对特定分支打开 pull request 时才触发。</p>
+<p>你还可以限制这些工作流，以便仅在<a href="https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#onpushpull_requestpaths" target="_blank" rel="noopener">推送特定路径</a>时才触发它们。</p>
+<a id="more"></a>
+<p>如果你在提交某些东西时会运行一些自动化功能，这将非常有用。例如：在我的一个开源项目中，每次将提交合并到master分支中时，我们都会将文档发布到我们的网站上。但是，我们只想在文档实际更改时运行该工作流程。</p>
+<p>在这种情况下，我们希望docs在master分支中目录中的任何内容更改时运行。我们可以使用<a href="https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet" target="_blank" rel="noopener">通配符</a>作为路径过滤器的一部分：</p>
+<script src="https://gist.github.com/ethomson/5244d867cb44c3d855f05094562d6dc2.js"></script>
+<p>现在，我们有了一个工作流程，只要我们对文件docs夹中的文件进行新更改并将其合并到master分支中，就可以运行脚本 <code>publish_docs.sh</code>。</p>
+<p>原文链接：<a href="https://www.edwardthomson.com/blog/github_actions_10_path_triggers.html" target="_blank" rel="noopener">https://www.edwardthomson.com/blog/github_actions_10_path_triggers.html</a></p>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E7%BF%BB%E8%AF%91/">#翻译</a><a href="/tags/tips/">#tips</a><a href="/tags/github-actions/">#github actions</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-127/" class="prev">PREV</a><a href="/qiwihui-blog-44/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-93/';
+var disqus_title = 'GitHub Actions 第10天：路径触发器';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-93/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

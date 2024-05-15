@@ -1,0 +1,83 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> HMM理解思路 · QIWIHUI</title><meta name="description" content="HMM理解思路 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-74/index.html"><meta property="og:title" content="HMM理解思路"><meta property="og:description" content="HMM理解思路"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">HMM理解思路</h1><div class="post-info">Mar 6, 2019<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>5 min. read</span></div><div class="post-content"><h1><span id="hmm">HMM</span></h1>
+<p>本文整理简单整理一下HMM的理解思路。</p>
+<a id="more"></a>
+<h2><span id="mo-xing">模型</span></h2>
+<h3><span id="ma-er-ke-fu-xing-yu-ma-er-ke-fu-lian">马尔科夫性与马尔科夫链</span></h3>
+<p>性质：
+- 有限历史假设
+- 时间不变性</p>
+<h3><span id="yin-ma-er-ke-fu-mo-xing">隐马尔科夫模型</span></h3>
+<ol>
+<li>
+<p>模型定义：
+1、初始状态概率向量 $\pi=(\pi_i)$，其中 $\pi_{i}=P(i_{1}=q_{i}), \quad i=1,2, \cdots, N$
+2、状态转移概率矩阵 $A=\left[a_{i j}\right]<em>{N \times N}$，其中 $a</em>{i j}=P\left(i_{t+1}=q_{j} | i_{t}=q_{i}\right), \quad i=1,2, \cdots, N ; j=1,2, \cdots, N$
+3、观测概率矩阵 $B=\left[b_{j}(k)\right]<em>{N \times M}$，其中 $b</em>{j}(k)=P\left(o_{t}=v_{k} | i_{t}=q_{j}\right), \quad k=1,2, \cdots, M ; j=1,2, \cdots, N$
+4、观测序列 $O=(o_{1}, o_{2}, \cdots, o_{T})$，状态序列 $I=(i_{1}, i_{2}, \cdots, i_{T})$
+5、状态集合 $Q=\left{q_{1}, q_{2}, \cdots, q_{N}\right}$，观测集合 $V=\left{v_{1}, v_{2}, \cdots, v_{M}\right}$</p>
+</li>
+<li>
+<p>模型三元组 $\lambda=(A, B, \pi)$</p>
+<p>状态转移概率矩阵A与初始状态概率向量确定了隐藏的马尔科夫链，生成不可观测的序列。观测概率矩阵B确定了如何从状态生成规则，与状态序列综合确定了如何产生观测序列。</p>
+</li>
+<li>
+<p>模型基本假设：</p>
+<ul>
+<li>齐次马尔科夫性假设：设隐马尔科夫链在任意时刻t的状态只依赖于其前一时刻的状态，与其他时刻的状态及观测无关，也与时刻t无关。</li>
+<li>观测独立性假设：假设任意时刻的观测只依赖于该时刻的马尔科夫链的状态，与其他观测和状态无关。</li>
+</ul>
+</li>
+<li>
+<p>例子：</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Viterbi_algorithm#Example" target="_blank" rel="noopener">感冒预测</a>，<a href="https://applenob.github.io/hmm.html#%E4%B8%80%E4%B8%AA%E5%85%B3%E4%BA%8E%E6%84%9F%E5%86%92%E7%9A%84%E5%AE%9E%E4%BE%8B" target="_blank" rel="noopener">中文</a></li>
+<li><a href="https://www.zhihu.com/question/20962240/answer/33438846" target="_blank" rel="noopener">掷骰子</a></li>
+<li><a href="https://www.zhihu.com/question/20962240/answer/64187492" target="_blank" rel="noopener">天气模型</a></li>
+<li><a href="https://www.zhihu.com/question/20962240/answer/33561657" target="_blank" rel="noopener">偷换骰子大法</a></li>
+</ul>
+</li>
+</ol>
+<h2><span id="san-ge-wen-ti">三个问题</span></h2>
+<h3><span id="gai-lu-ji-suan-wen-ti-ping-gu">概率计算问题（评估）</span></h3>
+<p>给定模型 $\lambda=(A, B, \pi)$ 和观测序列 $O=o_{1}, o_{2}, \ldots, o_{T}$，计算在模型 $\pi$ 下观测序列 $O$ 出现的概率 $P(O | \lambda)$。
+- 穷举搜索，<code>O(TN^T)</code>
+- 前向算法，<code>O(N^2T)</code>
+- 后向算法</p>
+<h3><span id="yu-ce-wen-ti-jie-ma">预测问题（解码）</span></h3>
+<p>已知观测序列 $O=o_{1}, o_{2}, \ldots, o_{T}$ 和模型 $\lambda=(A, B, \pi)$，求给定观测序列条件概率 $P(I|O)$ 最大的状态序列 $I=\left(i_{1}, i_{2}, \ldots, i_{T}\right)$，即给定观测序列，求最有可能的对应的状态序列。
+- 穷举搜索
+- 近似计算
+- 维特比（Viterbi）算法：动态规划</p>
+<h3><span id="xue-xi-wen-ti">学习问题</span></h3>
+<p>已知观测序列 $O=o_{1}, o_{2}, \ldots, o_{T}$，估计模型 $\lambda=(A, B, \pi)$，使 $P(O | \lambda)$ 最大。
+- 监督算法：利用极大似然估计
+- 非监督算法：Baum-Welch算法（EM算法在HMM中的具体实现）</p>
+<h2><span id="ying-yong">应用</span></h2>
+<p>语音识别，中文分词，手写识别</p>
+<h2><span id="can-kao">参考</span></h2>
+<ol>
+<li>《统计学习方法》，李航</li>
+<li><a href="https://applenob.github.io/hmm.html" target="_blank" rel="noopener">隐马尔科夫模型（HMM）及其Python实现</a></li>
+</ol>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">#机器学习</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-69/" class="prev">PREV</a><a href="/qiwihui-blog-58/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-74/';
+var disqus_title = 'HMM理解思路';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-74/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 使用Nginx，supervisor在DigitalOcean中部署tornado项目 · QIWIHUI</title><meta name="description" content="使用Nginx，supervisor在DigitalOcean中部署tornado项目 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-17/index.html"><meta property="og:title" content="使用Nginx，supervisor在DigitalOcean中部署tornado项目"><meta property="og:description" content="使用Nginx，supervisor在DigitalOcean中部署tornado项目"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">使用Nginx，supervisor在DigitalOcean中部署tornado项目</h1><div class="post-info">Oct 9, 2018<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>13 min. read</span></div><div class="post-content"><p>一直在想把微信的公众号的文章导出为RSS阅读，方便阅读和减少对微信的依赖，后来看到
+<a href="https://github.com/zhu327/rss" target="_blank" rel="noopener">zhu327/rss</a> 这个项目，这是一个用来生成微博，微信公众号，知乎日报 RSS 的Web APP。
+但是这个项目的demo部署在Red Hat的openshift上，
+囿于对这个cloud的操作不是很熟，所以想着把这个项目重新部署到自己在DigitalOcean的机器上，就fork了这个项目开始啦！</p>
+<a id="more"></a>
+<p>以下涉及到的内容有：</p>
+<ul>
+<li>Linux创建用户和修改用户组</li>
+<li>git hooks实现自动部署</li>
+<li>tornado项目的基本框架结构</li>
+<li>supervisor管理进程</li>
+<li>Nginx配置HTTP服务代理</li>
+<li>DNS的记录添加</li>
+</ul>
+<h2><span id="ji-ben-fu-wu-qi-she-zhi">基本服务器设置</span></h2>
+<p>因为之前并没有在我的服务器上创建过其他用户，如果直接用root用户的话不好，所以需要专门的一个账户来负责部署。</p>
+<ol start="0">
+<li>
+<p>登陆服务器：<code>ssh root@&lt;server-ip&gt;</code></p>
+</li>
+<li>
+<p>创建一个用户<code>deploy</code>: <code>sudo adduser deploy</code></p>
+</li>
+<li>
+<p>将用户加入sudoers中: <code>sudo usermod -a -G sudo deploy</code></p>
+</li>
+<li>
+<p>添加远程连接的权限，这样就省去了输入密码了：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo su - deploy</span><br><span class="line">mkdir .ssh</span><br><span class="line">chmod 700 .ssh</span><br><span class="line">touch .ssh/authorized_keys</span><br><span class="line">chmod 600 .ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+<p>其中，<code>700</code>表示只有文件拥有者才能读，写以及打开文件，<code>600</code>表示只能读和写。</p>
+</li>
+<li>
+<p>接着将自己的公钥加入<code>authorized_keys</code>文件中，这个公钥在自己本机<code>~.ssh/id_rsa.pub</code>中。没有的话可以用
+<code>ssh-keygen -t rsa -C &quot;qwh005007@gmail.com&quot;</code>来生成。</p>
+</li>
+</ol>
+<h2><span id="chuang-jian-shi-yong-git-hooks-de-zi-dong-bu-shu">创建使用git hooks的自动部署</span></h2>
+<p>自动部署的好处就是省去了每次都要上服务器。可以参见之前的一篇博客
+<a href="http://daozhang.info/deploy-projects-with-git-hooks/" target="_blank" rel="noopener">使用 Git Hooks 实现项目自动部署</a> 来创建这个远程的git server。</p>
+<p>这里，我们要先fork <a href="https://github.com/zhu327/rss" target="_blank" rel="noopener">zhu327/rss</a> 这个项目，然后用<code>git clone --bare rss rss.git</code>生成原来
+项目的裸仓库，然后将其复制到服务器上。我使用的是<code>~/remoteRepo/rss.git</code>做为git server，<code>~/deployment/rss</code>做为真正
+生产的代码文件目录。</p>
+<p>其中，git hooks中的<code>post-receive</code>文件的内容为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line"># Check the remote git repository whether it is bare</span><br><span class="line">IS_BARE=$(git rev-parse --is-bare-repository)</span><br><span class="line">if [ -z &quot;$IS_BARE&quot; ]; then</span><br><span class="line">echo &gt;&amp;2 &quot;fatal: post-receive: IS_NOT_BARE&quot;</span><br><span class="line">exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">unset GIT_DIR</span><br><span class="line"># current user is git</span><br><span class="line">DeployPath=/home/deploy/deployment/rss</span><br><span class="line">if [ ! -d $DeployPath ] ; then</span><br><span class="line">echo &gt;&amp;2 &quot;fatal: post-receive: DEPLOY_DIR_NOT_EXIST: \&quot;$DeployPath\&quot;&quot;</span><br><span class="line">exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">cd $DeployPath</span><br><span class="line">git add . -A &amp;&amp; git stash</span><br><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
+<h2><span id="xiu-gai-yuan-dai-ma">修改源代码</span></h2>
+<p><a href="https://github.com/zhu327/rss" target="_blank" rel="noopener">zhu327/rss</a> 项目的部署在openshift，为了将其部署在自己服务器上，修改
+是必须的。</p>
+<ul>
+<li>
+<p>删除了项目中的openshift hooks部分</p>
+</li>
+<li>
+<p>将其中用到openshift环境变量<code>OPENSHIFT_DIY_IP</code>和<code>OPENSHIFT_DIY_PORT</code>修改为对应的<code>localhost</code>和<code>8000</code>端口</p>
+</li>
+<li>
+<p>将<code>diy/templates/</code>中的<code>https://diy-devz.rhcloud.com</code>修改为之后要用到的地址 <code>http://rss.daozhang.info</code></p>
+</li>
+<li>
+<p>然后将修改好的代码在本地的virtualenv环境中测试，并生成需要的python的模块文件<code>requirement.txt</code>。如下：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Jinja2==2.7.3</span><br><span class="line">MarkupSafe==0.23</span><br><span class="line">backports.ssl-match-hostname==3.4.0.2</span><br><span class="line">certifi==2015.04.28</span><br><span class="line">lxml==3.4.4</span><br><span class="line">python-dateutil==2.4.2</span><br><span class="line">python-memcached==1.54</span><br><span class="line">six==1.9.0</span><br><span class="line">tornado==4.2</span><br><span class="line">wsgiref==0.1.2</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这些都好了之后就可以将本地的文件第一次push到服务器上了。因为之前已经设置好了git hook，所以可以在服务器上的
+<code>deployment/rss</code>看到项目的代码更新了。</p>
+<h2><span id="shi-yong-supervisor-guan-li-jin-cheng">使用supervisor管理进程</span></h2>
+<p><code>supervisor</code>是Linux中非常好用的进程管理工具，我们将使用它和Nginx一起来组成我们的服务的部署。</p>
+<ol>
+<li>
+<p>安装supervisor：<code>pip install supervisor</code> 或者 <code>sudo apt-get install supervisor</code></p>
+</li>
+<li>
+<p>创建一个目录来装supervisor的配置文件：<code>mkdir -p ~/local/etc/supervisord</code></p>
+</li>
+<li>
+<p>创建superviosr的出要的配置文件：<code>touch ~/local/etc/supervisord.conf</code>，并加入如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[unix_http_server]</span><br><span class="line">file=/home/deploy/tmp/supervisor.sock</span><br><span class="line"> </span><br><span class="line">[supervisord]</span><br><span class="line">user=deploy</span><br><span class="line">logfile=/home/deploy/logs/user/supervisord.log</span><br><span class="line">logfile_maxbytes=50MB</span><br><span class="line">logfile_backups=10 </span><br><span class="line">loglevel=info</span><br><span class="line">pidfile=/home/deploy/local/run/supervisord.pid supervisord.pid)</span><br><span class="line"> </span><br><span class="line">[rpcinterface:supervisor]</span><br><span class="line">supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface</span><br><span class="line"> </span><br><span class="line">[supervisorctl]</span><br><span class="line">serverurl=unix:///home/deploy/tmp/supervisor.sock</span><br><span class="line"> </span><br><span class="line">[include]</span><br><span class="line">files = /home/deploy/local/etc/supervisord/*.ini</span><br></pre></td></tr></table></figure>
+<p>其中我们都适用用户目录下创建的<code>local</code>，<code>logs</code>和<code>tmp</code>文件夹来装这些文件。</p>
+</li>
+<li>
+<p>创建一个rss.ini的文件用来作为rss服务：<code>touch ~/local/etc/supervisord/rss.ini</code>，放入如下内容：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[program:rss]</span><br><span class="line">command=python2.7 /home/deploy/deployment/rss/diy/start.py</span><br></pre></td></tr></table></figure>
+<p>其中，<code>start.py</code>是这个tornado项目的入口。</p>
+</li>
+<li>
+<p>启动服务：<code>supervisord -c /home/deploy/local/etc/supervisord.conf</code>，因为用的是非默认的配置文件，这里
+指定相应的配置文件位置。</p>
+</li>
+<li>
+<p>一旦我们在之后修改了项目push了之后，我们需要重新启动rss：<code>supervisorctl restart rss</code>，因此，为了方便，
+可以将这条命令加入项目git hooks中的<code>post-receive</code>文件末尾。</p>
+</li>
+</ol>
+<h2><span id="pei-zhi-nginx">配置Nginx</span></h2>
+<p>Nginx很好很强大，我们用它来做为我们的HTTP服务器。</p>
+<ol>
+<li>
+<p>安装Nginx，这里，我们适用从源代码安装Nginx，并配置一些log，pid等的目录到deploy的用户目录下，这里，写
+一个安装的脚本<code>install.sh</code>：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir -p ~/src</span><br><span class="line">mkdir -p ~/tmp/nginx/fcgi ~/tmp/nginx/proxy ~/tmp/nginx/client</span><br><span class="line"></span><br><span class="line">cd ~/src</span><br><span class="line">curl -O  http://nginx.org/download/nginx-1.2.1.tar.gz</span><br><span class="line">tar -xzvf nginx-1.2.1.tar.gz</span><br><span class="line">cd nginx-1.2.1</span><br><span class="line"></span><br><span class="line">./configure   --prefix=$HOME/local/nginx  \</span><br><span class="line">--sbin-path=$HOME/local/sbin/nginx \</span><br><span class="line">--conf-path=$HOME/local/etc/nginx.conf  \</span><br><span class="line">--error-log-path=$HOME/logs/user/nginx/error.log \</span><br><span class="line">--http-log-path=$HOME/logs/user/nginx/access.log \</span><br><span class="line">--pid-path=$HOME/local/run/nginx/nginx.pid \</span><br><span class="line">--lock-path=$HOME/local/lock/nginx.lock \</span><br><span class="line">--http-client-body-temp-path=$HOME/tmp/nginx/client/ \</span><br><span class="line">--http-proxy-temp-path=$HOME/tmp/nginx/proxy/  \</span><br><span class="line">--http-fastcgi-temp-path=$HOME/tmp/nginx/fcgi/ \</span><br><span class="line">--with-http_flv_module \</span><br><span class="line">--with-http_ssl_module \</span><br><span class="line">--with-http_gzip_static_module</span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+<p>在Nginx的安装过程中会列出这些配置信息：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Configuration summary</span><br><span class="line">  + using system PCRE library</span><br><span class="line">  + using system OpenSSL library</span><br><span class="line">  + md5: using OpenSSL library</span><br><span class="line">  + sha1: using OpenSSL library</span><br><span class="line">  + using system zlib library</span><br><span class="line"></span><br><span class="line">  nginx path prefix: &quot;/home/deploy/local/nginx&quot;</span><br><span class="line">  nginx binary file: &quot;/home/deploy/local/sbin/nginx&quot;</span><br><span class="line">  nginx configuration prefix: &quot;/home/deploy/local/etc&quot;</span><br><span class="line">  nginx configuration file: &quot;/home/deploy/local/etc/nginx.conf&quot;</span><br><span class="line">  nginx pid file: &quot;/home/deploy/local/run/nginx/nginx.pid&quot;</span><br><span class="line">  nginx error log file: &quot;/home/deploy/logs/user/nginx/error.log&quot;</span><br><span class="line">  nginx http access log file: &quot;/home/deploy/logs/user/nginx/access.log&quot;</span><br><span class="line">  nginx http client request body temporary files: &quot;/home/deploy/tmp/nginx/client/&quot;</span><br><span class="line">  nginx http proxy temporary files: &quot;/home/deploy/tmp/nginx/proxy/&quot;</span><br><span class="line">  nginx http fastcgi temporary files: &quot;/home/deploy/tmp/nginx/fcgi/&quot;</span><br><span class="line">  nginx http uwsgi temporary files: &quot;uwsgi_temp&quot;</span><br><span class="line">  nginx http scgi temporary files: &quot;scgi_temp&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>添加路径到PATH中：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export PATH=/home/you/local/sbin:$PATH</span><br><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>创建配置文件：<code>~/local/etc/nginx.conf</code>，在其中添加我们服务的配置：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#user  deploy;</span><br><span class="line">worker_processes  1;</span><br><span class="line"></span><br><span class="line">error_log /home/deploy/logs/user/nginx/error.log;</span><br><span class="line">pid /home/deploy/local/run/nginx/nginx.pid;</span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    upstream rsstornado &#123;</span><br><span class="line">        server 127.0.0.1:8000;</span><br><span class="line">    &#125;</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    access_log /home/deploy/logs/user/nginx/access.log;</span><br><span class="line"></span><br><span class="line">    keepalive_timeout 65;</span><br><span class="line">    proxy_read_timeout 200;</span><br><span class="line">    sendfile on;</span><br><span class="line">    tcp_nopush on;</span><br><span class="line">    tcp_nodelay on;</span><br><span class="line">    gzip on;</span><br><span class="line">    gzip_min_length 1000;</span><br><span class="line">    gzip_proxied any;</span><br><span class="line">    # Relevant docs: http://wiki.nginx.org/HttpGzipModule#gzip_types</span><br><span class="line">    # Enables compression for additional MIME-types besides &quot;text/html&quot;.</span><br><span class="line">    # &quot;text/html&quot; is always compressed.</span><br><span class="line">    gzip_types text/plain text/css text/xml</span><br><span class="line">               application/x-javascript application/xml</span><br><span class="line">               application/atom+xml text/javascript;</span><br><span class="line"></span><br><span class="line">    # Only retry if there was a communication error, not a timeout</span><br><span class="line">    # on the Tornado server (to avoid propagating &quot;queries of death&quot;</span><br><span class="line">    # to all frontends)</span><br><span class="line">    proxy_next_upstream error;</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        # server_name  localhost;</span><br><span class="line">        # Allow file uploads</span><br><span class="line">        client_max_body_size 50M;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">            proxy_pass_header Server;</span><br><span class="line">            proxy_set_header Host $http_host;</span><br><span class="line">            proxy_redirect off;</span><br><span class="line">            proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">            proxy_set_header X-Scheme $scheme;</span><br><span class="line">            proxy_pass http://rsstornado;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，<code>upstream rsstornado</code>指向了我们的rss的端口。</p>
+</li>
+<li>
+<p>之后使用<code>/home/deploy/local/sbin/nginx -t</code>来检查这些配置，期望的输出为：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nginx: the configuration file /home/deploy/local/etc/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /home/deploy/local/etc/nginx.conf test is successful</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>运行服务：<code>/home/deploy/local/sbin/nginx</code></p>
+</li>
+</ol>
+<p>如果一切顺利，这时，我们在浏览器中输入服务器对应的ip时就可以看到这个web app了。</p>
+<h2><span id="tian-jia-a-ji-lu">添加<code>A</code>纪录</span></h2>
+<p>最后的话需要在自己的dns服务商中添加一条指向服务器ip的<code>A</code>距离，例如在 <a href="http://dns.he.net" target="_blank" rel="noopener">he.net</a> 中添加
+一条<code>A</code>记录即可。很快，就可以直接使用 <a href="http://rss.daozhang.info" target="_blank" rel="noopener">http://rss.daozhang.info</a> 访问这个app了。</p>
+<h2><span id="zui-hou">最后</span></h2>
+<p>这样，我们就完成了这个server的配置。在我部署这个server的过程中，微信对应的RSS生成的解析实效了，
+我觉得是因为sogou在其url中添加了一个序列，这个序列是有AES算法得出来的，并且一段时间会换一个key来
+生成这个序列，所以我暂时也不知道怎么处理这个，有待进一步研究。</p>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-18/" class="prev">PREV</a><a href="/qiwihui-blog-16/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-17/';
+var disqus_title = '使用Nginx，supervisor在DigitalOcean中部署tornado项目';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-17/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

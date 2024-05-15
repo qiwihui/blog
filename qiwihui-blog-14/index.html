@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 为什么python中索引从0开始 · QIWIHUI</title><meta name="description" content="为什么python中索引从0开始 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-14/index.html"><meta property="og:title" content="为什么python中索引从0开始"><meta property="og:description" content="为什么python中索引从0开始"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">为什么python中索引从0开始</h1><div class="post-info">Oct 9, 2018<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>7 min. read</span></div><div class="post-content"><p>在Python中字符串索引从0开始而不是从1开始是合乎逻辑的选择，因为python是用C语言写的，做为C的主要数据结构，数组是从0开始索引的。这在C中
+是很基础的，以至于如果改变索引从1开始将会需要大量的工作。</p>
+<a id="more"></a>
+<p>** 1) 那么下一个问题：为什么在C中索引从0开始？**</p>
+<p>C语言中的主要数据结构是数组，数组时一些相同类型元素的集合。在C中，字符串时字符数组，如果你想存储字符串“HELLO”，C会在内存中寻找一块连
+续的地方存储这些字符。比如，从内存地址7000开始存储，那么这个字符串在内存中的地址就是：</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="number">7000</span> <span class="string">'H'</span></span><br><span class="line"><span class="number">7001</span> <span class="string">'E'</span></span><br><span class="line"><span class="number">7002</span> <span class="string">'L'</span></span><br><span class="line"><span class="number">7003</span> <span class="string">'L'</span></span><br><span class="line"><span class="number">7004</span> <span class="string">'O'</span></span><br><span class="line">7005 '/0'</span><br></pre></td></tr></table></figure>
+<p>你可能会问：最后一个’/0’是什么？这个不是字符串&quot;HELLO&quot;的一部分。这个称作空值终止字符串。我们知道字符串从7000开始，但是我们不知道在哪里
+结束，因此C在字符串的末尾加了一个空值使得我们遍历字符串时知道它在哪里结束。让我们再回到原来的问题。</p>
+<p>让我们认真看一下这些字符的地址，如果我们想要这个字符串的第一个字符，我们要做的就是得到这个字符串的初始内存地址。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="string">'H'</span> 地址在 <span class="number">7000</span> 因为字符串从 <span class="number">7000</span> 开始</span><br></pre></td></tr></table></figure>
+<p>如果我们要字符’E’，只需要地址偏移加1:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="string">'E'</span> is at <span class="number">7000</span>+<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>我们可以是用偏移来得到所以的字符：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="string">'H'</span> is at <span class="number">7000</span> + <span class="number">0</span></span><br><span class="line"><span class="string">'E'</span> is at <span class="number">7000</span> + <span class="number">1</span></span><br><span class="line"><span class="string">'L'</span> is at <span class="number">7000</span> + <span class="number">2</span></span><br><span class="line"><span class="string">'L'</span> is at <span class="number">7000</span> + <span class="number">3</span></span><br><span class="line"><span class="string">'O'</span> is at <span class="number">7000</span> + <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<p>啊哈！看到了吗？我们很自然地会使得索引等于便宜，这样我们就可以找到数组中的所有元素。
+如果我们赋值如下：</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">greeting = 'HELLO'</span><br></pre></td></tr></table></figure>
+<p>则</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">greeting[<span class="number">0</span>] = <span class="string">'H'</span></span><br><span class="line">greeting[<span class="number">1</span>] = <span class="string">'E'</span></span><br><span class="line">greeting[<span class="number">2</span>] = <span class="string">'L'</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>所以，这是我们问题的回答。字符从0开始索引因为这表示了相对于字符串开始位置的偏移。</p>
+<p>** 2) 我还是认为数组的第一个元素应该从1开始，这样错了吗？**</p>
+<p>不，一点也不。有很多语言都会设计成这样：字符串的第一个元素的位置必须为1。一个很常见的例子是Matlab，它的索引从1开始。在这个例子中，
+Matlab是基于Fotran的，Fotran的数组索引从1开始，所以，改变时没有意义的。</p>
+<p>看到趋势了吗？语言往往从他们的父辈中继承许多基本的特性。由C衍生出来的语言倾向于从0开始索引，比如C++，objective C，Java，Python， Perl，
+Javascript和其它许多语言，<a href="http://en.wikipedia.org/wiki/List_of_C-based_programming_languages" target="_blank" rel="noopener">看这</a>。有Fortran衍生出来的语言则往往从1开始
+所以，就像Matalb和SimScript一样。</p>
+<p>当然，这些继承不是必须的。比如，相对于其他许多C衍生的语言，Python使用缩进来表示结构，而不是花括号。恕我直言，这很不寻常，但也不失为一个好选择，
+因为为了清楚，结构里的语句也会缩进，从这点看，花括号或者其他分隔符都显得多余了。</p>
+<p>** 3) 哪一个更好呢，从0开始还是从1开始？**</p>
+<p>都不好。如果需要，使用另一个索引开始值也是相对简单的。然而，有一些算法自然是从0或者1开始的，没有其他的，所以对于这些情况下，在实现上略有不同。
+比如，二叉查找树从1开始，所以，在Python中，我们可以使用一个从0开始的数组活着列表，然后忽略第一个元素。在这篇
+<a href="http://forums.udacity.com/questions/2006322/where-python-is-illogical?page=1&amp;focusedAnswerId=2022504#2022504" target="_blank" rel="noopener">博客</a>中，其中描述了我们可以强制C中的数组
+从1开始索引，以及C开发者社区是怎样收到一本趋势读者也这样做的书。</p>
+<p>原文在<a href="http://forums.udacity.com/questions/100086491/why-does-indexing-begin-at-0?page=1&amp;focusedAnswerId=100086607#100086607" target="_blank" rel="noopener">这儿</a>。</p>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E7%BF%BB%E8%AF%91/">#翻译</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-15/" class="prev">PREV</a><a href="/qiwihui-blog-13/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-14/';
+var disqus_title = '为什么python中索引从0开始';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-14/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

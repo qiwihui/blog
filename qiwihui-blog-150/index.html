@@ -1,0 +1,304 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> CPython Internals 笔记 ── Python 语言和语法 · QIWIHUI</title><meta name="description" content="CPython Internals 笔记 ── Python 语言和语法 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-150/index.html"><meta property="og:title" content="CPython Internals 笔记 ── Python 语言和语法"><meta property="og:description" content="CPython Internals 笔记 ── Python 语言和语法"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">CPython Internals 笔记 ── Python 语言和语法</h1><div class="post-info">May 15, 2024<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>32 min. read</span></div><div class="post-content"><p>编译器的目的是将一种语言转换成另一种语言。把编译器想象成一个翻译器。
+比如你会雇一个翻译来听你说英语，然后翻译成日语。</p>
+<p>为此，翻译人员必须了解源语言和目标语言的语法结构。</p>
+<p>有些编译器会编译成低级机器码，可以直接在系统上执行。其他编译器会编译成一种中间语言，由虚拟机执行。</p>
+<p>选择编译器时的一个考虑因素是系统可移植性要求。
+<a href="https://en.wikipedia.org/wiki/Java_bytecode" target="_blank" rel="noopener">Java</a>
+和 <a href="https://en.wikipedia.org/wiki/Common_Language_Runtime" target="_blank" rel="noopener">.NET CLR</a>
+将编译成一种中间语言，以便编译后的代码可以跨多个系统架构移植。
+C、Go、C++ 和 Pascal 将编译成可执行的二进制文件。此二进制文件是为编译它的平台构建的。</p>
+<p>Python 应用程序通常作为源代码分发。Python 解释器的作用是将Python源代码进行转换并一步执行。
+CPython 运行时在第一次运行时会编译你的代码。这一步对普通用户是不可见的。</p>
+<p>Python 代码不会被编译成机器码；它被编译成一种称为 <strong>字节码</strong> 的低级中间语言。
+此字节码存储在 <code>.pyc</code> 文件中并缓存以供执行。
+如果在不更改源代码的情况下两次运行同一个 Python 应用程序，则第二次执行速度会更快。
+这是因为它加载编译后的字节码而不是每次都重新编译。</p>
+<a id="more"></a>
+<h2><span id="wei-shi-me-cpython-shi-yong-c-er-bu-shi-yong-python-bian-xie">为什么 CPython 是用 C 而不是用 Python 编写</span></h2>
+<p>CPython 中的 <strong>C</strong> 是对 C 编程语言的引用，这意味着这个 Python 发行版是用 C 语言编写的。</p>
+<p>这种说法大多是正确的：CPython 中的编译器是用纯 C 编写的。
+但是，许多标准库模块是用纯 Python 或 C 和 Python 组合编写的。</p>
+<p><strong>那么为什么 CPython 编译器是用 C 而不是 Python 编写的呢？</strong></p>
+<p>答案在于编译器的工作方式。 有两种类型的编译器：</p>
+<ol>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Self-hosting_(compilers)" target="_blank" rel="noopener">自举编译器</a>
+是用它们编译的语言编写的编译器，例如 Go 编译器。这是通过称为引导的过程完成的。</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Source-to-source_compiler" target="_blank" rel="noopener">源到源编译器</a>
+是用另一种已经有编译器的语言编写的编译器。</p>
+</li>
+</ol>
+<p>如果你要从头开始编写新的编程语言，则需要一个可执行应用程序来编译你的编译器！
+你需要一个编译器来执行任何事情，所以当开发新语言时，它们通常首先用更老的、更成熟的语言编写。</p>
+<p>还有一些可用的工具可以读取语言规范并创建解析器。
+流行的编译器-编译器（compiler-compilers）包括 GNU Bison、Yacc 和 ANTLR。</p>
+<blockquote>
+<p>如果你想了解有关解析器的更多信息，请查看 <a href="https://github.com/lark-parser/lark" target="_blank" rel="noopener">lark</a> 项目。
+Lark 是一个用 Python 编写的上下文无关语法解析器。</p>
+</blockquote>
+<p>编译器引导的一个很好的例子是 Go 编程语言。
+第一个 Go 编译器是用 C 编写的，然后一旦 Go 可以编译了，就用 Go 重写编译器。</p>
+<p>CPython 保留了 C 语言的传统；许多标准库模块，如 ssl 模块或套接字模块，都是用 C 编写的，用于访问低级操作系统 API。
+Windows 和 Linux 内核中用于<a href="https://realpython.com/python-sockets/" target="_blank" rel="noopener">创建网络套接字</a>、
+<a href="https://realpython.com/working-with-files-in-python/" target="_blank" rel="noopener">使用文件系统</a>或
+<a href="https://realpython.com/python-gui-with-wxpython/" target="_blank" rel="noopener">与显示器交互</a>的 API 都是用 C 编写的。
+Python 的可扩展性层专注于 C 语言是有意义的。</p>
+<p>有一个用 Python 编写的 Python 编译器，称为 PyPy。
+PyPy 的标志是一个 <a href="https://en.wikipedia.org/wiki/Ouroboros" target="_blank" rel="noopener">衔尾蛇</a>，代表编译器的自举性质。</p>
+<p>Python 交叉编译器的另一个示例是 Jython。Jython 是用 Java 编写的，从 Python 源代码编译成 Java 字节码。
+与 CPython 可以轻松导入 C 库并从 Python 中使用它们一样，Jython 可以轻松导入和引用 Java 模块和类。</p>
+<p>创建编译器的第一步是定义语言。 例如，一下不是有效的 Python：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_example</span><span class="params">()</span> &lt;<span class="title">str</span>&gt; :</span></span><br><span class="line">&#123;</span><br><span class="line">    void* result = ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译器在尝试执行之前需要严格的语言语法结构规则。</p>
+<blockquote>
+<p>对于本书的其余部分，<code>./python</code> 将指代 CPython 的编译版本。 但是，实际命令将取决于你的操作系统。</p>
+<p>对于 Windows：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&gt; &gt; python.exe</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>对于 Linux：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&gt; $ ./python</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>对于 macOS：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&gt; $ ./python.exe</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2><span id="python-yu-yan-gui-fan">Python 语言规范</span></h2>
+<p>CPython 源代码中包含 Python 语言的定义。这个文档是所有 Python 解释器使用的参考规范。</p>
+<p>该规范采用人类可读和机器可读的格式。文档里面是对 Python 语言的详细解释。包含允许的内容以及每个语句的行为方式。</p>
+<h3><span id="yu-yan-wen-dang">语言文档</span></h3>
+<p>位于 <code>Doc/reference</code> 目录中的是 Python 语言中每个功能的 <a href="http://docutils.sourceforge.net/rst.html" target="_blank" rel="noopener">reStructured-Text</a> 解释。
+这些文件构成了 <a href="https://docs.python.org/3/reference/" target="_blank" rel="noopener">docs.python.org/3/reference</a> 上的官方 Python 参考指南。</p>
+<p>目录里面是你需要了解整个语言、结构和关键字的文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cpython/Doc/reference/</span><br><span class="line">├── compound_stmts.rst          复合语句，如 if、while、for 和函数定义</span><br><span class="line">├── datamodel.rst               对象、值和类型</span><br><span class="line">├── executionmodel.rst          Python程序的结构</span><br><span class="line">├── expressions.rst             Python 表达式的元素</span><br><span class="line">├── grammar.rst                 Python 的核心语法（参考 Grammar/Grammar）</span><br><span class="line">├── import.rst                  导入系统</span><br><span class="line">├── index.rst                   语言参考索引</span><br><span class="line">├── introduction.rst            参考文档介绍</span><br><span class="line">├── lexical_analysis.rst        词法结构，如行、缩进、标记和关键字</span><br><span class="line">├── simple_stmts.rst            简单的语句，如 assert、import、return 和 yield</span><br><span class="line">└── toplevel_components.rst     执行 Python 的方式的描述，如脚本和模块</span><br></pre></td></tr></table></figure>
+<h3><span id="yi-ge-li-zi">一个例子</span></h3>
+<p>在 <code>Doc/reference/compound_stmts.rst</code>，你可以看到一个定义 <code>with</code> 语句的简单示例。</p>
+<p><code>with</code> 语句有多种形式，最简单的是上下文管理器的实例化和嵌套的代码块：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> x():</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>你可以使用 <code>as</code> 关键字将结果分配给变量：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> x() <span class="keyword">as</span> y:</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>你还可以使用逗号将上下文管理器链接在一起：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> x() <span class="keyword">as</span> y, z() <span class="keyword">as</span> jk:</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>文档包含语言的人类可读规范，机器可读规范包含在单个文件 <code>Grammar Grammar</code> 中。</p>
+<h3><span id="yu-fa-wen-jian">语法文件</span></h3>
+<blockquote>
+<p>本节指的是“旧解析器”使用的语法文件。 在发布时，“新解析器”（PEG 解析器）是实验性的，尚未完成。</p>
+<p>对于 3.8 及以下版本的 CPython，默认使用 pgen 解析器。
+对于 CPython 3.9 及更高版本，PEG 解析器是默认的。可以在命令行上使用 <code>-X oldparser</code> 启用旧解析器。</p>
+<p>两个解析器都使用 <code>Tokens</code> 文件。</p>
+</blockquote>
+<p>语法文件以一种称为<a href="https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form" target="_blank" rel="noopener">巴科斯范式</a> (BNF) 的上下文符号编写。
+巴科斯范式不是 Python 特有的，通常用作许多其他语言中的语法符号。</p>
+<p>编程语言中语法结构的概念受到 <a href="https://en.wikipedia.org/wiki/Syntactic_Structures" target="_blank" rel="noopener">Noam Chomsky 在 1950 年代关于句法结构的工作</a>的启发！</p>
+<p>Python 的语法文件使用扩展巴科斯范式（EBNF）规范和正则表达式语法。因此，在语法文件中，你可以使用：</p>
+<ul>
+<li><code>*</code> 用于重复</li>
+<li><code>+</code> 至少重复一次</li>
+<li><code>[]</code> 用于可选部分</li>
+<li><code>|</code> 对于替代品</li>
+<li><code>()</code> 用于分组</li>
+</ul>
+<p>例如，考虑如何定义一杯咖啡：</p>
+<ul>
+<li>它必须有一个杯子</li>
+<li>它必须包括至少一瓶浓缩咖啡（espresso），并且可以包含多个</li>
+<li>它可以有牛奶，但可选</li>
+<li>你可以在咖啡中加入多种牛奶，如全脂、脱脂和豆奶（soy）</li>
+</ul>
+<p>在 EBNF 中定义的咖啡订单可能如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">coffee: &apos;cup&apos; (&apos;espresso&apos;)+ [&apos;water&apos;] [milk]</span><br><span class="line">milk: &apos;full-fat&apos; | &apos;skimmed&apos; | &apos;soy&apos;</span><br></pre></td></tr></table></figure>
+<p>在本章中，语法是用铁路图形象化的。 这张图是咖啡语句的铁路图：</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/130769007-ecd75282-7d28-4d9f-9904-60cba7b83350.png" alt="coffee_statement"></p>
+<p>在铁路图中，每个可能的组合必须从左到右排成一条线。 可选语句可以被绕过，有些语句可以形成循环。</p>
+<p>如果在语法文件中搜索 <code>with_stmt</code>，可以看到定义：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">with_stmt: &apos;with&apos; with_item (&apos;,&apos; with_item)*  &apos;:&apos; suite</span><br><span class="line">with_item: test [&apos;as&apos; expr]</span><br></pre></td></tr></table></figure>
+<p>引号中的任何内容都是字符串文字，称为终端（terminal）。终端是识别关键字的方式。<code>with_stmt</code> 指定为：</p>
+<ol>
+<li>从 <code>with</code> 开始</li>
+<li>后面跟一个 <code>with_item</code>，它可以是 <code>test</code>，和（可选的） <code>as</code> 以及一个表达式 <code>expr</code></li>
+<li>接着是一个或多个 <code>with_item</code>，每个都用逗号隔开</li>
+<li>以 <code>:</code> 结尾</li>
+<li>跟一个 <code>suite</code></li>
+</ol>
+<p>在这两行中引用了其他三个定义：</p>
+<p>• <code>suite</code> 是指包含一个或多个语句的代码块
+• <code>test</code> 指的是一个被评估的简单的语句
+• <code>expr</code> 指的是一个简单的表达式</p>
+<p>在铁路图中可视化，<code>with</code> 语句如下所示：</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/130769199-d7db516f-fb2e-4a7d-ae4e-ca34f5c49d78.png" alt="with_stmt"></p>
+<p>作为一个更复杂的例子，<code>try</code> 语句定义为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">try_stmt: (&apos;try&apos; &apos;:&apos; suite</span><br><span class="line">           ((except_clause &apos;:&apos; suite)+</span><br><span class="line">            [&apos;else&apos; &apos;:&apos; suite]</span><br><span class="line">            [&apos;finally&apos; &apos;:&apos; suite] |</span><br><span class="line">           &apos;finally&apos; &apos;:&apos; suite))</span><br><span class="line">except_clause: &apos;except&apos; [test [&apos;as&apos; NAME]]</span><br></pre></td></tr></table></figure>
+<p><code>try</code> 语句有两种用途：</p>
+<ol>
+<li><code>try</code> 和一个或多个 <code>except</code> 子句，然后是一个可选的 <code>else</code>，然后是一个可选的 <code>finally</code></li>
+<li><code>try</code> 和只有一个 <code>finally</code> 语句</li>
+</ol>
+<p>或者，在铁路图中可视化：</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/130769305-3fc27399-a211-48ae-92c9-780885c2ca03.png" alt="try_stmt"></p>
+<p><code>try</code> 语句是更复杂结构的一个很好的例子。</p>
+<p>如果你想详细了解 Python 语言，语法在 <code>Grammar/Grammar</code> 中定义。</p>
+<h2><span id="shi-yong-jie-xi-qi-sheng-cheng-qi-the-parser-generator">使用解析器生成器（The Parser Generator）</span></h2>
+<p>Python 编译器从不使用语法文件本身。相反，解析器表由解析器生成器创建。
+如果对语法文件进行更改，则必须重新生成解析器表并重新编译 CPython。</p>
+<p>解析器表是潜在解析器状态的列表。当解析树变得复杂时，它们确保语法不会有歧义。</p>
+<h2><span id="jie-xi-qi-sheng-cheng-qi">解析器生成器</span></h2>
+<p>解析器生成器的工作原理是将 EBNF 语句转换为非确定性有限自动机 (Non-deterministic Finite Automaton，NFA)。
+NFA 状态和转换被解析并合并为一个确定性有限自动机 (Deterministic Finite Automaton，DFA)。</p>
+<p>DFA 被解析器用作解析表。这种技术是<a href="http://infolab.stanford.edu/~ullman/dragon/slides1.pdf" target="_blank" rel="noopener">在斯坦福大学形成的</a>，并在 1980 年代开发，就在 Python 出现之前。
+CPython 的解析器生成器 <code>pgen</code> 是 CPython 项目独有的。</p>
+<p><code>pgen</code> 应用程序在 Python 3.8 中从 C 重写为 Python，在文件 <code>Parser/pgen/pgen.py</code> 中。</p>
+<p>它可通过以下执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ./python -m Parser.pgen [grammar] [tokens] [graminit.h] [graminit.c]</span><br></pre></td></tr></table></figure>
+<p>它通常从构建脚本执行，而不是直接执行。</p>
+<p>DFA 和 NFA 没有视觉输出，但有一个带有有向图输出的 <a href="https://github.com/tonybaloney/cpython/tree/dot_pgen" target="_blank" rel="noopener">CPython 分支</a>。
+<code>decorator</code> 语法在 <code>Grammar/Grammar</code> 中定义为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">decorator: &apos;@&apos; dotted_name [ &apos;(&apos; [arglist] &apos;)&apos; ] NEWLINE</span><br></pre></td></tr></table></figure>
+<p>解析器生成器创建了一个包含 11 个状态的复杂 NFA 图。每个状态都用数字表示（在语法中提示它们的名称）。
+状态转移被称为“弧”。</p>
+<p>DFA 比 NFA 更简单，路径减少了：</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/130769383-4c305c61-39c4-4239-934e-5fadf0fc5281.png" alt="decorator_DFA"></p>
+<p>NFA 和 DFA 图仅用于调试复杂语法的设计。</p>
+<p>我们将使用铁路图代替 DFA 或 NFA 图来表示语法。例如，此图表示 <code>decorator</code> 语句可以采用的路径：</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/130769434-73eb6a03-e7a1-4baa-bd65-e7b467b49ec9.png" alt="decorator_stmt"></p>
+<h2><span id="chong-xin-sheng-cheng-yu-fa">重新生成语法</span></h2>
+<p>要查看 <code>pgen</code> 的运行情况，让我们更改部分 Python 语法。
+在 <code>Grammar/Grammar</code> 中搜索 <code>pass_stmt</code> 以查看 <code>pass</code> 语句的定义：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pass_stmt: &apos;pass&apos;</span><br></pre></td></tr></table></figure>
+<p><img src="https://user-images.githubusercontent.com/3297411/130769494-9b57251f-38fe-4d3b-b8eb-73e49c831eda.png" alt="pass_stmt"></p>
+<p>通过添加选择 <code>|</code> 和 <code>proceed</code> 字面量，更改该行以接受终端（关键字）<code>'pass'</code> 或 <code>'proceed'</code> 作为关键字：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pass_stmt: &apos;pass&apos; | &apos;proceed&apos;</span><br></pre></td></tr></table></figure>
+<p><img src="https://user-images.githubusercontent.com/3297411/130769525-5107b366-f299-4299-a31d-8573304203ec.png" alt="pass_stmt_modified"></p>
+<p>接下来，通过运行 <code>pgen</code> 重建语法文件。CPython 带有脚本来自动化 <code>pgen</code>。</p>
+<p>在 macOS 和 Linux 上，运行 <code>make regen-grammar</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ make regen-grammar</span><br></pre></td></tr></table></figure>
+<p>对于 Windows，从 PCBuild 目录调出命令行并使用 <code>--regen</code> 标志运行 <code>build.bat</code>：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> build.bat --regen</span></span><br></pre></td></tr></table></figure>
+<p>你应该会看到一个输出，显示新的 <code>Include/graminit.h</code> 和 <code>Python/graminit.c</code> 文件已重新生成。</p>
+<p>使用重新生成的解析器表，当你重新编译 CPython 时，它将使用新语法。</p>
+<p>如果代码编译成功，你可以执行新的 CPython 二进制文件并启动 REPL。</p>
+<p>在 REPL 中，你现在可以尝试定义一个函数。不要使用 pass 语句，
+而是使用你编译到 Python 语法中的 <code>proceed</code> 关键字替代 <code>pass</code>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ./python -X oldparser</span><br><span class="line">Python 3.9.0b1 (tags/v3.9.0b1:97fe9cf, May 19 2020, 10:00:00)</span><br><span class="line">[Clang 10.0.1 (clang-1001.0.46.4)] on darwin</span><br><span class="line">Type <span class="string">"help"</span>, <span class="string">"copyright"</span>, <span class="string">"credits"</span> or <span class="string">"license"</span> <span class="keyword">for</span> more information.</span><br><span class="line">&gt;&gt;&gt; def example():</span><br><span class="line">...    proceed</span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt; example()</span><br></pre></td></tr></table></figure>
+<p>恭喜，你已经更改了 CPython 语法并编译了你自己的 CPython 版本。</p>
+<p>接下来，我们将探索标记（tokens）及其与语法的关系。</p>
+<h3><span id="biao-ji-tokens">标记（Tokens）</span></h3>
+<p>除了 <code>Grammar</code> 文件夹中的语法文件之外，还有 <code>Grammar/Tokens</code> 文件，
+其中包含在分析树中作为叶节点找到的每个唯一类型。每个标记还有一个名称和一个生成的唯一 ID。
+名称用于使在分词器（tokenizer）中更容易引用。</p>
+<blockquote>
+<p><code>Grammar/Tokens</code> 文件是 Python 3.8 中的一项新功能。</p>
+</blockquote>
+<p>例如，左括号称为 <code>LPAR</code>，分号称为称为 <code>SEMI</code>。 你将在本书后面看到这些标记：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LPAR                    &apos;(&apos;</span><br><span class="line">RPAR                    &apos;)&apos;</span><br><span class="line">LSQB                    &apos;[&apos;</span><br><span class="line">RSQB                    &apos;]&apos;</span><br><span class="line">COLON                   &apos;:&apos;</span><br><span class="line">COMMA                   &apos;,&apos;</span><br><span class="line">SEMI                    &apos;;&apos;</span><br></pre></td></tr></table></figure>
+<p>和 <code>Grammar</code> 文件一样，如果你修改了 <code>Grammar/Tokens</code> 文件，你需要重新运行 <code>pgen</code>。</p>
+<p>要查看操作中的标记，你可以使用 CPython 中的 <code>tokenize</code> 模块。</p>
+<blockquote>
+<p>CPython 源代码中有两个标记器。这里演示了一个用 Python 编写的分词器，另一个用 C 编写。
+用 Python 编写的分词器是一个实用程序，Python 解释器使用用 C 编写的那个。
+它们具有相同的输出和行为。用 C 编写的版本是为性能而设计的，而 Python 中的模块是为调试而设计的。</p>
+</blockquote>
+<p><code>cpython-book-samples/13/test_tokens.py</code>:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Demo application</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_function</span><span class="params">()</span>:</span> proceed</span><br></pre></td></tr></table></figure>
+<p>将 <code>test_tokens.py</code> 文件输入到标准库中内置的名为 <code>tokenize</code> 的模块中。你将按行和字符看到标记列表。
+使用 <code>-e</code> 标志输出确切的标记名称：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ./python -m tokenize -e test_tokens.py</span><br><span class="line"></span><br><span class="line">0,0-0,0:            ENCODING       <span class="string">'utf-8'</span>        </span><br><span class="line">1,0-1,18:           COMMENT        <span class="string">'# Demo application'</span></span><br><span class="line">1,18-1,19:          NL             <span class="string">'\n'</span>           </span><br><span class="line">2,0-2,3:            NAME           <span class="string">'def'</span>          </span><br><span class="line">2,4-2,15:           NAME           <span class="string">'my_function'</span>  </span><br><span class="line">2,15-2,16:          LPAR           <span class="string">'('</span>            </span><br><span class="line">2,16-2,17:          RPAR           <span class="string">')'</span>            </span><br><span class="line">2,17-2,18:          COLON          <span class="string">':'</span>            </span><br><span class="line">2,18-2,19:          NEWLINE        <span class="string">'\n'</span>           </span><br><span class="line">3,0-3,4:            INDENT         <span class="string">'    '</span>         </span><br><span class="line">3,4-3,11:           NAME           <span class="string">'proceed'</span>      </span><br><span class="line">3,11-3,12:          NEWLINE        <span class="string">'\n'</span>           </span><br><span class="line">4,0-4,0:            DEDENT         <span class="string">''</span>             </span><br><span class="line">4,0-4,0:            ENDMARKER      <span class="string">''</span></span><br></pre></td></tr></table></figure>
+<p>在输出中，第一列是行/列坐标的范围，第二列是标记的名称，最后一列是标记的值。</p>
+<p>在输出中， <code>tokenize</code> 模块隐含了一些标记：</p>
+<ul>
+<li><code>utf-8</code> 的 <code>ENCODING</code> 标记</li>
+<li>结尾的空白行</li>
+<li><code>DEDENT</code> 关闭函数声明</li>
+<li><code>ENDMARKER</code> 结束文件</li>
+</ul>
+<p>最佳做法是在 Python 源文件的末尾有一个空行。如果省略它，CPython 会为你添加它。</p>
+<p><code>tokenize</code> 模块是用纯 Python 编写的，位于 <code>Lib/tokenize.py</code> 中。</p>
+<p>要查看 C 分词器的详细读数，您可以使用 <code>-d</code> 标志运行 Python。
+使用之前创建的 <code>test_tokens.py</code> 脚本，使用以下命令运行它：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ./python -d test_tokens.py</span><br><span class="line"></span><br><span class="line">Token NAME/<span class="string">'def'</span> ... It<span class="string">'s a keyword</span></span><br><span class="line"><span class="string"> DFA '</span>file_input<span class="string">', state 0: Push '</span>stmt<span class="string">'</span></span><br><span class="line"><span class="string"> DFA '</span>stmt<span class="string">', state 0: Push '</span>compound_stmt<span class="string">'</span></span><br><span class="line"><span class="string">...</span></span><br><span class="line"><span class="string">Token NEWLINE/'</span><span class="string">' ... It'</span>s a token we know</span><br><span class="line"> DFA <span class="string">'funcdef'</span>, state 5: [switch func_body_suite to suite] Push <span class="string">'suite'</span></span><br><span class="line"> DFA <span class="string">'suite'</span>, state 0: Shift.</span><br><span class="line">Token INDENT/<span class="string">''</span> ... It<span class="string">'s a token we know</span></span><br><span class="line"><span class="string"> DFA '</span>suite<span class="string">', state 1: Shift.</span></span><br><span class="line"><span class="string">Token NAME/'</span>proceed<span class="string">' ... It'</span>s a keyword</span><br><span class="line"> DFA <span class="string">'suite'</span>, state 3: Push <span class="string">'stmt'</span></span><br><span class="line">...</span><br><span class="line">ACCEPT.</span><br></pre></td></tr></table></figure>
+<p>在输出中，你可以看到它突出显示了作为关键字的 <code>proceed</code>。
+在下一章中，我们将看到执行 Python 二进制文件是如何到达分词器的，以及从那里执行代码时会发生什么。</p>
+<blockquote>
+<p>要清理你的代码，请恢复 <code>Grammar/Grammar</code> 中的更改，再次重新生成语法，然后清理构建并重新编译：</p>
+<p>对于 macOS 或 Linux：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; $ git checkout -- Grammar/Grammar</span><br><span class="line">&gt; $ make regen-grammar</span><br><span class="line">&gt; $ make clobber</span><br><span class="line">&gt; $ make -j2 -s</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>对于 Windows：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> &gt; git checkout -- Grammar/Grammar</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> &gt; build.bat --regen</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> &gt; build.bat -t CleanAll</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> &gt; build.bat -t Build</span></span><br><span class="line"><span class="meta">&gt;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2><span id="yi-ge-geng-fu-za-de-li-zi">一个更复杂的例子</span></h2>
+<p>添加 <code>proceed</code> 作为 <code>pass</code> 的替代关键字是一个简单的更改，
+解析器生成器将 <code>'proceed'</code> 作为 <code>pass_stmt</code> 标记的文字进行匹配。
+这个新关键字无需对编译器进行任何更改即可工作。</p>
+<p>在实践中，对语法的大多数更改都更加复杂。</p>
+<p>Python 3.8 引入了赋值表达式，格式为 <code>:=</code>。赋值表达式既为名称赋值，又返回命名变量的值。
+受在 Python 语言中添加赋值表达式影响的语句之一是 <code>if</code> 语句。</p>
+<p>在 3.8 之前，<code>if</code> 语句定义为：</p>
+<ul>
+<li>关键字 <code>if</code> 后跟 <code>test</code>，然后是 <code>:</code></li>
+<li>嵌套的一系列语句（<code>suite</code>）</li>
+<li>零个或多个 <code>elif</code> 语句，后跟 <code>test</code>、一个 <code>:</code> 和 <code>suite</code></li>
+<li>一个可选的 <code>else</code> 语句，后跟一个 <code>:</code> 和一个 <code>suite</code></li>
+</ul>
+<p>在语法中，这表示为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if_stmt: &apos;if&apos; test &apos;:&apos; suite (&apos;elif&apos; test &apos;:&apos; suite)* [&apos;else&apos; &apos;:&apos; suite]</span><br></pre></td></tr></table></figure>
+<p>可视化之后看起来像：</p>
+<p>为了支持赋值表达式，更改需要向后兼容。 因此，在 <code>if</code> 语句中使用 <code>:=</code> 必须是可选的。</p>
+<p><code>if</code> 语句中使用的 <code>test</code> 标记类型在许多语句之间是通用的。例如，<code>assert</code> 语句后跟一个 <code>test</code>（然后是可选的第二个 <code>test</code>）。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">assert_stmt: &apos;assert&apos; test [&apos;,&apos; test]</span><br></pre></td></tr></table></figure>
+<p>在 3.8 中添加了替代 <code>test</code> 标记类型，以便语法可以规定哪些语句应该支持赋值表达式，哪些不应该支持。</p>
+<p>这个称为 <code>namedexpr_test</code>，在 <code>Grammer</code> 中定义为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">namedexpr_test: test [&apos;:=&apos; test]</span><br></pre></td></tr></table></figure>
+<p>或者，在铁路图中可视化为：</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/130769573-78634152-1b47-4ee8-9ca7-2f6b6e3ff4a1.png" alt="namedexpr_test"></p>
+<p><code>if</code> 语句的新语法已更改为用 <code>namedexpr_test</code> 替换 <code>test</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if_stmt: &apos;if&apos; namedexpr_test &apos;:&apos; suite (&apos;elif&apos; namedexpr_test &apos;:&apos; suite)</span><br><span class="line">        [&apos;else&apos; &apos;:&apos; suite]</span><br></pre></td></tr></table></figure>
+<p>在铁路图中可视化：</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/130769666-b253d126-ab60-4eb5-8dd6-8e7ca3988282.png" alt="if_stmt_with_namedexpr_test"></p>
+<p>为了区分 <code>:=</code> 和现有的 <code>COLON</code> (<code>:</code>) 和 <code>EQUAL</code> (<code>=</code>) 标记，将以下标记也添加到 <code>Grammar/Tokens</code> 中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">COLONEQUAL              &apos;:=&apos;</span><br></pre></td></tr></table></figure>
+<p>这不是支持赋值表达式所需的唯一更改。 如 <a href="https://github.com/python/cpython/pull/10497" target="_blank" rel="noopener">Pull Request</a> 中所示，这一变化改变了 CPython 编译器的许多部分。</p>
+<blockquote>
+<p>有关 CPython 解析器生成器的更多信息，<code>pgen</code> 的作者在 PyCon Europe 2019 上录制了
+有关实现和设计的演示文稿：“<a href="https://www.youtube.com/watch?v=1_23AVsiQEc" target="_blank" rel="noopener">野兽之魂</a>”。</p>
+</blockquote>
+<h2><span id="zong-jie">总结</span></h2>
+<p>在本章中，你已经了解了 Python 语法定义和解析器生成器。
+在下一章中，你将扩展该知识以构建更复杂的语法功能，即“几乎等于”运算符。</p>
+<p>在实践中，必须仔细考虑和讨论对 Python 语法的更改。审查水平有两个原因：</p>
+<ol>
+<li>拥有“太多”的语言特性或复杂的语法会改变 Python 作为一种简单易读的语言的精神</li>
+<li>语法更改引入向后不兼容，这给所有开发人员增加了工作</li>
+</ol>
+<p>如果 Python 核心开发人员提议对语法进行更改，则必须将其作为 Python 增强提案 (PEP) 提出。
+所有 PEP 都在 PEP 索引上进行编号和索引。
+<a href="https://www.python.org/dev/peps/pep-0005/" target="_blank" rel="noopener">PEP 5</a> 记录了语言发展的指南，并指定必须在 PEP 中提出更改。</p>
+<p>成员还可以通过 <a href="https://www.python.org/community/lists/" target="_blank" rel="noopener">python-ideas 邮件列表</a>建议对核心开发组之外的语言进行更改。</p>
+<p>你可以在 <a href="https://www.python.org/dev/peps/" target="_blank" rel="noopener">PEP 索引</a>中查看 CPython 未来版本的起草的、拒绝的和接受的 PEP。
+一旦 PEP 达成共识，并且草案已定稿，指导委员会必须接受或拒绝它。
+<a href="https://www.python.org/dev/peps/pep-0013/" target="_blank" rel="noopener">PEP 13</a> 中定义的指导委员会的任务规定，
+他们应努力“维护 Python 语言和 CPython 解释器的质量和稳定性”。</p>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/Python/">#Python</a><a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">#读书笔记</a><a href="/tags/CPythonInternals/">#CPythonInternals</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-156/" class="prev">PREV</a><a href="/qiwihui-blog-175/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-150/';
+var disqus_title = 'CPython Internals 笔记 ── Python 语言和语法';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-150/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

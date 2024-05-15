@@ -1,0 +1,127 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Nginx服务器设置HTTP/2 · QIWIHUI</title><meta name="description" content="Nginx服务器设置HTTP/2 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-22/index.html"><meta property="og:title" content="Nginx服务器设置HTTP/2"><meta property="og:description" content="Nginx服务器设置HTTP/2"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">Nginx服务器设置HTTP/2</h1><div class="post-info">Oct 9, 2018<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>10 min. read</span></div><div class="post-content"><p>我的博客已经支持了 HTTP/2, 在此将介绍如何在 Nginx 上设置 HTTP/2 及相关注意事项(坑)。</p>
+<h2><span id="qian-ti">前提</span></h2>
+<p>HTTP/2 安装需要以下前提：</p>
+<ul>
+<li>Nginx 版本在1.9.5以上</li>
+<li>OpenSSL 版本在 1.0.2g 以上（支持 ALPN）</li>
+</ul>
+<a id="more"></a>
+<p>不同 Linux 系统对于 <code>ALPN</code> 和 <code>NPN</code> 的支持可以参见下表</p>
+<table>
+<thead>
+<tr>
+<th>Operating System</th>
+<th>OpenSSL Version</th>
+<th>ALPN and NPN Support</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CentOS/Oracle Linux/RHEL 5.10+</td>
+<td>0.9.8e</td>
+<td>Neither</td>
+</tr>
+<tr>
+<td>CentOS/Oracle Linux/RHEL 6.5+, 7.0+</td>
+<td>1.0.1e</td>
+<td>NPN</td>
+</tr>
+<tr>
+<td>Ubuntu 12.04 LTS</td>
+<td>1.0.1</td>
+<td>NPN</td>
+</tr>
+<tr>
+<td>Ubuntu 14.04 LTS</td>
+<td>1.0.1f</td>
+<td>NPN</td>
+</tr>
+<tr>
+<td>Ubuntu 16.04 LTS</td>
+<td>1.0.2g</td>
+<td>ALPN and NPN</td>
+</tr>
+<tr>
+<td>Debian 7.0</td>
+<td>1.0.1e</td>
+<td>NPN</td>
+</tr>
+<tr>
+<td>Debian 8.0</td>
+<td>1.0.1k</td>
+<td>NPN</td>
+</tr>
+</tbody>
+</table>
+<p>所以要么升级使用带有 OpenSSL 1.0.2 的 Ubuntu 16.04 LTS，要么从头编译 Nginx.</p>
+<p>我的服务器系统是 Debian 7, OpenSSL 版本是1.0.1t, 所以需要重新编译 Nginx 和 OpenSSL.</p>
+<h2><span id="an-zhuang-guo-cheng">安装过程</span></h2>
+<h3><span id="an-zhuang-openssl">安装 OpenSSL</span></h3>
+<p>下载并安装 OpenSSL:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># cd ~</span></span><br><span class="line"><span class="comment"># wget http://www.openssl.org/source/openssl-1.1.0e.tar.gz</span></span><br><span class="line"><span class="comment"># tar -zxf openssl-1.1.0e.tar.gz</span></span><br><span class="line"><span class="comment"># cd openssl-1.1.0e</span></span><br><span class="line"><span class="comment"># ./configure</span></span><br><span class="line"><span class="comment"># make</span></span><br><span class="line"><span class="comment"># sudo make install</span></span><br></pre></td></tr></table></figure>
+<p>使用 <code>openssl version</code> 来查看安装好的 OpenSSL 的版本。</p>
+<h3><span id="qi-ta-nginx-bian-yi-xu-yao-de-huan-jing">其他 Nginx 编译需要的环境</span></h3>
+<p>需要编译 <code>PCRE</code> 库和 <code>zlib</code> 库[]：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.40.tar.gz</span></span><br><span class="line"><span class="comment"># tar -zxf pcre-8.40.tar.gz</span></span><br><span class="line"><span class="comment"># cd pcre-8.40</span></span><br><span class="line"><span class="comment"># ./configure</span></span><br><span class="line"><span class="comment"># make</span></span><br><span class="line"><span class="comment"># sudo make install</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># wget http://zlib.net/zlib-1.2.11.tar.gz</span></span><br><span class="line"><span class="comment"># tar -zxf zlib-1.2.11.tar.gz</span></span><br><span class="line"><span class="comment"># cd zlib-1.2.11</span></span><br><span class="line"><span class="comment"># ./configure</span></span><br><span class="line"><span class="comment"># make</span></span><br><span class="line"><span class="comment"># sudo make install</span></span><br></pre></td></tr></table></figure>
+<h3><span id="bian-yi-nginx">编译 Nginx</span></h3>
+<p>首先，下载最新的 nginx，我使用 1.10.3.</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line">wget -c http://nginx.org/download/nginx-1.10.3.tar.gz</span><br><span class="line">tar xzvf nginx-1.10.3.tar.gzcd nginx-1.10.3</span><br></pre></td></tr></table></figure>
+<p>其实，获取 Nginx 配置参数，使新版 Nginx 和之前的配置一样</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># nginx -V</span></span><br><span class="line"></span><br><span class="line">nginx version: nginx/1.9.6</span><br><span class="line">built by gcc 4.7.2 (Debian 4.7.2-5) </span><br><span class="line">built with OpenSSL 1.0.1t  3 May 2016</span><br><span class="line">TLS SNI support enabled</span><br><span class="line">configure arguments: --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/<span class="built_in">log</span>/nginx/error.log --http-log-path=/var/<span class="built_in">log</span>/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=nginx --group=nginx --with-file-aio --with-threads --with-ipv6 --with-http_addition_module --with-http_auth_request_module --with-http_dav_module --with-http_flv_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_mp4_module --with-http_random_index_module --with-http_realip_module --with-http_secure_link_module --with-http_slice_module --with-http_ssl_module --with-http_stub_status_module --with-http_sub_module --with-http_v2_module --with-mail --with-mail_ssl_module --with-stream --with-stream_ssl_module --with-cc-opt=<span class="string">'-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -fPIC'</span> --with-ld-opt=<span class="string">'-Wl,-z,relro -Wl,-z,now -Wl,--as-needed -pie'</span></span><br></pre></td></tr></table></figure>
+<p>上述配置用已经有 <code>--with-http_v2_module</code> 选项了，还需要在上述配置参数后面加上 <code>--with-openssl=/path/to/your/openssl-1.1.0e</code> 指向新版本的 OpenSSL 文件夹</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/<span class="built_in">log</span>/nginx/error.log --http-log-path=/var/<span class="built_in">log</span>/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=nginx --group=nginx --with-file-aio --with-threads --with-ipv6 --with-http_addition_module --with-http_auth_request_module --with-http_dav_module --with-http_flv_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_mp4_module --with-http_random_index_module --with-http_realip_module --with-http_secure_link_module --with-http_slice_module --with-http_ssl_module --with-http_stub_status_module --with-http_sub_module --with-http_v2_module --with-mail --with-mail_ssl_module --with-stream --with-stream_ssl_module --with-cc-opt=<span class="string">'-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -fPIC'</span> --with-ld-opt=<span class="string">'-Wl,-z,relro -Wl,-z,now -Wl,--as-needed -pie'</span> --with-openssl=/home/qiwihui/openssl-1.1.0e</span><br><span class="line">```    </span><br><span class="line"></span><br><span class="line">可以看到大致输出为</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line">Configuration summary</span><br><span class="line">  + using threads</span><br><span class="line">  + using system PCRE library</span><br><span class="line">  + using OpenSSL library: /home/qiwihui/openssl-1.1.0e</span><br><span class="line">  + md5: using OpenSSL library</span><br><span class="line">  + sha1: using OpenSSL library</span><br><span class="line">  + using system zlib library</span><br><span class="line"></span><br><span class="line">  nginx path prefix: <span class="string">"/etc/nginx"</span></span><br><span class="line">  nginx binary file: <span class="string">"/usr/sbin/nginx"</span></span><br><span class="line">  nginx modules path: <span class="string">"/usr/lib/nginx/modules"</span></span><br><span class="line">  nginx configuration prefix: <span class="string">"/etc/nginx"</span></span><br><span class="line">  nginx configuration file: <span class="string">"/etc/nginx/nginx.conf"</span></span><br><span class="line">  nginx pid file: <span class="string">"/var/run/nginx.pid"</span></span><br><span class="line">  nginx error <span class="built_in">log</span> file: <span class="string">"/var/log/nginx/error.log"</span></span><br><span class="line">  nginx http access <span class="built_in">log</span> file: <span class="string">"/var/log/nginx/access.log"</span></span><br><span class="line">  nginx http client request body temporary files: <span class="string">"/var/cache/nginx/client_temp"</span></span><br><span class="line">  nginx http proxy temporary files: <span class="string">"/var/cache/nginx/proxy_temp"</span></span><br><span class="line">  nginx http fastcgi temporary files: <span class="string">"/var/cache/nginx/fastcgi_temp"</span></span><br><span class="line">  nginx http uwsgi temporary files: <span class="string">"/var/cache/nginx/uwsgi_temp"</span></span><br><span class="line">  nginx http scgi temporary files: <span class="string">"/var/cache/nginx/scgi_temp"</span></span><br></pre></td></tr></table></figure>
+<p>最后，编译并安装</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># make</span></span><br><span class="line"><span class="comment"># sudo make install</span></span><br></pre></td></tr></table></figure>
+<p>之后就可以看到已经安装好了新版 Nginx了。</p>
+<h3><span id="pei-zhi">配置</span></h3>
+<h4><span id="pei-zhi-https">配置 HTTPS</span></h4>
+<p>请参考之前博客 <a href="https://blog.qiwihui.com/2016/04/10/enable-https/" target="_blank" rel="noopener">使用免费的let’s encrypt证书为网站开启https</a></p>
+<h4><span id="kai-qi-http-2">开启 http/2</span></h4>
+<p>第一步完成后就设置好了一个 HTTPS 的网站了，在此基础之上开始 HTTP/2。首先，开启 HTTP/2：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">listen 443 ssl http2 default_server;</span><br></pre></td></tr></table></figure>
+<p>其次，去除HTTP/2不支持的旧的不安全的密码套件[5]:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssl_prefer_server_ciphers on;</span><br><span class="line">ssl_ciphers EECDH+CHACHA20:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;</span><br></pre></td></tr></table></figure>
+<p>最后，检查配置并重启 Nginx:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># nginx -t</span></span><br><span class="line"></span><br><span class="line">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /etc/nginx/nginx.conf <span class="built_in">test</span> is successful</span><br><span class="line"></span><br><span class="line"><span class="comment"># sudo /etc/init.d/nginx restart</span></span><br></pre></td></tr></table></figure>
+<h2><span id="jian-cha">检查</span></h2>
+<p>至此，不出问题的话你的服务器已经开始支持 HTTP/2 了，可以使用 <a href="https://tools.keycdn.com/http2-test" target="_blank" rel="noopener">HTTP/2 Test</a> 来检测是否支持了 HTTP/2</p>
+<p><img src="/media/files/2017/02/19-qiwihui-com-http2.png" alt></p>
+<p>其中，对 <code>ALPN</code> 的支持可以使用 OpenSSL 来检测：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> | openssl s_client -alpn h2 -connect qiwihui.com:443 | grep ALPN</span><br></pre></td></tr></table></figure>
+<p>如果输出中包含 <code>ALPN protocol: h2</code>，说明服务端支持 <code>ALPN</code>，如果输出中包含 <code>No ALPN negotiated</code>，说明服务端不支持 <code>ALPN</code>。</p>
+<p>同时，在 Chrome 的开发者工具中也可以看到协议的版本</p>
+<p><img src="/media/files/2017/02/19-qiwihui-com-chrome-http2.png" alt></p>
+<p>同时还可以对 HTTP/2 进行优化，请参见[6]，不赘述了。</p>
+<h2><span id="fu-lu">附录</span></h2>
+<p>附录一份 Nginx 的 http/2 简单配置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen 443 ssl http2 default_server;</span><br><span class="line">        listen [::]:443 ssl http2 default_server;</span><br><span class="line"></span><br><span class="line">        server_name example.com www.example.com; </span><br><span class="line"></span><br><span class="line">        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</span><br><span class="line">        ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;</span><br><span class="line">        ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;</span><br><span class="line"></span><br><span class="line">        ssl_dhparam /path/to/your/dhparam.pem;</span><br><span class="line">        ssl_ciphers EECDH+CHACHA20:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;</span><br><span class="line"></span><br><span class="line">        ssl_prefer_server_ciphers  on;</span><br><span class="line">        add_header Strict-Transport-Security <span class="string">"max-age=31536000; includeSubdomains;"</span>;</span><br><span class="line">        ssl_session_cache shared:SSL:5m;</span><br><span class="line">        ssl_session_timeout 1h;</span><br><span class="line">        </span><br><span class="line">        root /path/to/your/folder/;</span><br><span class="line">        index index.html;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    listen 80;</span><br><span class="line">    listen [::]:80;</span><br><span class="line">    server_name example.com www.example.com;</span><br><span class="line">    <span class="built_in">return</span> 301 https://<span class="variable">$server_name</span><span class="variable">$request_uri</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="can-kao">参考</span></h2>
+<p>[1]. <a href="https://www.nginx.com/blog/supporting-http2-google-chrome-users/" target="_blank" rel="noopener">Supporting HTTP/2 for Google Chrome Users</a>
+[2]. <a href="https://imququ.com/post/enable-alpn-asap.html" target="_blank" rel="noopener">为什么我们应该尽快支持 ALPN？</a>
+[3]. <a href="https://www.nginx.com/resources/admin-guide/installing-nginx-open-source/" target="_blank" rel="noopener">Nginx官方教程 INSTALLING NGINX OPEN SOURCE</a>
+[4]. <a href="http://serverfault.com/a/733556/296724" target="_blank" rel="noopener">serverfault问题: Nginx configured with http2 doesn’t deliver HTTP/2</a>
+[5]. <a href="https://http2.github.io/http2-spec/#BadCipherSuites" target="_blank" rel="noopener">TLS 1.2 Cipher Suite Black List</a>
+[6]. <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-nginx-with-http-2-support-on-ubuntu-16-04#step-10-%E2%80%94-optimizing-nginx-for-best-performance" target="_blank" rel="noopener">Optimizing Nginx for Best Performance</a></p>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-23/" class="prev">PREV</a><a href="/qiwihui-blog-21/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-22/';
+var disqus_title = 'Nginx服务器设置HTTP/2';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-22/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

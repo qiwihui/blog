@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 9个值得知道的cURL的用法 · QIWIHUI</title><meta name="description" content="9个值得知道的cURL的用法 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-19/index.html"><meta property="og:title" content="9个值得知道的cURL的用法"><meta property="og:description" content="9个值得知道的cURL的用法"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">9个值得知道的cURL的用法</h1><div class="post-info">Oct 9, 2018<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>9 min. read</span></div><div class="post-content"><p>对于 HTTP 工程师和 API 设计师来说，使用命令行操作 HTTP 是非常有用的技能。<a href="http://curl.haxx.se/" target="_blank" rel="noopener">cURL</a>
+库和 <code>curl</code> 命令可以给你设计请求，放入管道并查看相应的能力。<code>curl</code> 能力的缺点在于它能覆盖多广的
+命令选项。使用 <code>curl --help</code> 会展示出150条不同的选项。这篇文章演示了9个基本的，现实程序用到的 <code>curl</code> 命令。</p>
+<a id="more"></a>
+<p>在这篇教程中我们会使用httpkit的 <a href="http://echo.httpkit.com/" target="_blank" rel="noopener">echo</a> 服务做为端点，回显服务的响应
+是它收到 HTTP 请求的 JSON 表示。</p>
+<h2><span id="chuang-jian-qing-qiu">创建请求</span></h2>
+<p>我们从最简单的 <code>curl</code> 命令开始。</p>
+<p><strong>请求</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl http://echo.httpkit.com</span><br></pre></td></tr></table></figure>
+<p><strong>响应</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;method&quot;: &quot;GET&quot;,</span><br><span class="line">  &quot;uri&quot;: &quot;/&quot;,</span><br><span class="line">  &quot;path&quot;: &#123;</span><br><span class="line">    &quot;name&quot;: &quot;/&quot;,</span><br><span class="line">    &quot;query&quot;: &quot;&quot;,</span><br><span class="line">    &quot;params&quot;: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;headers&quot;: &#123;</span><br><span class="line">    &quot;host&quot;: &quot;echo.httpkit.com&quot;,</span><br><span class="line">    &quot;user-agent&quot;: &quot;curl/7.24.0 ...&quot;,</span><br><span class="line">    &quot;accept&quot;: &quot;*/*&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;body&quot;: null,</span><br><span class="line">  &quot;ip&quot;: &quot;28.169.144.35&quot;,</span><br><span class="line">  &quot;powered-by&quot;: &quot;http://httpkit.com&quot;,</span><br><span class="line">  &quot;docs&quot;: &quot;http://httpkit.com/echo&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>就这样，我们用 <code>curl</code> 创建了一个请求，<code>curl</code> 使用的 HTTP 动词默认为 <code>GET</code>，请求的资源指向的是
+<a href="http://httpkit.com/" target="_blank" rel="noopener">httpkit</a> 的 <a href="http://httpkit.com/echo" target="_blank" rel="noopener">echo</a> 服务：<code>http://echo.httpkit.com</code>。</p>
+<p>你可以添加路径和查询变量：</p>
+<p><strong>请求</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl http://echo.httpkit.com//path?query=string</span><br></pre></td></tr></table></figure>
+<p><strong>响应</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123; ...</span><br><span class="line">  &quot;uri&quot;: &quot;/path?query=string&quot;,</span><br><span class="line">  &quot;path&quot;: &#123;</span><br><span class="line">    &quot;name&quot;: &quot;/path&quot;,</span><br><span class="line">    &quot;query&quot;: &quot;?query=string&quot;,</span><br><span class="line">    &quot;params&quot;: &#123;</span><br><span class="line">      &quot;query&quot;: &quot;string&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="she-zhi-qing-qiu-fang-fa">设置请求方法</span></h2>
+<p><code>curl</code>默认的请求方法为 <code>GET</code> ，可以用 <code>-X</code> 参数设置成任何你想要的方法，通常为 <code>POST</code>，<code>PUT</code>，<code>DELETE</code>
+方法，甚至是自定义的方法。</p>
+<p><strong>请求</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -X POST echo.httpkit.com</span><br></pre></td></tr></table></figure>
+<p><strong>响应</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;method&quot;: &quot;POST&quot;,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>正如你看到的，<code>http://</code> 协议前缀可以不使用，因为这是默认假定的。接着实施 <code>DELETE</code> 方法：</p>
+<p><strong>请求</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -X DELETE echo.httpkit.com</span><br></pre></td></tr></table></figure>
+<p><strong>响应</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;method&quot;: &quot;DELETE&quot;,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="she-zhi-qing-qiu-tou-bu">设置请求头部</span></h2>
+<p>请求头部允许客户端给服务器提供诸如授权，内容类型等信息。比如，OAuth2 使用 <code>Authorization</code> 头
+来传递访问令牌（access tokens）。<code>curl</code> 使用 <code>-H</code> 选项设置自定义头部。</p>
+<p><strong>请求</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -H &quot;Authorization: OAuth 2c4419d1aabeec&quot; \</span><br><span class="line">     http://echo.httpkit.com</span><br></pre></td></tr></table></figure>
+<p><strong>响应</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;...</span><br><span class="line">&quot;headers&quot;: &#123;</span><br><span class="line">    &quot;host&quot;: &quot;echo.httpkit.com&quot;,</span><br><span class="line">    &quot;authorization&quot;: &quot;OAuth 2c4419d1aabeec&quot;,</span><br><span class="line">  ...&#125;,</span><br><span class="line">...&#125;</span><br></pre></td></tr></table></figure>
+<p>可以使用 <code>-H</code> 多次来设置多个头部。</p>
+<p><strong>请求</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -H &quot;Accept: application/json&quot; \</span><br><span class="line">     -H &quot;Authorization: OAuth 2c3455d1aeffc&quot; \</span><br><span class="line">     http://echo.httpkit.com</span><br></pre></td></tr></table></figure>
+<p><strong>响应</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123; ...</span><br><span class="line">  &quot;headers&quot;: &#123; ...</span><br><span class="line">    &quot;host&quot;: &quot;echo.httpkit.com&quot;,</span><br><span class="line">    &quot;accept&quot;: &quot;application/json&quot;,</span><br><span class="line">    &quot;authorization&quot;: &quot;OAuth 2c3455d1aeffc&quot; </span><br><span class="line">   &#125;, ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="fa-song-qing-qiu-ti">发送请求体</span></h2>
+<p>现今许多有名的 HTTP API 使用 <code>application/json</code> 和 <code>application/xml</code> 来 <code>POST</code> 和 <code>PUT</code> 资源，
+而不是用HTML化的数据。我们试试 <code>PUT</code> 一些 JSON 数据到服务器上。</p>
+<p><strong>请求</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -X PUT \</span><br><span class="line">     -H &apos;Content-Type: application/json&apos; \</span><br><span class="line">     -d &apos;&#123;&quot;firstName&quot;:&quot;Kris&quot;, &quot;lastName&quot;:&quot;Jordan&quot;&#125;&apos;</span><br><span class="line">     echo.httpkit.com</span><br></pre></td></tr></table></figure>
+<p><strong>响应</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   &quot;method&quot;: &quot;PUT&quot;, ...</span><br><span class="line">   &quot;headers&quot;: &#123; ...</span><br><span class="line">     &quot;content-type&quot;: &quot;application/json&quot;,</span><br><span class="line">     &quot;content-length&quot;: &quot;40&quot;</span><br><span class="line">   &#125;,</span><br><span class="line">   &quot;body&quot;: &quot;&#123;\&quot;firstName\&quot;:\&quot;Kris\&quot;,\&quot;lastName\&quot;:\&quot;Jordan\&quot;&#125;&quot;,</span><br><span class="line">   ...</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="shi-yong-wen-jian-zuo-wei-qing-qiu-ti">使用文件作为请求体</span></h2>
+<p>将 JSON/XML 写到命令行中是令人头疼的，尤其有时这个文件很大时。幸运的是， <code>curl</code> 的 <code>@readfile</code>
+可以很容易地读取文件的文本。如果上面例子中的 JSON 保存为文件 <code>example.json</code>， 我们可以这么做：</p>
+<p><strong>请求</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -X PUT \</span><br><span class="line">     -H &apos;Content-Type: application/json&apos; \</span><br><span class="line">     -d @example.json</span><br><span class="line">     echo.httpkit.com</span><br></pre></td></tr></table></figure>
+<h2><span id="fa-song-html-biao-dan-shu-ju">发送 HTML 表单数据</span></h2>
+<p>如果不能发送带有数据的请求体，可以设置类似 <code>POST</code> 的方法真是没什么用。也许我们可以试试发送 HTML
+表单数据。使用 <code>-d</code> 选项，我们可以制定 URL 编码的名称和值。</p>
+<p><strong>请求</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -d &quot;firstName=Kris&quot; \</span><br><span class="line">     -d &quot;lastName=Jordan&quot; \</span><br><span class="line">     echo.httpkit.com</span><br></pre></td></tr></table></figure>
+<p><strong>响应</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;method&quot;: &quot;POST&quot;, ...</span><br><span class="line">  &quot;headers&quot;: &#123;</span><br><span class="line">    &quot;content-length&quot;: &quot;30&quot;,</span><br><span class="line">    &quot;content-type&quot;:&quot;application/x-www-form-urlencoded&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;body&quot;: &quot;firstName=Kris&amp;lastName=Jordan&quot;, ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意到 <code>POST</code> 这个方法，即使我们没有指明方法，当 <code>curl</code> 看到表单数据时它会指定 <code>POST</code> 方法。
+可以使用 <code>-X</code> 选项来覆盖这个方法。请求的 <code>Content-Type</code> 也被自动设置为 <code>application/x-www-form-urlencoded</code>，
+这样服务器就知道怎么解析数据了。最终，请求体由编码了每一个表单域的 URL 构成。</p>
+<h2><span id="fa-song-html-multipart-file-biao-dan-shang-chuan-wen-jian">发送 HTML Multipart/file 表单（上传文件）</span></h2>
+<p>当涉及到文件上传的表单时，正如你从写上传文件表单时知道的那样，这些使用 <code>multipart/form-data</code> 文本类型，
+带有 <code>enctype</code> 属性。cURL 使用 <code>-F</code> 配合上面介绍的 <code>@readFile</code> 宏来处理。</p>
+<p><strong>请求</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -F &quot;firstName=Kris&quot; \</span><br><span class="line">     -F &quot;publicKey=@idrsa.pub;type=text/plain&quot; \</span><br><span class="line">     echo.httpkit.com</span><br></pre></td></tr></table></figure>
+<p><strong>响应</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;method&quot;: &quot;POST&quot;,</span><br><span class="line">  ...</span><br><span class="line">  &quot;headers&quot;: &#123;</span><br><span class="line">    &quot;content-length&quot;: &quot;697&quot;,</span><br><span class="line">    &quot;content-type&quot;: &quot;multipart/form-data;</span><br><span class="line">    boundary=----------------------------488327019409&quot;,</span><br><span class="line">    ... &#125;,</span><br><span class="line">  &quot;body&quot;: &quot;------------------------------488327019409\r\n</span><br><span class="line">           Content-Disposition: form-data;</span><br><span class="line">           name=\&quot;firstName\&quot;\r\n\r\n</span><br><span class="line">           Kris\r\n</span><br><span class="line">           ------------------------------488327019409\r\n</span><br><span class="line">           Content-Disposition: form-data;</span><br><span class="line">           name=\&quot;publicKey\&quot;;</span><br><span class="line">           filename=\&quot;id_rsa.pub\&quot;\r\n</span><br><span class="line">           Content-Type: text/plain\r\n\r\n</span><br><span class="line">           ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAkq1lZYUOJH2</span><br><span class="line">           ... more [a-zA-Z0-9]* ...</span><br><span class="line">           naZXJw== krisjordan@gmail.com\n\r\n</span><br><span class="line">           ------------------------------488327019409</span><br><span class="line">           --\r\n&quot;,</span><br><span class="line">...&#125;</span><br></pre></td></tr></table></figure>
+<p>像 <code>-d</code> 选项一样，当使用 <code>-d</code> 选项时 <code>curl</code> 会自动地默认使用 <code>POST</code> 方法，<code>multipart/form-data</code> 文件
+类型头部，计算长度并组成请求体。请注意 <code>@readFile</code>  宏是怎样读取一个文件的文本为任何字符的，这个不是
+一个单独的操作，<code>;text/plain</code> 指定了文件的 MIME 文本类型。在未指定的情况下，<code>curl</code> 会尝试嗅探文本类型。</p>
+<h2><span id="ce-shi-xu-ni-zhu-ji-bu-shi-yong-dns">测试虚拟主机，不使用 DNS</span></h2>
+<p>通常，在不修改 DNS 覆盖主机的情况下测试一个虚拟主机或者是缓存代理时很有用的。只需使用 cURL 将请求指向
+主机的 IP 地址 并覆写 <code>Host</code> 头。</p>
+<p><strong>请求</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -H &quot;Host: google.com&quot; 50.112.251.120</span><br></pre></td></tr></table></figure>
+<p><strong>响应</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;method&quot;: &quot;GET&quot;, ...</span><br><span class="line">  &quot;headers&quot;: &#123;</span><br><span class="line">    &quot;host&quot;: &quot;google.com&quot;, ...</span><br><span class="line">  &#125;, ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="cha-kan-xiang-ying-tou-bu">查看响应头部</span></h2>
+<p>API 正越来越多的利用响应头部来提供授权，速率限制，缓存等方面的信息。cURL 使用 <code>-i</code> 选项来查看响应头部
+和响应体。</p>
+<p><strong>请求</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -i echo.httpkit.com</span><br></pre></td></tr></table></figure>
+<p><strong>响应</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Server: nginx/1.1.19</span><br><span class="line">Date: Wed, 29 Aug 2012 04:18:19 GMT</span><br><span class="line">Content-Type: application/json; charset=utf-8</span><br><span class="line">Content-Length: 391</span><br><span class="line">Connection: keep-alive</span><br><span class="line">X-Powered-By: http://httpkit.com</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;method&quot;: &quot;GET&quot;,</span><br><span class="line">  &quot;uri&quot;: &quot;/&quot;, ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>原文：<a href="http://httpkit.com/resources/HTTP-from-the-Command-Line/" target="_blank" rel="noopener">9 uses for cURL worth knowing</a></p>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E7%BF%BB%E8%AF%91/">#翻译</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-20/" class="prev">PREV</a><a href="/qiwihui-blog-18/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-19/';
+var disqus_title = '9个值得知道的cURL的用法';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-19/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

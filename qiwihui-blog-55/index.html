@@ -1,0 +1,1821 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 如何在 Titanic Kaggle Challenge 中获得0.8134分 · QIWIHUI</title><meta name="description" content="如何在 Titanic Kaggle Challenge 中获得0.8134分 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-55/index.html"><meta property="og:title" content="如何在 Titanic Kaggle Challenge 中获得0.8134分"><meta property="og:description" content="如何在 Titanic Kaggle Challenge 中获得0.8134分"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">如何在 Titanic Kaggle Challenge 中获得0.8134分</h1><div class="post-info">Dec 2, 2019<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>50 min. read</span></div><div class="post-content"><p>原文：<a href="https://ahmedbesbes.com/how-to-score-08134-in-titanic-kaggle-challenge.html" target="_blank" rel="noopener">How to score 0.8134 in Titanic Kaggle Challenge</a></p>
+<p>由 Kaggle 主持的<a href="https://www.kaggle.com/c/titanic/" target="_blank" rel="noopener">泰坦尼克号生存挑战赛</a>是一项竞赛，其目标是基于一组描述乘客的变量，例如他的年龄，性别或乘客在船上的等级，来预测特定乘客是生存或死亡。</p>
+<p>我一直在玩 Titanic 数据集，我最近在公共排行榜上获得了0.8134的准确度分数。当我写这篇文章时，我在所有 Kagglers 中排名前4％。</p>
+<p><img src="https://raw.githubusercontent.com/qiwihui/How-to-score-0.8134-in-Titanic-Kaggle-Challenge/master/images/article_1/score.png" alt="png"></p>
+<p>这篇文章将分享我的解决方案。</p>
+<p>为了使本教程更具“学术性”以便任何人都能从中受益，我将首先从探索性数据分析（EDA）开始，然后我将遵循特征工程并最终呈现我设置的预测模型。</p>
+<a id="more"></a>
+<p>在这个 jupyter 笔记本中，我将在每个级别的管道中使用 Python。</p>
+<p>本教程涉及的主要库是：</p>
+<ul>
+<li><strong>Pandas</strong> 用于数据操作和接入（ingestion）</li>
+<li><strong>Matplotlib</strong> 和 <strong>seaborn</strong> 用于数据可视化</li>
+<li><strong>Numpy</strong> 用于多维数组计算</li>
+<li><strong>sklearn</strong> 用于机器学习和预测建模</li>
+</ul>
+<h3><span id="an-zhuang-guo-cheng">安装过程</span></h3>
+<p>安装这些软件包的一种非常简单的方法是下载并安装 <a href="href=%22http://conda.pydata.org/docs/install/quick.html#os-x-miniconda-install">Conda</a>，它是将以上所有包封装起来的发行版。此发行版适用于所有平台（Windows，Linux 和 Mac OSX）。</p>
+<h3><span id="te-bie-zhu-yi">特别注意</span></h3>
+<p>这是我作为博主和机器学习从业者的第一次尝试。</p>
+<p>如果您对我所做的代码或假设有疑问，请不要犹豫，在下面的评论部分发表评论。</p>
+<p>如果您对如何改进笔记本电脑也有建议，请联系我。</p>
+<p>本教程可在我的 <a href="https://github.com/ahmedbesbes/How-to-score-0.8134-in-Titanic-Kaggle-Challenge" target="_blank" rel="noopener">github</a> 帐户中找到。</p>
+<blockquote>
+<p>译者注：本翻译在 <a href="https://github.com/qiwihui/How-to-score-0.8134-in-Titanic-Kaggle-Challenge" target="_blank" rel="noopener">qiwihui</a> 下。</p>
+</blockquote>
+<p>希望你已经在计算机上设置了所有内容。让我们开始吧。</p>
+<h2><span id="i-tan-suo-xing-shu-ju-fen-xi">I - 探索性数据分析</span></h2>
+<p>正如在不同的数据项目中，我们将首先开始深入研究数据并建立我们的第一个直觉。</p>
+<p>在本节中，我们将做四件事。</p>
+<ul>
+<li>数据提取：我们将加载数据集并首先查看它。</li>
+<li>清洁：我们将填写缺失值。</li>
+<li>绘图：我们将创建一些有趣的图表，这些图表（希望）可以发现数据中的相关性和隐藏的见解。</li>
+<li>假设：我们将从图表中提出假设。</li>
+</ul>
+<p>我们稍微调整了这款笔记本的风格，以便画图居中。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> IPython.core.display <span class="keyword">import</span> HTML</span><br><span class="line">HTML(<span class="string">"""</span></span><br><span class="line"><span class="string">&lt;style&gt;</span></span><br><span class="line"><span class="string">.output_png &#123;</span></span><br><span class="line"><span class="string">    display: table-cell;</span></span><br><span class="line"><span class="string">    text-align: center;</span></span><br><span class="line"><span class="string">    vertical-align: middle;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">&lt;/style&gt;</span></span><br><span class="line"><span class="string">"""</span>);</span><br></pre></td></tr></table></figure>
+<p>导入有用的包。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> warnings</span><br><span class="line">warnings.filterwarnings(<span class="string">'ignore'</span>)</span><br><span class="line">warnings.filterwarnings(<span class="string">'ignore'</span>, category=DeprecationWarning)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">pd.options.display.max_columns = <span class="number">100</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pylab <span class="keyword">as</span> plot</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">'axes.labelsize'</span>: <span class="string">"large"</span>,</span><br><span class="line">    <span class="string">'xtick.labelsize'</span>: <span class="string">'x-large'</span>,</span><br><span class="line">    <span class="string">'legend.fontsize'</span>: <span class="number">20</span>,</span><br><span class="line">    <span class="string">'figure.dpi'</span>: <span class="number">150</span>,</span><br><span class="line">    <span class="string">'figure.figsize'</span>: [<span class="number">25</span>, <span class="number">7</span>]</span><br><span class="line">&#125;</span><br><span class="line">plot.rcParams.update(params)</span><br></pre></td></tr></table></figure>
+<p>有两个数据集：训练集和测试集。
+我们将使用训练集来构建我们的预测模型，用测试集来对其进行评分并生成输出文件以在Kaggle评估系统上提交。</p>
+<p>我们将在本文末尾看到这个过程是如何完成的。</p>
+<p>现在让我们开始加载训练集。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = pd.read_csv(<span class="string">'./data/train.csv'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">print</span> data.shape</span><br></pre></td></tr></table></figure>
+<pre><code>(891, 12)
+</code></pre>
+<p>我们得到:</p>
+<ul>
+<li>891 行</li>
+<li>12 列</li>
+</ul>
+<p>Pandas 允许你鸟瞰数据。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data.head()</span><br></pre></td></tr></table></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PassengerId</th>
+      <th>Survived</th>
+      <th>Pclass</th>
+      <th>Name</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Ticket</th>
+      <th>Fare</th>
+      <th>Cabin</th>
+      <th>Embarked</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+      <td>Braund, Mr. Owen Harris</td>
+      <td>male</td>
+      <td>22.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>A/5 21171</td>
+      <td>7.2500</td>
+      <td>NaN</td>
+      <td>S</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>Cumings, Mrs. John Bradley (Florence Briggs Th...</td>
+      <td>female</td>
+      <td>38.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>PC 17599</td>
+      <td>71.2833</td>
+      <td>C85</td>
+      <td>C</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>1</td>
+      <td>3</td>
+      <td>Heikkinen, Miss. Laina</td>
+      <td>female</td>
+      <td>26.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>STON/O2. 3101282</td>
+      <td>7.9250</td>
+      <td>NaN</td>
+      <td>S</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>1</td>
+      <td>1</td>
+      <td>Futrelle, Mrs. Jacques Heath (Lily May Peel)</td>
+      <td>female</td>
+      <td>35.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>113803</td>
+      <td>53.1000</td>
+      <td>C123</td>
+      <td>S</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>0</td>
+      <td>3</td>
+      <td>Allen, Mr. William Henry</td>
+      <td>male</td>
+      <td>35.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>373450</td>
+      <td>8.0500</td>
+      <td>NaN</td>
+      <td>S</td>
+    </tr>
+  </tbody>
+</table>
+<p><code>Survived</code> 列是 <strong>目标变量</strong>。 如果 <code>Survived</code> 为 1，乘客幸免于难，否则他已经死了。这是我们要预测的变量。</p>
+<p>其他变量描述了乘客。 它们是 <strong>特征</strong>。</p>
+<ul>
+<li><code>PassengerId</code>：船上每位旅客的身份证明</li>
+<li><code>Pclass</code>：乘客等级。 它有三个可能的值：1，2，3（第一，第二和第三类）</li>
+<li><code>Name</code>：Passeger的名字</li>
+<li><code>Sex</code>：性别</li>
+<li><code>Age</code>：年龄</li>
+<li><code>SibSp</code>：与乘客一起旅行的兄弟姐妹和配偶的数量</li>
+<li><code>Parch</code>：与乘客一起旅行的父母和孩子的数量</li>
+<li><code>Ticket</code>：船票号码</li>
+<li><code>Fare</code>：票价</li>
+<li><code>Cabin</code>：船舱号码</li>
+<li><code>Embarked</code>：这描述了人们登上的泰坦尼克号的三个可能区域。 三个可能的值 S，C，Q</li>
+</ul>
+<p>Pandas 允许您对数字特征进行高级简单的统计描述。
+这可以使用 <code>describe</code> 方法完成。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data.describe()</span><br></pre></td></tr></table></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PassengerId</th>
+      <th>Survived</th>
+      <th>Pclass</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Fare</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>891.000000</td>
+      <td>891.000000</td>
+      <td>891.000000</td>
+      <td>714.000000</td>
+      <td>891.000000</td>
+      <td>891.000000</td>
+      <td>891.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>446.000000</td>
+      <td>0.383838</td>
+      <td>2.308642</td>
+      <td>29.699118</td>
+      <td>0.523008</td>
+      <td>0.381594</td>
+      <td>32.204208</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>257.353842</td>
+      <td>0.486592</td>
+      <td>0.836071</td>
+      <td>14.526497</td>
+      <td>1.102743</td>
+      <td>0.806057</td>
+      <td>49.693429</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>1.000000</td>
+      <td>0.000000</td>
+      <td>1.000000</td>
+      <td>0.420000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>223.500000</td>
+      <td>0.000000</td>
+      <td>2.000000</td>
+      <td>20.125000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>7.910400</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>446.000000</td>
+      <td>0.000000</td>
+      <td>3.000000</td>
+      <td>28.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>14.454200</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>668.500000</td>
+      <td>1.000000</td>
+      <td>3.000000</td>
+      <td>38.000000</td>
+      <td>1.000000</td>
+      <td>0.000000</td>
+      <td>31.000000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>891.000000</td>
+      <td>1.000000</td>
+      <td>3.000000</td>
+      <td>80.000000</td>
+      <td>8.000000</td>
+      <td>6.000000</td>
+      <td>512.329200</td>
+    </tr>
+  </tbody>
+</table>
+<p><code>count</code> 变量显示 <code>Age</code> 列中缺少177个值。</p>
+<p>一种解决方案是用中值年龄填充空值。我们也可以用平均年龄来估算，但中位数对异常值更为稳健。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data[<span class="string">'Age'</span>] = data[<span class="string">'Age'</span>].fillna(data[<span class="string">'Age'</span>].median())</span><br></pre></td></tr></table></figure>
+<p>让我们看一下结果。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data.describe()</span><br></pre></td></tr></table></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PassengerId</th>
+      <th>Survived</th>
+      <th>Pclass</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Fare</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>891.000000</td>
+      <td>891.000000</td>
+      <td>891.000000</td>
+      <td>891.000000</td>
+      <td>891.000000</td>
+      <td>891.000000</td>
+      <td>891.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>446.000000</td>
+      <td>0.383838</td>
+      <td>2.308642</td>
+      <td>29.361582</td>
+      <td>0.523008</td>
+      <td>0.381594</td>
+      <td>32.204208</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>257.353842</td>
+      <td>0.486592</td>
+      <td>0.836071</td>
+      <td>13.019697</td>
+      <td>1.102743</td>
+      <td>0.806057</td>
+      <td>49.693429</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>1.000000</td>
+      <td>0.000000</td>
+      <td>1.000000</td>
+      <td>0.420000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>223.500000</td>
+      <td>0.000000</td>
+      <td>2.000000</td>
+      <td>22.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>7.910400</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>446.000000</td>
+      <td>0.000000</td>
+      <td>3.000000</td>
+      <td>28.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>14.454200</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>668.500000</td>
+      <td>1.000000</td>
+      <td>3.000000</td>
+      <td>35.000000</td>
+      <td>1.000000</td>
+      <td>0.000000</td>
+      <td>31.000000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>891.000000</td>
+      <td>1.000000</td>
+      <td>3.000000</td>
+      <td>80.000000</td>
+      <td>8.000000</td>
+      <td>6.000000</td>
+      <td>512.329200</td>
+    </tr>
+  </tbody>
+</table>
+<p>完美。</p>
+<p>我们现在制作一些图表。让我们根据性别来看待生存。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data[<span class="string">'Died'</span>] = <span class="number">1</span> - data[<span class="string">'Survived'</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data.groupby(<span class="string">'Sex'</span>).agg(<span class="string">'sum'</span>)[[<span class="string">'Survived'</span>, <span class="string">'Died'</span>]].plot(kind=<span class="string">'bar'</span>, figsize=(<span class="number">25</span>, <span class="number">7</span>),</span><br><span class="line">                                                          stacked=<span class="literal">True</span>, colors=[<span class="string">'g'</span>, <span class="string">'r'</span>]);</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/qiwihui/How-to-score-0.8134-in-Titanic-Kaggle-Challenge/master/images/article_1/1.png" alt="png"></p>
+<p>看起来男性乘客更容易死亡。让我们绘制相同的图形，但用比例代替。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data.groupby(<span class="string">'Sex'</span>).agg(<span class="string">'mean'</span>)[[<span class="string">'Survived'</span>, <span class="string">'Died'</span>]].plot(kind=<span class="string">'bar'</span>, figsize=(<span class="number">25</span>, <span class="number">7</span>), </span><br><span class="line">                                                           stacked=<span class="literal">True</span>, colors=[<span class="string">'g'</span>, <span class="string">'r'</span>]);</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/qiwihui/How-to-score-0.8134-in-Titanic-Kaggle-Challenge/master/images/article_1/2.png" alt="png"></p>
+<p>性别变量似乎是一种歧视性特征。女性更有可能生存。</p>
+<p>现在让我们将生存与年龄变量联系起来。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">fig = plt.figure(figsize=(<span class="number">25</span>, <span class="number">7</span>))</span><br><span class="line">sns.violinplot(x=<span class="string">'Sex'</span>, y=<span class="string">'Age'</span>, </span><br><span class="line">               hue=<span class="string">'Survived'</span>, data=data, </span><br><span class="line">               split=<span class="literal">True</span>,</span><br><span class="line">               palette=&#123;<span class="number">0</span>: <span class="string">"r"</span>, <span class="number">1</span>: <span class="string">"g"</span>&#125;</span><br><span class="line">              );</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/qiwihui/How-to-score-0.8134-in-Titanic-Kaggle-Challenge/master/images/article_1/3.png" alt="png"></p>
+<p>正如我们在上面的图表中看到并通过以下方式验证：</p>
+<ul>
+<li>女性的生存率高于男性，如较大的女性绿色直方图所示</li>
+</ul>
+<p>现在，我们看到：</p>
+<ul>
+<li>
+<p>年龄为男性乘客的生存：</p>
+<ul>
+<li>年轻的男性倾向于生存
+  * 20至40岁之间的大量乘客死亡</li>
+</ul>
+</li>
+<li>
+<p>年龄似乎没有对女性生存产生直接影响</p>
+</li>
+</ul>
+<p>以下小提琴情节证实，在遇到威胁的情况下，水手和船长遵守一条旧的行为准则：“<strong>妇女和儿童优先！</strong>”。</p>
+<p><img src="https://raw.githubusercontent.com/qiwihui/How-to-score-0.8134-in-Titanic-Kaggle-Challenge/master/images/article_1/titanic.jpg" alt="png"></p>
+<p>对吗？</p>
+<p>现在让我们关注每位乘客的票价，看看它如何影响生存。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">figure = plt.figure(figsize=(<span class="number">25</span>, <span class="number">7</span>))</span><br><span class="line">plt.hist([data[data[<span class="string">'Survived'</span>] == <span class="number">1</span>][<span class="string">'Fare'</span>], data[data[<span class="string">'Survived'</span>] == <span class="number">0</span>][<span class="string">'Fare'</span>]], </span><br><span class="line">         stacked=<span class="literal">True</span>, color = [<span class="string">'g'</span>,<span class="string">'r'</span>],</span><br><span class="line">         bins = <span class="number">50</span>, label = [<span class="string">'Survived'</span>,<span class="string">'Dead'</span>])</span><br><span class="line">plt.xlabel(<span class="string">'Fare'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'Number of passengers'</span>)</span><br><span class="line">plt.legend();</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/qiwihui/How-to-score-0.8134-in-Titanic-Kaggle-Challenge/master/images/article_1/4.png" alt="png"></p>
+<p>票价较低的乘客更容易死亡。
+换句话说，拥有更昂贵门票，因此更重要的社会地位的乘客似乎首先获救。</p>
+<p>好的，这很好。 现在让我们将年龄，票价和生存结合在一张图表上。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.figure(figsize=(<span class="number">25</span>, <span class="number">7</span>))</span><br><span class="line">ax = plt.subplot()</span><br><span class="line"></span><br><span class="line">ax.scatter(data[data[<span class="string">'Survived'</span>] == <span class="number">1</span>][<span class="string">'Age'</span>], data[data[<span class="string">'Survived'</span>] == <span class="number">1</span>][<span class="string">'Fare'</span>], </span><br><span class="line">           c=<span class="string">'green'</span>, s=data[data[<span class="string">'Survived'</span>] == <span class="number">1</span>][<span class="string">'Fare'</span>])</span><br><span class="line">ax.scatter(data[data[<span class="string">'Survived'</span>] == <span class="number">0</span>][<span class="string">'Age'</span>], data[data[<span class="string">'Survived'</span>] == <span class="number">0</span>][<span class="string">'Fare'</span>], </span><br><span class="line">           c=<span class="string">'red'</span>, s=data[data[<span class="string">'Survived'</span>] == <span class="number">0</span>][<span class="string">'Fare'</span>]);</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/qiwihui/How-to-score-0.8134-in-Titanic-Kaggle-Challenge/master/images/article_1/5.png" alt="png"></p>
+<p>圆圈的大小与票价成正比。</p>
+<p>在 x 轴上，我们有年龄，在 y 轴，我们考虑票价。</p>
+<p>我们可以观察不同的集群：</p>
+<ol>
+<li>x = 20 和 x = 45 之间的大绿点：票价最高的成人</li>
+<li>x = 10 和 x = 45 之间的小红点，船上较低级别的成年人</li>
+<li>x = 0 和 x = 7 之间的小密集点：这些是被保存的孩子</li>
+</ol>
+<p>事实上，票价与我们在下面的图表中看到的类别相关。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ax = plt.subplot()</span><br><span class="line">ax.set_ylabel(<span class="string">'Average fare'</span>)</span><br><span class="line">data.groupby(<span class="string">'Pclass'</span>).mean()[<span class="string">'Fare'</span>].plot(kind=<span class="string">'bar'</span>, figsize=(<span class="number">25</span>, <span class="number">7</span>), ax = ax);</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/qiwihui/How-to-score-0.8134-in-Titanic-Kaggle-Challenge/master/images/article_1/6.png" alt="png"></p>
+<p>现在让我们看看登船地点如何影响生存。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">fig = plt.figure(figsize=(<span class="number">25</span>, <span class="number">7</span>))</span><br><span class="line">sns.violinplot(x=<span class="string">'Embarked'</span>, y=<span class="string">'Fare'</span>, hue=<span class="string">'Survived'</span>, data=data, split=<span class="literal">True</span>, palette=&#123;<span class="number">0</span>: <span class="string">"r"</span>, <span class="number">1</span>: <span class="string">"g"</span>&#125;);</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/qiwihui/How-to-score-0.8134-in-Titanic-Kaggle-Challenge/master/images/article_1/7.png" alt="png"></p>
+<p>似乎登船地点 C 的票价范围更广，因此支付最高价格的乘客是那些幸存的乘客。</p>
+<p>我们也看到这种情况发生在登船地点 S 而不是登船地点 Q。</p>
+<p>现在让我们停止数据探索并切换到下一部分。</p>
+<h2><span id="ii-te-zheng-gong-cheng">II - 特征工程</span></h2>
+<p>在前一部分中，我们调查了数据并发现了一些有趣的相关性。</p>
+<p>在这一部分中，我们将看到如何处理和转换这些变量，使数据变得可以通过机器学习算法进行管理。</p>
+<p>我们还将创建或“设计”在构建模型时有用的其他功能。</p>
+<p>我们将在此过程中看到如何处理文本变量（如乘客姓名）并将此信息集成到我们的模型中。</p>
+<p>为了更加清晰，我们将代码分散在单独的函数中。</p>
+<p>但首先，让我们定义一个打印函数，断言是否已经处理了一个特征。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">status</span><span class="params">(feature)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'Processing'</span>, feature, <span class="string">': ok'</span></span><br></pre></td></tr></table></figure>
+<h3><span id="jia-zai-shu-ju">加载数据</span></h3>
+<p>启动机器学习问题的一个技巧是将训练集一起附加到测试集。</p>
+<p>我们将使用训练集进行特征工程以防止信息泄漏。然后我们将这些变量添加到测试集中。</p>
+<p>让我们加载训练集和测试集并将它们合在一起。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_combined_data</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># reading train data</span></span><br><span class="line">    train = pd.read_csv(<span class="string">'./data/train.csv'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># reading test data</span></span><br><span class="line">    test = pd.read_csv(<span class="string">'./data/test.csv'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># extracting and then removing the targets from the training data </span></span><br><span class="line">    targets = train.Survived</span><br><span class="line">    train.drop([<span class="string">'Survived'</span>], <span class="number">1</span>, inplace=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># merging train data and test data for future feature engineering</span></span><br><span class="line">    <span class="comment"># we'll also remove the PassengerID since this is not an informative feature</span></span><br><span class="line">    combined = train.append(test)</span><br><span class="line">    combined.reset_index(inplace=<span class="literal">True</span>)</span><br><span class="line">    combined.drop([<span class="string">'index'</span>, <span class="string">'PassengerId'</span>], inplace=<span class="literal">True</span>, axis=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> combined</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined = get_combined_data()</span><br></pre></td></tr></table></figure>
+<p>让我们看一下数据的维度。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">print</span> combined.shape</span><br></pre></td></tr></table></figure>
+<pre><code>(1309, 10)
+</code></pre>
+<p>训练集和测试集被合并。您可能会注意到总行数（1309）是训练集和测试集中行数的精确总和。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined.head()</span><br></pre></td></tr></table></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Pclass</th>
+      <th>Name</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Ticket</th>
+      <th>Fare</th>
+      <th>Cabin</th>
+      <th>Embarked</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3</td>
+      <td>Braund, Mr. Owen Harris</td>
+      <td>male</td>
+      <td>22.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>A/5 21171</td>
+      <td>7.2500</td>
+      <td>NaN</td>
+      <td>S</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>Cumings, Mrs. John Bradley (Florence Briggs Th...</td>
+      <td>female</td>
+      <td>38.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>PC 17599</td>
+      <td>71.2833</td>
+      <td>C85</td>
+      <td>C</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>Heikkinen, Miss. Laina</td>
+      <td>female</td>
+      <td>26.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>STON/O2. 3101282</td>
+      <td>7.9250</td>
+      <td>NaN</td>
+      <td>S</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>Futrelle, Mrs. Jacques Heath (Lily May Peel)</td>
+      <td>female</td>
+      <td>35.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>113803</td>
+      <td>53.1000</td>
+      <td>C123</td>
+      <td>S</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>3</td>
+      <td>Allen, Mr. William Henry</td>
+      <td>male</td>
+      <td>35.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>373450</td>
+      <td>8.0500</td>
+      <td>NaN</td>
+      <td>S</td>
+    </tr>
+  </tbody>
+</table>
+<h3><span id="ti-qu-cheng-ke-cheng-wei">提取乘客称谓</span></h3>
+<p>在查看乘客姓名时，人们可能想知道如何处理它们以提取有用的信息。</p>
+<p>如果你仔细看看这些第一个例子：</p>
+<ul>
+<li>Braund, <strong>Mr.</strong> Owen Harris</li>
+<li>Heikkinen, <strong>Miss.</strong> Laina</li>
+<li>Oliva y Ocana, <strong>Dona.</strong> Fermina</li>
+<li>Peter, <strong>Master.</strong> Michael J</li>
+</ul>
+<p>你会注意到每个名字都有一个称谓！这可能是一个简单的小姐（Miss.）或太太（Mrs.），但它有时可能像 Master，Sir 或 Dona 那样更复杂。在这种情况下，我们可以通过简单地解析称谓并提取标题并转换为二进制变量来引入有关社会地位的其他信息。</p>
+<p>让我们看看我们将如何在下面的函数中执行此操作。</p>
+<p>让我们先来看看在训练集中有什么不同的称谓。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">titles = set()</span><br><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> data[<span class="string">'Name'</span>]:</span><br><span class="line">    titles.add(name.split(<span class="string">','</span>)[<span class="number">1</span>].split(<span class="string">'.'</span>)[<span class="number">0</span>].strip())</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">print</span> titles</span><br></pre></td></tr></table></figure>
+<pre><code>set(['Sir', 'Major', 'the Countess', 'Don', 'Mlle', 'Capt', 'Dr', 'Lady', 'Rev', 'Mrs', 'Jonkheer', 'Master', 'Ms', 'Mr', 'Mme', 'Miss', 'Col'])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Title_Dictionary = &#123;</span><br><span class="line">    <span class="string">"Capt"</span>: <span class="string">"Officer"</span>,</span><br><span class="line">    <span class="string">"Col"</span>: <span class="string">"Officer"</span>,</span><br><span class="line">    <span class="string">"Major"</span>: <span class="string">"Officer"</span>,</span><br><span class="line">    <span class="string">"Jonkheer"</span>: <span class="string">"Royalty"</span>,</span><br><span class="line">    <span class="string">"Don"</span>: <span class="string">"Royalty"</span>,</span><br><span class="line">    <span class="string">"Sir"</span> : <span class="string">"Royalty"</span>,</span><br><span class="line">    <span class="string">"Dr"</span>: <span class="string">"Officer"</span>,</span><br><span class="line">    <span class="string">"Rev"</span>: <span class="string">"Officer"</span>,</span><br><span class="line">    <span class="string">"the Countess"</span>:<span class="string">"Royalty"</span>,</span><br><span class="line">    <span class="string">"Mme"</span>: <span class="string">"Mrs"</span>,</span><br><span class="line">    <span class="string">"Mlle"</span>: <span class="string">"Miss"</span>,</span><br><span class="line">    <span class="string">"Ms"</span>: <span class="string">"Mrs"</span>,</span><br><span class="line">    <span class="string">"Mr"</span> : <span class="string">"Mr"</span>,</span><br><span class="line">    <span class="string">"Mrs"</span> : <span class="string">"Mrs"</span>,</span><br><span class="line">    <span class="string">"Miss"</span> : <span class="string">"Miss"</span>,</span><br><span class="line">    <span class="string">"Master"</span> : <span class="string">"Master"</span>,</span><br><span class="line">    <span class="string">"Lady"</span> : <span class="string">"Royalty"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_titles</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># we extract the title from each name</span></span><br><span class="line">    combined[<span class="string">'Title'</span>] = combined[<span class="string">'Name'</span>].map(<span class="keyword">lambda</span> name:name.split(<span class="string">','</span>)[<span class="number">1</span>].split(<span class="string">'.'</span>)[<span class="number">0</span>].strip())</span><br><span class="line"></span><br><span class="line">    <span class="comment"># a map of more aggregated title</span></span><br><span class="line">    <span class="comment"># we map each title</span></span><br><span class="line">    combined[<span class="string">'Title'</span>] = combined.Title.map(Title_Dictionary)</span><br><span class="line">    status(<span class="string">'Title'</span>)</span><br><span class="line">    <span class="keyword">return</span> combined</span><br></pre></td></tr></table></figure>
+<p>此函数解析名称并提取称谓。 然后，它将称谓映射到称谓类别。
+我们选择：</p>
+<ul>
+<li>Officer</li>
+<li>Royalty</li>
+<li>Mr</li>
+<li>Mrs</li>
+<li>Miss</li>
+<li>Master</li>
+</ul>
+<p>让我们运行一下！</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined = get_titles()</span><br></pre></td></tr></table></figure>
+<pre><code>Processing Title : ok
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined.head()</span><br></pre></td></tr></table></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Pclass</th>
+      <th>Name</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Ticket</th>
+      <th>Fare</th>
+      <th>Cabin</th>
+      <th>Embarked</th>
+      <th>Title</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3</td>
+      <td>Braund, Mr. Owen Harris</td>
+      <td>male</td>
+      <td>22.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>A/5 21171</td>
+      <td>7.2500</td>
+      <td>NaN</td>
+      <td>S</td>
+      <td>Mr</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>Cumings, Mrs. John Bradley (Florence Briggs Th...</td>
+      <td>female</td>
+      <td>38.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>PC 17599</td>
+      <td>71.2833</td>
+      <td>C85</td>
+      <td>C</td>
+      <td>Mrs</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>Heikkinen, Miss. Laina</td>
+      <td>female</td>
+      <td>26.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>STON/O2. 3101282</td>
+      <td>7.9250</td>
+      <td>NaN</td>
+      <td>S</td>
+      <td>Miss</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>Futrelle, Mrs. Jacques Heath (Lily May Peel)</td>
+      <td>female</td>
+      <td>35.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>113803</td>
+      <td>53.1000</td>
+      <td>C123</td>
+      <td>S</td>
+      <td>Mrs</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>3</td>
+      <td>Allen, Mr. William Henry</td>
+      <td>male</td>
+      <td>35.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>373450</td>
+      <td>8.0500</td>
+      <td>NaN</td>
+      <td>S</td>
+      <td>Mr</td>
+    </tr>
+  </tbody>
+</table>
+<p>让我们检查一下称谓是否填写正确。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined[combined[<span class="string">'Title'</span>].isnull()]</span><br></pre></td></tr></table></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Pclass</th>
+      <th>Name</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Ticket</th>
+      <th>Fare</th>
+      <th>Cabin</th>
+      <th>Embarked</th>
+      <th>Title</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1305</th>
+      <td>1</td>
+      <td>Oliva y Ocana, Dona. Fermina</td>
+      <td>female</td>
+      <td>39.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>PC 17758</td>
+      <td>108.9</td>
+      <td>C105</td>
+      <td>C</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>在1305行中确实存在 NaN 值。实际上相应的名称是 <code>Oliva y Ocana, **Dona**. Fermina</code>。</p>
+<p>在训练数据集中没有遇到这个标题。</p>
+<p>很好，现在我们有一个名为 <strong>Title</strong> 的附加列来包含这些信息。</p>
+<h3><span id="chu-li-nian-ling-age">处理年龄（Age）</span></h3>
+<p>我们在第一部分中看到 <code>Age</code> 变量缺少177个值。这是一个很大的数字（约占数据集的13％）。简单地用平均年龄或中位年龄替换它们可能不是最佳解决方案，因为年龄可能因乘客的类别和类别而不同。</p>
+<p>为了理解原因，让我们按性别（Sex），称谓（Title）和乘客类（Pclass）对我们的数据集进行分组，并为每个子集计算中位数年龄。</p>
+<p>为了避免测试集中的数据泄漏，我们使用训练集填写训练中的缺失年龄，并且我们使用从训练集计算的值来填充测试集中的年龄。</p>
+<p>训练级中缺少的年龄数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">print</span> combined.iloc[:<span class="number">891</span>].Age.isnull().sum()</span><br></pre></td></tr></table></figure>
+<pre><code>177
+</code></pre>
+<p>测试集中缺少的年龄数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">print</span> combined.iloc[<span class="number">891</span>:].Age.isnull().sum()</span><br></pre></td></tr></table></figure>
+<pre><code>86
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">grouped_train = combined.iloc[:<span class="number">891</span>].groupby([<span class="string">'Sex'</span>,<span class="string">'Pclass'</span>,<span class="string">'Title'</span>])</span><br><span class="line">grouped_median_train = grouped_train.median()</span><br><span class="line">grouped_median_train = grouped_median_train.reset_index()[[<span class="string">'Sex'</span>, <span class="string">'Pclass'</span>, <span class="string">'Title'</span>, <span class="string">'Age'</span>]]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">grouped_median_train.head()</span><br></pre></td></tr></table></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Sex</th>
+      <th>Pclass</th>
+      <th>Title</th>
+      <th>Age</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>female</td>
+      <td>1</td>
+      <td>Miss</td>
+      <td>30.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>female</td>
+      <td>1</td>
+      <td>Mrs</td>
+      <td>40.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>female</td>
+      <td>1</td>
+      <td>Officer</td>
+      <td>49.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>female</td>
+      <td>1</td>
+      <td>Royalty</td>
+      <td>40.5</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>female</td>
+      <td>2</td>
+      <td>Miss</td>
+      <td>24.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>此 dataframe 将帮助我们根据不同的标准估算缺失的年龄值。</p>
+<p>查看中位年龄列，看看这个值如何根据 <code>Sex</code>，<code>Pclass</code> 和 <code>Title</code> 组合在一起。</p>
+<p>例如：</p>
+<ul>
+<li>如果乘客是女性，则来自 Pclass 1 和来自王室（royalty），中位年龄为40.5岁。</li>
+<li>如果乘客是男性，来自 Pclass 3，拥有 Mr 称谓，则年龄中位数为26岁。</li>
+</ul>
+<p>让我们创建一个函数，根据这些不同的属性填充 <strong>组合</strong> 中的缺失年龄。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fill_age</span><span class="params">(row)</span>:</span></span><br><span class="line">    condition = (</span><br><span class="line">        (grouped_median_train[<span class="string">'Sex'</span>] == row[<span class="string">'Sex'</span>]) &amp; </span><br><span class="line">        (grouped_median_train[<span class="string">'Title'</span>] == row[<span class="string">'Title'</span>]) &amp; </span><br><span class="line">        (grouped_median_train[<span class="string">'Pclass'</span>] == row[<span class="string">'Pclass'</span>])</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> grouped_median_train[condition][<span class="string">'Age'</span>].values[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_age</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">global</span> combined</span><br><span class="line">    <span class="comment"># a function that fills the missing values of the Age variable</span></span><br><span class="line">    combined[<span class="string">'Age'</span>] = combined.apply(<span class="keyword">lambda</span> row: fill_age(row) <span class="keyword">if</span> np.isnan(row[<span class="string">'Age'</span>]) <span class="keyword">else</span> row[<span class="string">'Age'</span>], axis=<span class="number">1</span>)</span><br><span class="line">    status(<span class="string">'age'</span>)</span><br><span class="line">    <span class="keyword">return</span> combined</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined = process_age()</span><br></pre></td></tr></table></figure>
+<pre><code>Processing age : ok
+</code></pre>
+<p>完美。失踪的年龄已被取代。</p>
+<p>但是，我们注意到票价（Fare）中缺少1个值，登船位置（Embarked）有两个缺失值，而船舱位置（Cabin）有很多缺失值。我们稍后会处理这些变量。</p>
+<p>我们现在处理名字。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_names</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">global</span> combined</span><br><span class="line">    <span class="comment"># we clean the Name variable</span></span><br><span class="line">    combined.drop(<span class="string">'Name'</span>, axis=<span class="number">1</span>, inplace=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># encoding in dummy variable</span></span><br><span class="line">    titles_dummies = pd.get_dummies(combined[<span class="string">'Title'</span>], prefix=<span class="string">'Title'</span>)</span><br><span class="line">    combined = pd.concat([combined, titles_dummies], axis=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># removing the title variable</span></span><br><span class="line">    combined.drop(<span class="string">'Title'</span>, axis=<span class="number">1</span>, inplace=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    status(<span class="string">'names'</span>)</span><br><span class="line">    <span class="keyword">return</span> combined</span><br></pre></td></tr></table></figure>
+<p>此函数会删除 <code>Name</code> 列，我们不再使用它，因为我们创建了 <code>Title</code> 列。</p>
+<p>然后我们使用虚拟编码（dummy encoding）对称谓值进行编码。</p>
+<p>您可以了解虚拟编码以及如何在 <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.get_dummies.html" target="_blank" rel="noopener">Pandas</a> 中轻松完成此操作。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined = process_names()</span><br></pre></td></tr></table></figure>
+<pre><code>Processing names : ok
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined.head()</span><br></pre></td></tr></table></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Pclass</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Ticket</th>
+      <th>Fare</th>
+      <th>Cabin</th>
+      <th>Embarked</th>
+      <th>Title_Master</th>
+      <th>Title_Miss</th>
+      <th>Title_Mr</th>
+      <th>Title_Mrs</th>
+      <th>Title_Officer</th>
+      <th>Title_Royalty</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3</td>
+      <td>male</td>
+      <td>22.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>A/5 21171</td>
+      <td>7.2500</td>
+      <td>NaN</td>
+      <td>S</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>female</td>
+      <td>38.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>PC 17599</td>
+      <td>71.2833</td>
+      <td>C85</td>
+      <td>C</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>female</td>
+      <td>26.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>STON/O2. 3101282</td>
+      <td>7.9250</td>
+      <td>NaN</td>
+      <td>S</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>female</td>
+      <td>35.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>113803</td>
+      <td>53.1000</td>
+      <td>C123</td>
+      <td>S</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>3</td>
+      <td>male</td>
+      <td>35.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>373450</td>
+      <td>8.0500</td>
+      <td>NaN</td>
+      <td>S</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>如你看到的 ：</p>
+<ul>
+<li>不再有名字特征。</li>
+<li>出现了新的变量（Title_X）。这些特征是二进制的。
+<ul>
+<li>例如，如果 Title_Mr = 1，则相应的称谓为 Mr。</li>
+</ul>
+</li>
+</ul>
+<h3><span id="chu-li-piao-jie-fare">处理票价（Fare）</span></h3>
+<p>让我们通过在训练集上计算的平均票价估算缺失的票价值。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_fares</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">global</span> combined</span><br><span class="line">    <span class="comment"># there's one missing fare value - replacing it with the mean.</span></span><br><span class="line">    combined.Fare.fillna(combined.iloc[:<span class="number">891</span>].Fare.mean(), inplace=<span class="literal">True</span>)</span><br><span class="line">    status(<span class="string">'fare'</span>)</span><br><span class="line">    <span class="keyword">return</span> combined</span><br></pre></td></tr></table></figure>
+<p>此函数用平均值替换一个缺失的票价（Fare）值。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined = process_fares()</span><br></pre></td></tr></table></figure>
+<pre><code>Processing fare : ok
+</code></pre>
+<h3><span id="chu-li-deng-chuan-wei-zhi-embarked">处理登船位置（Embarked）</span></h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_embarked</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">global</span> combined</span><br><span class="line">    <span class="comment"># two missing embarked values - filling them with the most frequent one in the train  set(S)</span></span><br><span class="line">    combined.Embarked.fillna(<span class="string">'S'</span>, inplace=<span class="literal">True</span>)</span><br><span class="line">    <span class="comment"># dummy encoding</span></span><br><span class="line">    embarked_dummies = pd.get_dummies(combined[<span class="string">'Embarked'</span>], prefix=<span class="string">'Embarked'</span>)</span><br><span class="line">    combined = pd.concat([combined, embarked_dummies], axis=<span class="number">1</span>)</span><br><span class="line">    combined.drop(<span class="string">'Embarked'</span>, axis=<span class="number">1</span>, inplace=<span class="literal">True</span>)</span><br><span class="line">    status(<span class="string">'embarked'</span>)</span><br><span class="line">    <span class="keyword">return</span> combined</span><br></pre></td></tr></table></figure>
+<p>此函数用最常用的 <code>Embarked</code> 值替换了两个缺失的 <code>Embarked</code> 值。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined = process_embarked()</span><br></pre></td></tr></table></figure>
+<pre><code>Processing embarked : ok
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined.head()</span><br></pre></td></tr></table></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Pclass</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Ticket</th>
+      <th>Fare</th>
+      <th>Cabin</th>
+      <th>Title_Master</th>
+      <th>Title_Miss</th>
+      <th>Title_Mr</th>
+      <th>Title_Mrs</th>
+      <th>Title_Officer</th>
+      <th>Title_Royalty</th>
+      <th>Embarked_C</th>
+      <th>Embarked_Q</th>
+      <th>Embarked_S</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3</td>
+      <td>male</td>
+      <td>22.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>A/5 21171</td>
+      <td>7.2500</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>female</td>
+      <td>38.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>PC 17599</td>
+      <td>71.2833</td>
+      <td>C85</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>female</td>
+      <td>26.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>STON/O2. 3101282</td>
+      <td>7.9250</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>female</td>
+      <td>35.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>113803</td>
+      <td>53.1000</td>
+      <td>C123</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>3</td>
+      <td>male</td>
+      <td>35.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>373450</td>
+      <td>8.0500</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<h3><span id="chu-li-chuan-cang-wei-zhi-cabin">处理船舱位置（Cabin）</span></h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">train_cabin, test_cabin = set(), set()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> combined.iloc[:<span class="number">891</span>][<span class="string">'Cabin'</span>]:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        train_cabin.add(c[<span class="number">0</span>])</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        train_cabin.add(<span class="string">'U'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> combined.iloc[<span class="number">891</span>:][<span class="string">'Cabin'</span>]:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        test_cabin.add(c[<span class="number">0</span>])</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        test_cabin.add(<span class="string">'U'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">print</span> train_cabin</span><br></pre></td></tr></table></figure>
+<pre><code>set(['A', 'C', 'B', 'E', 'D', 'G', 'F', 'U', 'T'])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">print</span> test_cabin</span><br></pre></td></tr></table></figure>
+<pre><code>set(['A', 'C', 'B', 'E', 'D', 'G', 'F', 'U'])
+</code></pre>
+<p>我们在测试集中没有任何不存在于训练集中的船舱位置字母。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_cabin</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">global</span> combined</span><br><span class="line">    <span class="comment"># replacing missing cabins with U (for Uknown)</span></span><br><span class="line">    combined.Cabin.fillna(<span class="string">'U'</span>, inplace=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># mapping each Cabin value with the cabin letter</span></span><br><span class="line">    combined[<span class="string">'Cabin'</span>] = combined[<span class="string">'Cabin'</span>].map(<span class="keyword">lambda</span> c: c[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># dummy encoding ...</span></span><br><span class="line">    cabin_dummies = pd.get_dummies(combined[<span class="string">'Cabin'</span>], prefix=<span class="string">'Cabin'</span>)</span><br><span class="line">    combined = pd.concat([combined, cabin_dummies], axis=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    combined.drop(<span class="string">'Cabin'</span>, axis=<span class="number">1</span>, inplace=<span class="literal">True</span>)</span><br><span class="line">    status(<span class="string">'cabin'</span>)</span><br><span class="line">    <span class="keyword">return</span> combined</span><br></pre></td></tr></table></figure>
+<p>此函数将 <code>NaN</code> 值替换为 U（表示 <em>Unknow</em> ）。 然后它将每个 <code>Cabin</code> 值映射到第一个字母。
+然后它再次使用虚拟编码对舱位值进行编码。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined = process_cabin()</span><br></pre></td></tr></table></figure>
+<pre><code>Processing cabin : ok
+</code></pre>
+<p>好了，没有缺失值了。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined.head()</span><br></pre></td></tr></table></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Pclass</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Ticket</th>
+      <th>Fare</th>
+      <th>Title_Master</th>
+      <th>Title_Miss</th>
+      <th>Title_Mr</th>
+      <th>Title_Mrs</th>
+      <th>Title_Officer</th>
+      <th>Title_Royalty</th>
+      <th>Embarked_C</th>
+      <th>Embarked_Q</th>
+      <th>Embarked_S</th>
+      <th>Cabin_A</th>
+      <th>Cabin_B</th>
+      <th>Cabin_C</th>
+      <th>Cabin_D</th>
+      <th>Cabin_E</th>
+      <th>Cabin_F</th>
+      <th>Cabin_G</th>
+      <th>Cabin_T</th>
+      <th>Cabin_U</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3</td>
+      <td>male</td>
+      <td>22.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>A/5 21171</td>
+      <td>7.2500</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>female</td>
+      <td>38.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>PC 17599</td>
+      <td>71.2833</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>female</td>
+      <td>26.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>STON/O2. 3101282</td>
+      <td>7.9250</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>female</td>
+      <td>35.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>113803</td>
+      <td>53.1000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>3</td>
+      <td>male</td>
+      <td>35.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>373450</td>
+      <td>8.0500</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<h3><span id="chu-li-xing-bie-sex">处理性别（Sex）</span></h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_sex</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">global</span> combined</span><br><span class="line">    <span class="comment"># mapping string values to numerical one</span></span><br><span class="line">    combined[<span class="string">'Sex'</span>] = combined[<span class="string">'Sex'</span>].map(&#123;<span class="string">'male'</span>:<span class="number">1</span>, <span class="string">'female'</span>:<span class="number">0</span>&#125;)</span><br><span class="line">    status(<span class="string">'Sex'</span>)</span><br><span class="line">    <span class="keyword">return</span> combined</span><br></pre></td></tr></table></figure>
+<p>此函数将字符串值 <code>male</code> 和 <code>female</code> 分别映射到1和0。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined = process_sex()</span><br></pre></td></tr></table></figure>
+<pre><code>Processing Sex : ok
+</code></pre>
+<h3><span id="chu-li-cheng-ke-deng-ji-pclass">处理乘客等级（Pclass）</span></h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_pclass</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">global</span> combined</span><br><span class="line">    <span class="comment"># encoding into 3 categories:</span></span><br><span class="line">    pclass_dummies = pd.get_dummies(combined[<span class="string">'Pclass'</span>], prefix=<span class="string">"Pclass"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># adding dummy variable</span></span><br><span class="line">    combined = pd.concat([combined, pclass_dummies],axis=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># removing "Pclass"</span></span><br><span class="line">    combined.drop(<span class="string">'Pclass'</span>,axis=<span class="number">1</span>,inplace=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    status(<span class="string">'Pclass'</span>)</span><br><span class="line">    <span class="keyword">return</span> combined</span><br></pre></td></tr></table></figure>
+<p>此函数使用虚拟编码对 Pclass（1,2,3）的值进行编码。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined = process_pclass()</span><br></pre></td></tr></table></figure>
+<pre><code>Processing Pclass : ok
+</code></pre>
+<h3><span id="chu-li-chuan-piao-hao-ma-ticket">处理船票号码（Ticket）</span></h3>
+<p>让我们首先看看我们的数据集中不同的船票号码前缀</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cleanTicket</span><span class="params">(ticket)</span>:</span></span><br><span class="line">    ticket = ticket.replace(<span class="string">'.'</span>, <span class="string">''</span>)</span><br><span class="line">    ticket = ticket.replace(<span class="string">'/'</span>, <span class="string">''</span>)</span><br><span class="line">    ticket = ticket.split()</span><br><span class="line">    ticket = map(<span class="keyword">lambda</span> t : t.strip(), ticket)</span><br><span class="line">    ticket = list(filter(<span class="keyword">lambda</span> t : <span class="keyword">not</span> t.isdigit(), ticket))</span><br><span class="line">    <span class="keyword">if</span> len(ticket) &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> ticket[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'XXX'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tickets = set()</span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> combined[<span class="string">'Ticket'</span>]:</span><br><span class="line">    tickets.add(cleanTicket(t))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">print</span> len(tickets)</span><br></pre></td></tr></table></figure>
+<pre><code>37
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_ticket</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">global</span> combined</span><br><span class="line"></span><br><span class="line">    <span class="comment"># a function that extracts each prefix of the ticket, returns 'XXX' if no prefix (i.e the ticket is a digit)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cleanTicket</span><span class="params">(ticket)</span>:</span></span><br><span class="line">        ticket = ticket.replace(<span class="string">'.'</span>,<span class="string">''</span>)</span><br><span class="line">        ticket = ticket.replace(<span class="string">'/'</span>,<span class="string">''</span>)</span><br><span class="line">        ticket = ticket.split()</span><br><span class="line">        ticket = map(<span class="keyword">lambda</span> t : t.strip(), ticket)</span><br><span class="line">        ticket = filter(<span class="keyword">lambda</span> t : <span class="keyword">not</span> t.isdigit(), ticket)</span><br><span class="line">        <span class="keyword">if</span> len(ticket) &gt; <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> ticket[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">'XXX'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Extracting dummy variables from tickets:</span></span><br><span class="line"></span><br><span class="line">    combined[<span class="string">'Ticket'</span>] = combined[<span class="string">'Ticket'</span>].map(cleanTicket)</span><br><span class="line">    tickets_dummies = pd.get_dummies(combined[<span class="string">'Ticket'</span>], prefix=<span class="string">'Ticket'</span>)</span><br><span class="line">    combined = pd.concat([combined, tickets_dummies], axis=<span class="number">1</span>)</span><br><span class="line">    combined.drop(<span class="string">'Ticket'</span>, inplace=<span class="literal">True</span>, axis=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    status(<span class="string">'Ticket'</span>)</span><br><span class="line">    <span class="keyword">return</span> combined</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined = process_ticket()</span><br></pre></td></tr></table></figure>
+<pre><code>Processing Ticket : ok
+</code></pre>
+<h3><span id="chu-li-jia-ting">处理家庭</span></h3>
+<p>这部分包括根据家庭的大小创建新变量（大小是我们创建的另一个变量）。</p>
+<p>这种新变量的创建是在一个现实的假设下完成的：大家庭聚集在一起，因此他们比单独旅行的人更有可能获救。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_family</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">global</span> combined</span><br><span class="line">    <span class="comment"># introducing a new feature : the size of families (including the passenger)</span></span><br><span class="line">    combined[<span class="string">'FamilySize'</span>] = combined[<span class="string">'Parch'</span>] + combined[<span class="string">'SibSp'</span>] + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># introducing other features based on the family size</span></span><br><span class="line">    combined[<span class="string">'Singleton'</span>] = combined[<span class="string">'FamilySize'</span>].map(<span class="keyword">lambda</span> s: <span class="number">1</span> <span class="keyword">if</span> s == <span class="number">1</span> <span class="keyword">else</span> <span class="number">0</span>)</span><br><span class="line">    combined[<span class="string">'SmallFamily'</span>] = combined[<span class="string">'FamilySize'</span>].map(<span class="keyword">lambda</span> s: <span class="number">1</span> <span class="keyword">if</span> <span class="number">2</span> &lt;= s &lt;= <span class="number">4</span> <span class="keyword">else</span> <span class="number">0</span>)</span><br><span class="line">    combined[<span class="string">'LargeFamily'</span>] = combined[<span class="string">'FamilySize'</span>].map(<span class="keyword">lambda</span> s: <span class="number">1</span> <span class="keyword">if</span> <span class="number">5</span> &lt;= s <span class="keyword">else</span> <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    status(<span class="string">'family'</span>)</span><br><span class="line">    <span class="keyword">return</span> combined</span><br></pre></td></tr></table></figure>
+<p>此函数引入了4个新特征：</p>
+<ul>
+<li><code>FamilySize</code>：包括乘客（他/她）自己在内的亲属总数。</li>
+<li><code>Sigleton</code>：描述 size = 1 的家庭的布尔变量</li>
+<li><code>SmallFamily</code>：一个布尔变量，描述 2 &lt;= size &lt;= 4 的家庭</li>
+<li><code>LargeFamily</code>：一个布尔变量，描述 5 &lt; size 的家庭</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined = process_family()</span><br></pre></td></tr></table></figure>
+<pre><code>Processing family : ok
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">print</span> combined.shape</span><br></pre></td></tr></table></figure>
+<pre><code>(1309, 67)
+</code></pre>
+<p>最后我们得到了67个特征。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">combined.head()</span><br></pre></td></tr></table></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Fare</th>
+      <th>Title_Master</th>
+      <th>Title_Miss</th>
+      <th>Title_Mr</th>
+      <th>Title_Mrs</th>
+      <th>Title_Officer</th>
+      <th>Title_Royalty</th>
+      <th>Embarked_C</th>
+      <th>Embarked_Q</th>
+      <th>Embarked_S</th>
+      <th>Cabin_A</th>
+      <th>Cabin_B</th>
+      <th>Cabin_C</th>
+      <th>Cabin_D</th>
+      <th>Cabin_E</th>
+      <th>Cabin_F</th>
+      <th>Cabin_G</th>
+      <th>Cabin_T</th>
+      <th>Cabin_U</th>
+      <th>Pclass_1</th>
+      <th>Pclass_2</th>
+      <th>Pclass_3</th>
+      <th>Ticket_A</th>
+      <th>Ticket_A4</th>
+      <th>Ticket_A5</th>
+      <th>Ticket_AQ3</th>
+      <th>Ticket_AQ4</th>
+      <th>Ticket_AS</th>
+      <th>Ticket_C</th>
+      <th>Ticket_CA</th>
+      <th>Ticket_CASOTON</th>
+      <th>Ticket_FC</th>
+      <th>Ticket_FCC</th>
+      <th>Ticket_Fa</th>
+      <th>Ticket_LINE</th>
+      <th>Ticket_LP</th>
+      <th>Ticket_PC</th>
+      <th>Ticket_PP</th>
+      <th>Ticket_PPP</th>
+      <th>Ticket_SC</th>
+      <th>Ticket_SCA3</th>
+      <th>Ticket_SCA4</th>
+      <th>Ticket_SCAH</th>
+      <th>Ticket_SCOW</th>
+      <th>Ticket_SCPARIS</th>
+      <th>Ticket_SCParis</th>
+      <th>Ticket_SOC</th>
+      <th>Ticket_SOP</th>
+      <th>Ticket_SOPP</th>
+      <th>Ticket_SOTONO2</th>
+      <th>Ticket_SOTONOQ</th>
+      <th>Ticket_SP</th>
+      <th>Ticket_STONO</th>
+      <th>Ticket_STONO2</th>
+      <th>Ticket_STONOQ</th>
+      <th>Ticket_SWPP</th>
+      <th>Ticket_WC</th>
+      <th>Ticket_WEP</th>
+      <th>Ticket_XXX</th>
+      <th>FamilySize</th>
+      <th>Singleton</th>
+      <th>SmallFamily</th>
+      <th>LargeFamily</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>22.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>7.2500</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>38.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>71.2833</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>26.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7.9250</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>35.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>53.1000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>35.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>8.0500</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<h2><span id="iii-mo-xing">III - 模型</span></h2>
+<p>在这一部分中，我们根据我们创建的特征建立统计模型。您可以将此模型视为一个盒子，它可以处理任何新乘客的信息，并决定他是否能够幸存。</p>
+<p>有各种各样的模型可供使用，从逻辑回归到决策树，以及更复杂的模型，如随机森林和梯度提升树。</p>
+<p>我们将使用随机森林。Random Froests 在 Kaggle 比赛中证明了很高的有效性。</p>
+<p>有关为什么集合方法表现良好的更多详细信息，您可以参考这些帖子：</p>
+<ul>
+<li><a href="http://mlwave.com/kaggle-ensembling-guide/" target="_blank" rel="noopener">http://mlwave.com/kaggle-ensembling-guide/</a></li>
+<li><a href="http://www.overkillanalytics.net/more-is-always-better-the-power-of-simple-ensembles/" target="_blank" rel="noopener">http://www.overkillanalytics.net/more-is-always-better-the-power-of-simple-ensembles/</a></li>
+</ul>
+<p>回到我们的问题，我们现在必须：</p>
+<p>1.将组合数据集分成训练集和测试集。
+2.使用训练集建立预测模型。
+3.使用训练集评估模型。
+4.使用测试集测试模型，并生成并输出提交文件。</p>
+<p>请记住，我们必须重复 2 和 3 直到达到可接受的评估分数。</p>
+<p>让我们首先导入需要用到的函数包。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.pipeline <span class="keyword">import</span> make_pipeline</span><br><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.ensemble.gradient_boosting <span class="keyword">import</span> GradientBoostingClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectKBest</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> StratifiedKFold</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> GridSearchCV</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> cross_val_score</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression, LogisticRegressionCV</span><br></pre></td></tr></table></figure>
+<p>为了评估我们的模型，我们将使用5折交叉验证（5-fold cross validation），因为它是在比赛排行榜中使用的指标。</p>
+<p>为此，我们将定义一个小的评分函数。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compute_score</span><span class="params">(clf, X, y, scoring=<span class="string">'accuracy'</span>)</span>:</span></span><br><span class="line">    xval = cross_val_score(clf, X, y, cv = <span class="number">5</span>, scoring=scoring)</span><br><span class="line">    <span class="keyword">return</span> np.mean(xval)</span><br></pre></td></tr></table></figure>
+<p>从组合数据集中恢复训练集和测试集是一项简单的任务。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recover_train_test_target</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">global</span> combined</span><br><span class="line"></span><br><span class="line">    targets = pd.read_csv(<span class="string">'./data/train.csv'</span>, usecols=[<span class="string">'Survived'</span>])[<span class="string">'Survived'</span>].values</span><br><span class="line">    train = combined.iloc[:<span class="number">891</span>]</span><br><span class="line">    test = combined.iloc[<span class="number">891</span>:]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> train, test, targets</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">train, test, targets = recover_train_test_target()</span><br></pre></td></tr></table></figure>
+<h3><span id="te-zheng-xuan-ze">特征选择</span></h3>
+<p>到目前为止，我们已经提出了30多个特征。这个数字非常大。</p>
+<p>在完成特征工程时，我们通常倾向于通过选择捕获基本特征的“正确”数量的特征来减少维度。</p>
+<p>事实上，特征选择带来许多好处：</p>
+<ul>
+<li>它减少了数据之间的冗余</li>
+<li>它加快了训练过程</li>
+<li>它减少过拟合</li>
+</ul>
+<p>基于树的估算器可用于计算特征重要性，而这些重要性又可用于丢弃不相关的特征。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">clf = RandomForestClassifier(n_estimators=<span class="number">50</span>, max_features=<span class="string">'sqrt'</span>)</span><br><span class="line">clf = clf.fit(train, targets)</span><br></pre></td></tr></table></figure>
+<p>让我们看看每个特征的重要性。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">features = pd.DataFrame()</span><br><span class="line">features[<span class="string">'feature'</span>] = train.columns</span><br><span class="line">features[<span class="string">'importance'</span>] = clf.feature_importances_</span><br><span class="line">features.sort_values(by=[<span class="string">'importance'</span>], ascending=<span class="literal">True</span>, inplace=<span class="literal">True</span>)</span><br><span class="line">features.set_index(<span class="string">'feature'</span>, inplace=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">features.plot(kind=<span class="string">'barh'</span>, figsize=(<span class="number">25</span>, <span class="number">25</span>))</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x117ff2a10&gt;
+</code></pre>
+<p><img src="https://raw.githubusercontent.com/qiwihui/How-to-score-0.8134-in-Titanic-Kaggle-Challenge/master/images/article_1/8.png" alt="png"></p>
+<p>正如您可能注意到的那样，与 <code>Title_Mr</code>，<code>Age</code>，<code>Fare</code> 和 <code>Sex</code> 相关联非常重要。</p>
+<p>与 <code>Passenger_Id</code> 也有重要的相关性。</p>
+<p>现在让我们将我们的训练集和测试集转换为更紧凑的数据集。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">model = SelectFromModel(clf, prefit=<span class="literal">True</span>)</span><br><span class="line">train_reduced = model.transform(train)</span><br><span class="line"><span class="keyword">print</span> train_reduced.shape</span><br></pre></td></tr></table></figure>
+<pre><code>(891, 12)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">test_reduced = model.transform(test)</span><br><span class="line"><span class="keyword">print</span> test_reduced.shape</span><br></pre></td></tr></table></figure>
+<pre><code>(418, 12)
+</code></pre>
+<p>好极了！ 现在我们的特征减少了很多。</p>
+<p>我们将看看我们是否会使用训练集的减少版或完整版。</p>
+<h3><span id="rang-wo-men-chang-shi-bu-tong-de-ji-chu-mo-xing">让我们尝试不同的基础模型</span></h3>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">logreg = LogisticRegression()</span><br><span class="line">logreg_cv = LogisticRegressionCV()</span><br><span class="line">rf = RandomForestClassifier()</span><br><span class="line">gboost = GradientBoostingClassifier()</span><br><span class="line"></span><br><span class="line">models = [logreg, logreg_cv, rf, gboost]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> model <span class="keyword">in</span> models:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'Cross-validation of : &#123;0&#125;'</span>.format(model.__class__)</span><br><span class="line">    score = compute_score(clf=model, X=train_reduced, y=targets, scoring=<span class="string">'accuracy'</span>)</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'CV score = &#123;0&#125;'</span>.format(score)</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'****'</span></span><br></pre></td></tr></table></figure>
+<pre><code>Cross-validation of : &lt;class 'sklearn.linear_model.logistic.LogisticRegression'&gt;
+CV score = 0.818195097715
+****
+Cross-validation of : &lt;class 'sklearn.linear_model.logistic.LogisticRegressionCV'&gt;
+CV score = 0.81818240172
+****
+Cross-validation of : &lt;class 'sklearn.ensemble.forest.RandomForestClassifier'&gt;
+CV score = 0.808183171282
+****
+Cross-validation of : &lt;class 'sklearn.ensemble.gradient_boosting.GradientBoostingClassifier'&gt;
+CV score = 0.824917697684
+****
+</code></pre>
+<h3><span id="chao-can-shu-diao-zheng">超参数调整</span></h3>
+<p>正如建模部分的开头所提到的，我们将使用随机森林模型。它可能不是这项任务的最佳模型，但我们将展示如何调整。这项工作可以应用于不同的模型。</p>
+<p>随机森林非常方便。然而，它们会带有一些参数进行调整，以便为预测任务获得最佳模型。</p>
+<p>要了解有关随机森林的更多信息，请参阅此 <a href="https://www.analyticsvidhya.com/blog/2015/06/tuning-random-forest-model/" target="_blank" rel="noopener">链接</a>。</p>
+<p>此外，我们将使用全部训练集。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># turn run_gs to True if you want to run the gridsearch again.</span></span><br><span class="line">run_gs = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> run_gs:</span><br><span class="line">    parameter_grid = &#123;</span><br><span class="line">                 <span class="string">'max_depth'</span> : [<span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>],</span><br><span class="line">                 <span class="string">'n_estimators'</span>: [<span class="number">50</span>, <span class="number">10</span>],</span><br><span class="line">                 <span class="string">'max_features'</span>: [<span class="string">'sqrt'</span>, <span class="string">'auto'</span>, <span class="string">'log2'</span>],</span><br><span class="line">                 <span class="string">'min_samples_split'</span>: [<span class="number">2</span>, <span class="number">3</span>, <span class="number">10</span>],</span><br><span class="line">                 <span class="string">'min_samples_leaf'</span>: [<span class="number">1</span>, <span class="number">3</span>, <span class="number">10</span>],</span><br><span class="line">                 <span class="string">'bootstrap'</span>: [<span class="literal">True</span>, <span class="literal">False</span>],</span><br><span class="line">                 &#125;</span><br><span class="line">    forest = RandomForestClassifier()</span><br><span class="line">    cross_validation = StratifiedKFold(n_splits=<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">    grid_search = GridSearchCV(forest,</span><br><span class="line">                               scoring=<span class="string">'accuracy'</span>,</span><br><span class="line">                               param_grid=parameter_grid,</span><br><span class="line">                               cv=cross_validation,</span><br><span class="line">                               verbose=<span class="number">1</span></span><br><span class="line">                              )</span><br><span class="line"></span><br><span class="line">    grid_search.fit(train, targets)</span><br><span class="line">    model = grid_search</span><br><span class="line">    parameters = grid_search.best_params_</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'Best score: &#123;&#125;'</span>.format(grid_search.best_score_))</span><br><span class="line">    print(<span class="string">'Best parameters: &#123;&#125;'</span>.format(grid_search.best_params_))</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    parameters = &#123;<span class="string">'bootstrap'</span>: <span class="literal">False</span>, <span class="string">'min_samples_leaf'</span>: <span class="number">3</span>, <span class="string">'n_estimators'</span>: <span class="number">50</span>,</span><br><span class="line">                  <span class="string">'min_samples_split'</span>: <span class="number">10</span>, <span class="string">'max_features'</span>: <span class="string">'sqrt'</span>, <span class="string">'max_depth'</span>: <span class="number">6</span>&#125;</span><br><span class="line"></span><br><span class="line">    model = RandomForestClassifier(**parameters)</span><br><span class="line">    model.fit(train, targets)</span><br></pre></td></tr></table></figure>
+<p>现在通过扫描超参数的几个组合来构建模型，我们可以生成一个输出文件以在 Kaggle 上提交。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">output = model.predict(test).astype(int)</span><br><span class="line">df_output = pd.DataFrame()</span><br><span class="line">aux = pd.read_csv(<span class="string">'./data/test.csv'</span>)</span><br><span class="line">df_output[<span class="string">'PassengerId'</span>] = aux[<span class="string">'PassengerId'</span>]</span><br><span class="line">df_output[<span class="string">'Survived'</span>] = output</span><br><span class="line">df_output[[<span class="string">'PassengerId'</span>,<span class="string">'Survived'</span>]].to_csv(<span class="string">'./predictions/gridsearch_rf.csv'</span>, index=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<h3><span id="bonus-hun-he-bu-tong-mo-xing">[BONUS] 混合不同模型</span></h3>
+<p>我没有亲自上传基于模型混合的提交，但这是你可以这么做：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">trained_models = []</span><br><span class="line"><span class="keyword">for</span> model <span class="keyword">in</span> models:</span><br><span class="line">    model.fit(train, targets)</span><br><span class="line">    trained_models.append(model)</span><br><span class="line"></span><br><span class="line">predictions = []</span><br><span class="line"><span class="keyword">for</span> model <span class="keyword">in</span> trained_models:</span><br><span class="line">    predictions.append(model.predict_proba(test)[:, <span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">predictions_df = pd.DataFrame(predictions).T</span><br><span class="line">predictions_df[<span class="string">'out'</span>] = predictions_df.mean(axis=<span class="number">1</span>)</span><br><span class="line">predictions_df[<span class="string">'PassengerId'</span>] = aux[<span class="string">'PassengerId'</span>]</span><br><span class="line">predictions_df[<span class="string">'out'</span>] = predictions_df[<span class="string">'out'</span>].map(<span class="keyword">lambda</span> s: <span class="number">1</span> <span class="keyword">if</span> s &gt;= <span class="number">0.5</span> <span class="keyword">else</span> <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">predictions_df = predictions_df[[<span class="string">'PassengerId'</span>, <span class="string">'out'</span>]]</span><br><span class="line">predictions_df.columns = [<span class="string">'PassengerId'</span>, <span class="string">'Survived'</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">predictions_df.to_csv(<span class="string">'./predictions/blending_base_models.csv'</span>, index=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<p>为了获得良好的混合提交，基本模型应该是不同的，并且它们的相关性是不相关的。</p>
+<h2><span id="iv-jie-lun">IV - 结论</span></h2>
+<p>在本文中，我们探讨了 <a href="http://kaggle.com" target="_blank" rel="noopener">Kaggle</a> 带给我们的一个有趣的数据集。</p>
+<p>我们浏览了数据科学管道的基本要点：</p>
+<ul>
+<li>数据探索和可视化：制定假设的第一步</li>
+<li>数据清理</li>
+<li>特征工程</li>
+<li>特征选择</li>
+<li>超参数调整</li>
+<li>提交</li>
+<li>混合</li>
+</ul>
+<p>如果您想测试和使用它，可以将此博客下载为笔记本：<a href="https://github.com/ahmedbesbes/How-to-score-0.8134-in-Titanic-Kaggle-Challenge/raw/master/article_1.ipynb" target="_blank" rel="noopener">我的 github repo</a></p>
+<blockquote>
+<p>译者注：此中文翻译地址为： <a href="https://github.com/qiwihui/How-to-score-0.8134-in-Titanic-Kaggle-Challenge/raw/master/article_cn.ipynb" target="_blank" rel="noopener">qiwihui 的 github repo</a></p>
+</blockquote>
+<p>关于这一挑战的文章很多，所以显然还有改进的余地。</p>
+<p>以下是我建议的后续步骤：</p>
+<ul>
+<li>挖掘更多数据并最终构建新特征。</li>
+<li>尝试不同的模型：逻辑回归，Gradient Boosted Tree，XGboost 等。</li>
+<li>尝试集成学习技巧（堆叠）</li>
+<li>运行 auto-ML 框架</li>
+</ul>
+<p>如果你能找到改善我的解决方案的方法，我会非常高兴。这可以让我更新文章，绝对给你信任。所以请随时发表评论。</p>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E7%BF%BB%E8%AF%91/">#翻译</a><a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">#机器学习</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-79/" class="prev">PREV</a><a href="/qiwihui-blog-54/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-55/';
+var disqus_title = '如何在 Titanic Kaggle Challenge 中获得0.8134分';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-55/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

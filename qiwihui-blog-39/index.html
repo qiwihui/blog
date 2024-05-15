@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Elasticsearch cheat sheet · QIWIHUI</title><meta name="description" content="Elasticsearch cheat sheet - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-39/index.html"><meta property="og:title" content="Elasticsearch cheat sheet"><meta property="og:description" content="Elasticsearch cheat sheet"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">Elasticsearch cheat sheet</h1><div class="post-info">Aug 13, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>3 min. read</span></div><div class="post-content"><h3><span id="1">1</span></h3>
+<p><code>curl -X&lt;REST Verb&gt; &lt;Node&gt;:&lt;Port&gt;/&lt;Index&gt;/&lt;Type&gt;/&lt;ID&gt;</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -XPOST &apos;localhost:9200/bank/_search?pretty&apos; -d &apos;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123; &quot;match_all&quot;: &#123;&#125; &#125;,</span><br><span class="line">  &quot;_source&quot;: [&quot;account_number&quot;, &quot;balance&quot;],</span><br><span class="line">  &quot;sort&quot;: &#123; &quot;balance&quot;: &#123; &quot;order&quot;: &quot;desc&quot; &#125; &#125;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure>
+<p><code>bool must</code>: 所有的查询都必须为真
+<code>bool should</code>: 只要有一个查询匹配
+<code>bool must_not</code>: 查询列表中的的所有查询都必须都不为真</p>
+<h3><span id="2-zhi-xing-guo-lu-qi">2. 执行过滤器</span></h3>
+<p><code>_score</code>: 指定的搜索查询匹配程度的一个相对度量。得分越高，文档越相关，得分越低文档的相关度越低。
+Elasticsearch中的所有的查询都会触发相关度得分的计算。对于那些我们不需要相关度得分的场景下，Elasticsearch以过滤器的形式提供了另一种查询功能。</p>
+<p>过滤器在概念上类似于查询，但是它们有非常快的执行速度，这种快的执行速度主要有以下两个原因：</p>
+<ul>
+<li>过滤器不会计算相关度的得分，所以它们在计算上更快一些</li>
+<li>过滤器可以被缓存到内存中，这使得在重复的搜索查询上，其要比相应的查询快出许多。</li>
+</ul>
+<p>通常情况下，要决定是使用过滤器还是使用查询，你就需要问自己是否需要相关度得分。如果相关度是不重要的，使用过滤器，否则使用查询。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -XPOST <span class="string">'localhost:9200/bank/_search?pretty'</span> -d <span class="string">'</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">  "query": &#123;</span></span><br><span class="line"><span class="string">    "filtered": &#123;</span></span><br><span class="line"><span class="string">      "query": &#123; "match_all": &#123;&#125; &#125;,</span></span><br><span class="line"><span class="string">      "filter": &#123;</span></span><br><span class="line"><span class="string">        "range": &#123;</span></span><br><span class="line"><span class="string">          "balance": &#123;</span></span><br><span class="line"><span class="string">            "gte": 20000,</span></span><br><span class="line"><span class="string">            "lte": 30000</span></span><br><span class="line"><span class="string">          &#125;</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">      &#125;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;'</span></span><br></pre></td></tr></table></figure>
+<h3><span id="3">3</span></h3>
+<p>doc[‘my_field’].value和_source.my_field之间的不同:</p>
+<ul>
+<li>首先，使用doc关键字，会使相应的字段加载到内存，执行速度更快但是更耗费内存；</li>
+<li>第二，doc[…]符号 仅允许简单的值字段，只在基于字段的非分析或者单个项上有意义；</li>
+<li>_source加载、分析source，然后仅仅返回相关部分的json。</li>
+</ul>
+<h3><span id="can-kao">参考</span></h3>
+<ul>
+<li><a href="https://endymecy.gitbooks.io/elasticsearch-guide-chinese/" target="_blank" rel="noopener">elasticsearch guide chinese</a></li>
+<li><a href="https://gist.github.com/ruanbekker/e8a09604b14f37e8d2f743a87b930f93" target="_blank" rel="noopener">https://gist.github.com/ruanbekker/e8a09604b14f37e8d2f743a87b930f93</a></li>
+<li><a href="https://gist.github.com/stephen-puiszis/212b8a8b37f67c670422" target="_blank" rel="noopener">https://gist.github.com/stephen-puiszis/212b8a8b37f67c670422</a></li>
+</ul>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-138/" class="prev">PREV</a><a href="/qiwihui-blog-68/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-39/';
+var disqus_title = 'Elasticsearch cheat sheet';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-39/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

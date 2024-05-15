@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> CS251 - final 2021 - 问题 3 · QIWIHUI</title><meta name="description" content="CS251 - final 2021 - 问题 3 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-156/index.html"><meta property="og:title" content="CS251 - final 2021 - 问题 3"><meta property="og:description" content="CS251 - final 2021 - 问题 3"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">CS251 - final 2021 - 问题 3</h1><div class="post-info">May 15, 2024<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>8 min. read</span></div><div class="post-content"><p><strong><em>问题3（20分）: Automated market maker (AMM).</em></strong></p>
+<p><em>你作为Uniswap V2的流动性提供者，为DAI/ETH池贡献5个ETH及5000个DAI。假设1个DAI值1美元，那么你的出资总额为1万美元。</em></p>
+<p><em>A)    几个月后，1个ETH的价格上升到2000 DAI。在DAI/ETH池适应这个新的汇率稳定下来以后，您决定撤回作为流动性提供者的全部份额。假设系统不收费(∅= 1)，你会收到多少ETH和DAI ?</em></p>
+<a id="more"></a>
+<p><strong>答：</strong> 假设初始时流动性池中 ETH 和 DAI 的数量为$x$，$y$，提供的<em>5个 ETH 和5000个 DAI</em> 流动性占比为 $w$，则此时边际价格（marginal price）为$M_p=\frac{y}{x}=\frac{5000}{5}=1000$；</p>
+<p>设价格变化之后流动性池中 ETH 和 DAI 的数量为 $x’$，$y’$，则有 $M_p’=\frac{y’}{x’}=2000=2M_p$；</p>
+<p>根据恒定乘积公式 $xy=x’y’=k$，以及 $M_p=\frac{y}{x}$，$M_p’=\frac{y’}{x’}$，可以推出：</p>
+<p>$x’=\sqrt{\frac{k}{M_p’}}=\sqrt{\frac{k}{2M_p}}=\frac{1}{\sqrt{2}}x$，$y’=\sqrt{2kM_p’}=\sqrt{2}y$，</p>
+<p>由于流动性占比不变，所以取回的 ETH 为 $wx’=\frac{1}{\sqrt{2}}wx=5\frac{1}{\sqrt{2}}=3.5355$，DAI 为 $wy’=\sqrt{2}wy=5000\sqrt{2}=7071.0678$</p>
+<p>故可以收到 3.5355 ETH 和 7071.0678 DAI</p>
+<p><em>B)    如果你自己持有你的5 ETH和5000 DAI，你的资产现在将价值15K DAI，获取了5000 DAI的利润。在这几个月里，作为Uniswap V2的流动性提供者，与“自己持有”策略相比，你的损失是多少? 将损失以美元的绝对值表示，假设1 DAI = 1 USD。这被称为暂时性损失，尽管在这种情况下，这种损失是相当永久性的。</em></p>
+<p><strong>答：</strong> 按目前的价格，收回的 ETH 和 DAI 的价值为 $3.5355*2000+7071.0678=14142.0678$，损失为 $15000-14142.0678=857.9322$，损失率为 $\frac{857.9322}{15000}=0.057=5.7%$，故损失 857.9322 USD。</p>
+<p><em>C)    如果您因担任Uniswap V2的流动性提供者而损失了x美元，Uniswap V2是用部分（b）计算x的，那么这些资金流向了哪里？具体来说，就是谁在这个过程中获得了x美元？</em></p>
+<p><strong>答：</strong> 这些损失将会由套利交易者获得。当外部 ETH 价格上升时，套利交易者会通过向 ETH/DAI 池中添加 DAI 取出 ETH 来使得池中的 ETH 价格比例达到外部 ETH 价格，由于池中流动性乘积恒定，因此取出的 ETH 的套利利润即为流动性提供者的损失。</p>
+<p><em>D)     现在让我们转向使用Uniswap V2 交易。假设Bob使用DAI/ETH池将DAI兑换成ETH进行大型 交易。交易完成后，DAI/ETH池中的DAI金额比之前略高，而ETH的金额则略低。因此，DAI/ETH  池中的资产比率有点偏离其平衡点。</em></p>
+<p><em>套利者Alice发现了这个机会，并希望在反方向发行一个交易，以重新平衡资金池。她旨在从这笔交易中获利，所以希望确保她的交易在Bob交易后被立即执行。这种策略被称为“尾随”。</em></p>
+<p><em>那么Alice如何能实施尾随计划呢？请提出可以使Alice的交易在Bob之后可以有合理机会被立即被执行的方法。</em></p>
+<p><strong>答：</strong> Alice 可以利用一定量账户和一个合约来使得其交易在Bob交易之后被立即执行，具体步骤为：</p>
+<ol>
+<li>Alice 部署一个合约，这个合约可以提交交易，并预先存入用于交易的ETH；</li>
+<li>准备一定数量的账户，账户中存入可用以支付gas的ETH；</li>
+<li>Alice 监听以太坊的交易池，当监听到 Bob 的交易时，通过每一个账户调用部署的合约广播一个交易，这个交易的 gas 价格<strong>等于</strong> Bob 交易的 gas 价格。</li>
+</ol>
+<p>由于以太坊中矿工在打包交易时是根据交易的gas价格高低进行的，这样将会使得 Alice 广播的交易有机会处于 Bob 交易的后的第一个交易，从而达到获利机会。</p>
+<p><em>E)      假设10个不同的套利者，为捕获Bob的交易创造的套利机会， 在同一时间执行了相同的尾随操作策略。他们都使用了你在(D)部分中所描述的相同机制，那么这10个中的哪一个会获胜呢？</em></p>
+<p><strong>答：</strong> 由于以太坊中矿工在打包交易时是根据交易的 gas 价格高低进行的，因此对于所有 gas 价格和Bob的交易的 Gas 价格一致的交易，都有能被排序在Bob交易之后，所以这些交易中处在 Bob 交易之后的第一个交易将获利，对应的套利者获胜。</p>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/">#区块链</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-173/" class="prev">PREV</a><a href="/qiwihui-blog-150/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-156/';
+var disqus_title = 'CS251 - final 2021 - 问题 3';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-156/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

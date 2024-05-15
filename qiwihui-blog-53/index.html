@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 在 Mac OS X 上使用 iodine 配置 DNS 隧道 · QIWIHUI</title><meta name="description" content="在 Mac OS X 上使用 iodine 配置 DNS 隧道 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-53/index.html"><meta property="og:title" content="在 Mac OS X 上使用 iodine 配置 DNS 隧道"><meta property="og:description" content="在 Mac OS X 上使用 iodine 配置 DNS 隧道"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">在 Mac OS X 上使用 iodine 配置 DNS 隧道</h1><div class="post-info">Aug 13, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>9 min. read</span></div><div class="post-content"><blockquote>
+<p>DNS 隧道，是隐蔽信道的一种，通过将其他协议封装在DNS协议中传输建立通信。</p>
+</blockquote>
+<p>本文是在 Mac OS X 上实践的 DNS 隧道的一个记录，关于这个方法的原理，请具体参考 <a href="https://cloud.tencent.com/developer/article/1040276" target="_blank" rel="noopener">DNS Tunneling及相关实现</a>。</p>
+<a id="more"></a>
+<h2><span id="an-zhuang-he-pei-zhi">安装和配置</span></h2>
+<h3><span id="pei-zhi-yu-ming">配置域名</span></h3>
+<p>准备一台 VPS 以及一个域名（比如 <code>qiwihui.com</code>），在域名的 DNS 配置中添加两条记录：</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>TTL</th>
+<th>Data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dns</td>
+<td>A</td>
+<td>1h</td>
+<td><code>vps-ip</code></td>
+</tr>
+<tr>
+<td>dt</td>
+<td>NS</td>
+<td>1h</td>
+<td><a href="http://dns.qiwihui.com" target="_blank" rel="noopener">dns.qiwihui.com</a></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="fu-wu-duan">服务端</span></h3>
+<p>以 Debian 系统为例，安装：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt install iodine</span><br></pre></td></tr></table></figure>
+<p>使用</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ iodined -f -c -P password 172.18.0.1 dt.qiwihui.com </span><br><span class="line">Opened dns0</span><br><span class="line">Setting IP of dns0 to 172.18.0.1</span><br><span class="line">Setting MTU of dns0 to 1130</span><br><span class="line">Opened IPv4 UDP socket</span><br><span class="line">Listening to dns <span class="keyword">for</span> domain dt.qiwihui.com</span><br></pre></td></tr></table></figure>
+<p>其中，<code>password</code> 是客户端和服务器之前的密码，<code>172.18.0.1</code> 为虚拟局域网的IP地址，可自行设定，但不要与现有网络重复了。此时，服务端已经就绪。</p>
+<h3><span id="ke-hu-duan-ben-di-an-zhuang-iodine">客户端（本地）安装 <code>iodine</code></span></h3>
+<ol>
+<li>本地安装 <code>tuntap</code></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew cask install tuntap</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>安装 <code>iodine</code></li>
+</ol>
+<p>因为官方没有提供 Mac OS X 的可执行文件，需要从源码编译，或者使用我已经设置好的 Homebrew tap 进行安装。从源码编译：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget -c http://code.kryo.se/iodine/iodine-0.7.0.tar.gz</span><br><span class="line">tar zxvf iodine-0.7.0.tar.gz</span><br><span class="line"><span class="built_in">cd</span> iodine-0.7.0</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<p>或者使用 Homebrew：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew tap qiwihui/core</span><br><span class="line">brew install qiwihui/core/iodine</span><br></pre></td></tr></table></figure>
+<p>使用：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo iodine -f -P password dns.qiwihui.com dt.qiwihui.com</span><br><span class="line">Opened /dev/tun0</span><br><span class="line">Opened IPv4 UDP socket</span><br><span class="line">Sending DNS queries <span class="keyword">for</span> dt.qiwihui.com to &lt;vps-ip&gt;</span><br><span class="line">Autodetecting DNS query <span class="built_in">type</span> (use -T to override).</span><br><span class="line">Using DNS <span class="built_in">type</span> NULL queries</span><br><span class="line">Version ok, both using protocol v 0x00000502. You are user <span class="comment">#1</span></span><br><span class="line">Setting IP of tun0 to 172.18.0.3</span><br><span class="line">Adding route 172.18.0.0/27 to 172.18.0.3</span><br><span class="line">add net 172.18.0.0: gateway 172.18.0.3</span><br><span class="line">Setting MTU of tun0 to 1130</span><br><span class="line">Server tunnel IP is 172.18.0.1</span><br><span class="line">Testing raw UDP data to the server (skip with -r).</span><br><span class="line">Server is at 10.170.0.3, trying raw login: ....failed</span><br><span class="line">Retrying EDNS0 support <span class="built_in">test</span>...</span><br><span class="line">Using EDNS0 extension</span><br><span class="line">Switching upstream to codec Base128</span><br><span class="line">Server switched upstream to codec Base128</span><br><span class="line">No alternative downstream codec available, using default (Raw)</span><br><span class="line">Switching to lazy mode <span class="keyword">for</span> low-latency</span><br><span class="line">Server switched to lazy mode</span><br><span class="line">Autoprobing max downstream fragment size... (skip with -m fragsize)</span><br><span class="line">768 ok.. ...1152 not ok.. 960 ok.. 1056 ok.. 1104 ok.. 1128 ok.. 1140 ok.. will use 1140-2=1138</span><br><span class="line">Setting downstream fragment size to max 1138...</span><br><span class="line">Retrying <span class="built_in">set</span> fragsize...</span><br><span class="line">Retrying <span class="built_in">set</span> fragsize...</span><br><span class="line">Connection setup complete, transmitting data.</span><br></pre></td></tr></table></figure>
+<p>此时，客户端配置完成。</p>
+<h3><span id="ce-shi-he-shi-yong">测试和使用</span></h3>
+<p>在本地尝试 ping 172.18.0.1 即可：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ping 172.18.0.1</span><br><span class="line">PING 172.18.0.1 (172.18.0.1): 56 data bytes</span><br><span class="line">64 bytes from 172.18.0.1: icmp_seq=0 ttl=64 time=233.914 ms</span><br><span class="line">64 bytes from 172.18.0.1: icmp_seq=1 ttl=64 time=232.870 ms</span><br><span class="line">64 bytes from 172.18.0.1: icmp_seq=2 ttl=64 time=230.201 ms</span><br><span class="line">64 bytes from 172.18.0.1: icmp_seq=3 ttl=64 time=268.602 ms</span><br><span class="line">64 bytes from 172.18.0.1: icmp_seq=4 ttl=64 time=230.573 ms</span><br><span class="line">^C</span><br><span class="line">--- 172.18.0.1 ping statistics ---</span><br><span class="line">5 packets transmitted, 5 packets received, 0.0% packet loss</span><br><span class="line">round-trip min/avg/max/stddev = 230.201/239.232/268.602/14.751 ms</span><br></pre></td></tr></table></figure>
+<p>这时，只要通过这个 DNS 隧道就可就传递其他数据了。</p>
+<h2><span id="yong-tu">用途</span></h2>
+<p>当防火墙限制了一些网站的访问，但是能进行 DNS 查询时，可使用这种方法进行绕过，比如在公司，又或者在某些国家，犯罪分子也常用这中方式进行内网数据传出。</p>
+<h2><span id="can-kao">参考</span></h2>
+<ul>
+<li><a href="http://code.kryo.se/iodine/%EF%BC%9Aiodine" target="_blank" rel="noopener">http://code.kryo.se/iodine/：iodine</a> 官方网站，<a href="http://kryo.se" target="_blank" rel="noopener">kryo.se</a>: iodine (IP-over-DNS, IPv4 over DNS tunnel)</li>
+<li><a href="https://github.com/yarrick/iodine%EF%BC%9AOfficial" target="_blank" rel="noopener">https://github.com/yarrick/iodine：Official</a> git repo for iodine dns tunnel</li>
+<li><a href="https://cloud.tencent.com/developer/article/1040276" target="_blank" rel="noopener">DNS Tunneling及相关实现</a></li>
+<li><a href="http://jeremy5189.logdown.com/posts/263029-iodine-ip-over-dns" target="_blank" rel="noopener">iodine - IP over DNS</a></li>
+<li><a href="http://wiki.attie.co.uk/wiki/Tunnel_IP_through_DNS" target="_blank" rel="noopener">Tunnel IP through DNS</a></li>
+</ul>
+<h3><span id="comments">Comments</span></h3>
+<hr>
+<blockquote>
+<p>from: <a href="https://github.com/qiwihui/blog/issues/53#issuecomment-486480977" target="_blank" rel="noopener"><strong>shaohuihu</strong></a> on: <strong>4/25/2019</strong></p>
+</blockquote>
+<p>mac上使用 iodined: open_tun: Failed to open tunneling device: No such file or directory
+楼主mac上如何解决的TUN/TAP?</p>
+<hr>
+<blockquote>
+<p>from: <a href="https://github.com/qiwihui/blog/issues/53#issuecomment-486482390" target="_blank" rel="noopener"><strong>qiwihui</strong></a> on: <strong>4/25/2019</strong></p>
+</blockquote>
+<h2><span id="shaohuihu-ni-xu-yao-tuntap-brew-cask-install-tuntap">@shaohuihu 你需要tuntap：<code>brew cask install tuntap</code></span></h2>
+<blockquote>
+<p>from: <a href="https://github.com/qiwihui/blog/issues/53#issuecomment-486503799" target="_blank" rel="noopener"><strong>shaohuihu</strong></a> on: <strong>4/25/2019</strong></p>
+</blockquote>
+<h2><span id="qing-wen-zhe-ge-dns-fu-wu-qi-yi-ji-iodine-ke-hu-duan-fu-wu-duan-zi-ji-da-jian-zai-ben-di-hao-shi-bu">请问  这个dns服务器 以及iodine 客户端 服务端自己搭建在本地好使不？</span></h2>
+<blockquote>
+<p>from: <a href="https://github.com/qiwihui/blog/issues/53#issuecomment-486529656" target="_blank" rel="noopener"><strong>qiwihui</strong></a> on: <strong>4/25/2019</strong></p>
+</blockquote>
+<p>@shaohuihu  在直连模式下可看youtube 720p, 中继模式下没试过，看相关文章速度也是在其他几种DNS tunneling中是最快的。</p>
+<hr>
+<blockquote>
+<p>from: <a href="https://github.com/qiwihui/blog/issues/53#issuecomment-486972412" target="_blank" rel="noopener"><strong>shaohuihu</strong></a> on: <strong>4/26/2019</strong></p>
+</blockquote>
+<h2><span id="ke-fu-duan-he-fu-wu-duan-du-pei-zhi-hao-hou-ping-ip-bao-cuo-ping-sendto-no-buffer-space-available-qing-wen-zhe-ge-shi-shi-me-yuan-yin-ni-qiwihui">客服端和服务端都配置好后。ping ip 报错：ping: sendto: No buffer space available 请问这个是什么原因呢？@qiwihui</span></h2>
+<blockquote>
+<p>from: <a href="https://github.com/qiwihui/blog/issues/53#issuecomment-487355342" target="_blank" rel="noopener"><strong>shaohuihu</strong></a> on: <strong>4/28/2019</strong></p>
+</blockquote>
+<h2><span id="qiwihui-zhe-ge-kun-rao-liao-hao-jiu-liao-fu-wu-duan-wo-ye-check-liao-shi-dui-de-ke-hu-duan-ye-lian-jie-wan-cheng-53-duan-kou-wo-ye-kai-fang-liao-fu-wu-duan-he-ke-hu-duan-ban-ben-ye-shi-yi-yang-de-jiu-shi-ping-bu-tong-bu-neng-tong-xin-ni-zhi-dao-wei-shi-me-ma">@qiwihui  这个困扰了好久了 服务端我也check了 是对的，客户端也连接完成53端口我也开放了，服务端和客户端版本也是一样的，就是ping 不通。不能通信，你知道为什么吗</span></h2>
+<blockquote>
+<p>from: <a href="https://github.com/qiwihui/blog/issues/53#issuecomment-487360896" target="_blank" rel="noopener"><strong>qiwihui</strong></a> on: <strong>4/28/2019</strong></p>
+</blockquote>
+<p>@shaohuihu 这个问题原因很多，可是试试重置网卡</p>
+<ol>
+<li>确定使用的网卡</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo route -n get 172.18.0.1</span></span><br><span class="line">   route to: 172.18.0.1</span><br><span class="line">destination: 172.18.0.0</span><br><span class="line">       mask: 255.255.255.224</span><br><span class="line">    gateway: 172.18.0.2</span><br><span class="line">  interface: tun0</span><br><span class="line">      flags: &lt;UP,GATEWAY,DONE,STATIC,PRCLONING&gt;</span><br><span class="line"> recvpipe  sendpipe  ssthresh  rtt,msec    rttvar  hopcount      mtu     expire</span><br><span class="line">       0         0         0         0         0         0      1130         0</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>重置</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo ifconfig tun0 down</span><br><span class="line">sudo ifconfig tun0 up</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>from: <a href="https://github.com/qiwihui/blog/issues/53#issuecomment-487361085" target="_blank" rel="noopener"><strong>qiwihui</strong></a> on: <strong>4/28/2019</strong></p>
+</blockquote>
+<p>可以参考：</p>
+<ul>
+<li><a href="https://docs.netgate.com/pfsense/en/latest/routing/no-buffer-space-available.html" target="_blank" rel="noopener">https://docs.netgate.com/pfsense/en/latest/routing/no-buffer-space-available.html</a></li>
+<li><a href="https://odino.org/ping-sendto-no-buffer-space-available-with-du-dnses/" target="_blank" rel="noopener">https://odino.org/ping-sendto-no-buffer-space-available-with-du-dnses/</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>from: <a href="https://github.com/qiwihui/blog/issues/53#issuecomment-490726534" target="_blank" rel="noopener"><strong>badtoken</strong></a> on: <strong>5/9/2019</strong></p>
+</blockquote>
+<blockquote>
+<p>@shaohuihu 这个问题原因很多，可是试试重置网卡</p>
+<ol>
+<li>确定使用的网卡</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> $ sudo route -n get 172.18.0.1</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">    route to: 172.18.0.1</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> destination: 172.18.0.0</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">        mask: 255.255.255.224</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">     gateway: 172.18.0.2</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">   interface: tun0</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">       flags: &lt;UP,GATEWAY,DONE,STATIC,PRCLONING&gt;</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">  recvpipe  sendpipe  ssthresh  rtt,msec    rttvar  hopcount      mtu     expire</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">        0         0         0         0         0         0      1130         0 </span></span><br><span class="line"><span class="meta">&gt;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<ol>
+<li>重置</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> sudo ifconfig tun0 down</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> sudo ifconfig tun0 up</span></span><br><span class="line"><span class="meta">&gt;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>你好，请问有win的解决方案吗。
+我现在也是ping不通，win客户端ping隧道的服务端内网地址，死活不通（ping隧道服务端外网地址是通的）</p>
+<hr>
+<blockquote>
+<p>from: <a href="https://github.com/qiwihui/blog/issues/53#issuecomment-490766765" target="_blank" rel="noopener"><strong>qiwihui</strong></a> on: <strong>5/9/2019</strong></p>
+</blockquote>
+<p>@badtoken 应该也有吧，比如这个 <a href="https://kb.wisc.edu/helpdesk/page.php?id=6653" target="_blank" rel="noopener">https://kb.wisc.edu/helpdesk/page.php?id=6653</a> ，具体我也没有试过</p>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-120/" class="prev">PREV</a><a href="/qiwihui-blog-84/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-53/';
+var disqus_title = '在 Mac OS X 上使用 iodine 配置 DNS 隧道';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-53/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

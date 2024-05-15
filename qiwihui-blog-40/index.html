@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Making kernels for jupyter · QIWIHUI</title><meta name="description" content="Making kernels for jupyter - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-40/index.html"><meta property="og:title" content="Making kernels for jupyter"><meta property="og:description" content="Making kernels for jupyter"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">Making kernels for jupyter</h1><div class="post-info">Aug 13, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>11 min. read</span></div><div class="post-content"><p>一个内核是运行和解析用户代码的程序。IPython包含了一个运行和解析Python代码的内核，而且人们已经写了多种语言的内核。</p>
+<p>当Jupyter开始一个内核的时候，它会传递它一个连接文件。它指定了如何与前端开始通信。</p>
+<a id="more"></a>
+<p>以下是实践：</p>
+<h3><span id="an-zhuang-huan-jing">安装环境</span></h3>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> conda create -n py365400 python=3.6.5 jupyter ipykernel</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> conda activate py365</span></span><br></pre></td></tr></table></figure>
+<h3><span id="lie-chu-dang-qian-nei-he">列出当前内核</span></h3>
+<p>在Unix系统中，可用的内核列在如下文件夹中（<a href="https://jupyter-client.readthedocs.io/en/latest/kernels.html#kernel-specs" target="_blank" rel="noopener">Kernel specs</a>）:</p>
+<p>System:</p>
+<ul>
+<li><code>/usr/share/jupyter/kernels</code></li>
+<li><code>/usr/local/share/jupyter/kernels</code></li>
+</ul>
+<p>Env:</p>
+<ul>
+<li><code>{sys.prefix}/share/jupyter/kernels</code></li>
+</ul>
+<p>User:</p>
+<ul>
+<li><code>~/.local/share/jupyter/kernels (Linux)</code></li>
+<li><code>~/Library/Jupyter/kernels (Mac)</code></li>
+</ul>
+<p>用户位置的优先级高于系统级别的，忽略名字的大小写。因此不论系统是否大小写敏感，都可以以同样的烦噶事来获取内核。因为内核名字会在URL出现，因此内核名字需要是一个简单的，只使用ASCII字母，数字和简单的分隔符<code>-</code>，<code>.</code>， <code>_</code>。
+如果设置了 <code>JUPYTER_PATH</code> 环境变量的话，也会搜索其他位置。</p>
+<p>例如在我的Mac上，有两个个内核，一个是 python 3 的，另一个是 pyspark(python 2) 的。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">  jupyter kernelspec list</span></span><br><span class="line">Available kernels:</span><br><span class="line">  pyspark2    /Users/qiwihui/Library/Jupyter/kernels/pyspark2</span><br><span class="line">  python3     /usr/local/miniconda3/envs/py365/share/jupyter/kernels/python3</span><br></pre></td></tr></table></figure>
+<p>在内核文件夹下，现在会使用三种类型的文件。<code>kernel.json</code>, <code>kernel.js</code>和log图片文件。目前，没有使用其他文件，但是将来可能会改变。</p>
+<p>最重要的文件是 <code>kernel.json</code>，应该是一个json序列化的字典包含以下字段</p>
+<ul>
+<li><code>argv</code>: 用来启动内核的命令行参数列表。<code>{connection_file}</code> 将会被实际的连接文件的路径替换。</li>
+<li><code>display_name</code>: 在UI上展示的内核名字。不像在API中使用的内核名字，这里的名字可以包含任意字符。</li>
+<li><code>language</code>: 内核的语言名字。当载入notebook的时候，如果没有找到匹配的内核，那么匹配相应语言的内核将会被启动。这样允许一个写了任何Python或者julia内核的notebook可以与用户的Python或者julia内核合适的联系起来，即使它们没有在与用户内核同样的名字下。</li>
+<li><code>interrupt_mode</code>：可能是signal或者message指定了客户端如何在这个内核中停止单元运行。是通过发送一个信号呢，还是发送一个<code>interrupt_request</code>消息在<code>control channel</code>。如果没有指定，将默认使用signal模式。</li>
+<li><code>env</code>：为内核设置的环境变量。在内核启动前，会添加到当前的环境变量里。</li>
+<li><code>metadata</code>：关于这个内核的其他相关属性。帮助客户端选择内核。</li>
+</ul>
+<p>比如：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cat /usr/<span class="built_in">local</span>/miniconda3/envs/py365/share/jupyter/kernels/python3/kernel.json </span></span><br><span class="line">&#123;</span><br><span class="line"> "argv": [</span><br><span class="line">  "/usr/local/miniconda3/envs/py365/bin/python",</span><br><span class="line">  "-m",</span><br><span class="line">  "ipykernel_launcher",</span><br><span class="line">  "-f",</span><br><span class="line">  "&#123;connection_file&#125;"</span><br><span class="line"> ],</span><br><span class="line"> "display_name": "Python 3",</span><br><span class="line"> "language": "python"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当内核开始的时候将会传入一个连接文件的路径，这个文件只对当前用户可用，会包含类似下面的一个JSON字典。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"control_port"</span>: <span class="number">50160</span>,</span><br><span class="line">  <span class="attr">"shell_port"</span>: <span class="number">57503</span>,</span><br><span class="line">  <span class="attr">"transport"</span>: <span class="string">"tcp"</span>,</span><br><span class="line">  <span class="attr">"signature_scheme"</span>: <span class="string">"hmac-sha256"</span>,</span><br><span class="line">  <span class="attr">"stdin_port"</span>: <span class="number">52597</span>,</span><br><span class="line">  <span class="attr">"hb_port"</span>: <span class="number">42540</span>,</span><br><span class="line">  <span class="attr">"ip"</span>: <span class="string">"127.0.0.1"</span>,</span><br><span class="line">  <span class="attr">"iopub_port"</span>: <span class="number">40885</span>,</span><br><span class="line">  <span class="attr">"key"</span>: <span class="string">"a0436f6c-1916-498b-8eb9-e81ab9368e84"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>transport</code>, <code>ip</code> 和设定了该使用 ZeroMQ 绑定的五个_port。比如 shell 套接字的地址应该是：<code>tcp://127.0.0.1:57503</code>。在每个内核开始的时候会指定随意的端口。<code>signature_scheme</code> 和 <code>key</code> 用来加密信息，因此系统的其他用户不能发送代码来运行内核。</p>
+<p>现在我需要自己定义一个内核，这个内核可以执行我们定义的逻辑。</p>
+<h3><span id="tian-jia-xin-nei-he">添加新内核</span></h3>
+<p>这是简单的重用 IPython  的内核机制来实现这个新的内核。</p>
+<p>步骤：</p>
+<p>子类化ipykernel.kernelbase.Kernel，然后实现下面的方法和属性</p>
+<p>class MyKernel</p>
+<pre><code>- implementation
+- implementation_version
+- banner
+    Kernel info会返回的信息。Implementation指的是内核而不是语言，比如IPython而不是Python。banner是在控制UI上显示第一个提示符之前的东西。这些都是字符串
+
+- language_info
+    Kernel info会返回的信息字典。应该包含mimetype键，值是目标语言的mimetype，比如text/x-python。name键是实现的语言比如python，file_extension比如.py，而且也可能根据不同语言包含codemirror_mode和pygments_lexer
+
+- do_execute(code, silent, store_history=True, user_expressions=None, allow_stdin=False)
+
+    执行用户代码
+
+        - code：要执行的代码
+        - silent：是否展示输出
+        - store_history: 是否在历史里记录代码，并且增加执行次数。
+        - user_expressions：在代码被执行后对这些表达式求值
+        - allow_stdin：前端是否提供输入请求
+
+    你的方法应该返回一个字典，包含在Execution results规定的字典。为了展现输出，它可以使用send_response() 来发送消息。
+</code></pre>
+<p>为了启动你的内核，在模块后面加上：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">from</span> ipykernel.kernelapp <span class="keyword">import</span> IPKernelApp</span><br><span class="line">    IPKernelApp.launch_instance(kernel_class=MyKernel)</span><br></pre></td></tr></table></figure>
+<p>现在创建一个JSON的内核说明文件，然后通过 <code>jupyter kernelspec install &lt;/path/to/kernel&gt;</code>。将你的内核模块放在Python可以导入的地方，一般是当前目录(做测试)。最后，你可以使用 <code>jupyter console --kernel &lt;mykernelname&gt;</code> 来运行你的内核。</p>
+<p>例子：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ls <span class="built_in">echo</span>/</span></span><br><span class="line">echokernel.py kernel.json</span><br></pre></td></tr></table></figure>
+<p><code>echokernel.py</code>:</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> ipykernel.kernelbase <span class="keyword">import</span> Kernel</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EchoKernel</span><span class="params">(Kernel)</span>:</span></span><br><span class="line">    implementation = <span class="string">'Echo'</span></span><br><span class="line">    implementation_version = <span class="string">'1.0'</span></span><br><span class="line">    language = <span class="string">'no-op'</span></span><br><span class="line">    language_version = <span class="string">'0.1'</span></span><br><span class="line">    language_info = &#123;</span><br><span class="line">        <span class="string">'name'</span>: <span class="string">'Any text'</span>,</span><br><span class="line">        <span class="string">'mimetype'</span>: <span class="string">'text/plain'</span>,</span><br><span class="line">        <span class="string">'file_extension'</span>: <span class="string">'.txt'</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    banner = <span class="string">"Echo kernel - as useful as a parrot"</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">do_execute</span><span class="params">(self, code, silent, store_history=True, user_expressions=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                   allow_stdin=False)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> silent:</span><br><span class="line">            stream_content = &#123;<span class="string">'name'</span>: <span class="string">'stdout'</span>, <span class="string">'text'</span>: code&#125;</span><br><span class="line">            self.send_response(self.iopub_socket, <span class="string">'stream'</span>, stream_content)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">'status'</span>: <span class="string">'ok'</span>,</span><br><span class="line">                <span class="comment"># The base class increments the execution count</span></span><br><span class="line">                <span class="string">'execution_count'</span>: self.execution_count,</span><br><span class="line">                <span class="string">'payload'</span>: [],</span><br><span class="line">                <span class="string">'user_expressions'</span>: &#123;&#125;,</span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">from</span> ipykernel.kernelapp <span class="keyword">import</span> IPKernelApp</span><br><span class="line">    IPKernelApp.launch_instance(kernel_class=EchoKernel)</span><br></pre></td></tr></table></figure>
+<p><code>kernel.json</code>:</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"argv"</span>:[<span class="string">"python"</span>,<span class="string">"-m"</span>,<span class="string">"echokernel"</span>, <span class="string">"-f"</span>, <span class="string">"&#123;connection_file&#125;"</span>],</span><br><span class="line">    <span class="attr">"display_name"</span>:<span class="string">"Echo"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>安装</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ jupyter kernelspec install echo --user</span><br></pre></td></tr></table></figure>
+<p>这里，只为当前用户添加这个kernel。</p>
+<h3><span id="cha-kan">查看</span></h3>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> jupyter notebook</span></span><br></pre></td></tr></table></figure>
+<p>选择新创建的内核创建 notebook，并运行代码。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/47489844-1bdedc00-d87a-11e8-8294-3c412fbcdb52.png" alt="jupyter with new kernel echo"></p>
+<p><img src="https://user-images.githubusercontent.com/3297411/47490179-bf2ff100-d87a-11e8-85b3-3469efa7edc2.png" alt="image"></p>
+<h3><span id="yi-xie-keng">一些坑</span></h3>
+<ol>
+<li>运行 notebook 时无法找到 <code>echokernel</code> 模块：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[I 15:48:27.754 NotebookApp] Kernel started: 77759cfa-db55-4b70-be23-c14d69f8d87d</span><br><span class="line">/usr/local/miniconda3/envs/py365/bin/python: No module named echokernel</span><br><span class="line">[I 15:48:30.750 NotebookApp] KernelRestarter: restarting kernel (1/5), new random ports</span><br><span class="line">/usr/local/miniconda3/envs/py365/bin/python: No module named echokernel</span><br><span class="line">[I 15:48:33.766 NotebookApp] KernelRestarter: restarting kernel (2/5), new random ports</span><br><span class="line">/usr/local/miniconda3/envs/py365/bin/python: No module named echokernel</span><br><span class="line">[I 15:48:36.789 NotebookApp] KernelRestarter: restarting kernel (3/5), new random ports</span><br><span class="line">/usr/local/miniconda3/envs/py365/bin/python: No module named echokernel</span><br><span class="line">[I 15:48:39.812 NotebookApp] KernelRestarter: restarting kernel (4/5), new random ports</span><br><span class="line">/usr/local/miniconda3/envs/py365/bin/python: No module named echokernel</span><br></pre></td></tr></table></figure>
+<p>需要将 <code>echokernel.py</code> 放置在 python PATH 中 ，这样在执行命令时才能访问到。</p>
+<h3><span id="geng-duo-ming-ling">更多命令</span></h3>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ jupyter kernelspec <span class="built_in">help</span></span><br><span class="line">Manage Jupyter kernel specifications.</span><br><span class="line"></span><br><span class="line">Subcommands</span><br><span class="line">-----------</span><br><span class="line"></span><br><span class="line">Subcommands are launched as `jupyter kernelspec cmd [args]`. For information on</span><br><span class="line">using subcommand <span class="string">'cmd'</span>, <span class="keyword">do</span>: `jupyter kernelspec cmd -h`.</span><br><span class="line"></span><br><span class="line">list</span><br><span class="line">    List installed kernel specifications.</span><br><span class="line">install</span><br><span class="line">    Install a kernel specification directory.</span><br><span class="line">uninstall</span><br><span class="line">    Alias <span class="keyword">for</span> remove</span><br><span class="line">remove</span><br><span class="line">    Remove one or more Jupyter kernelspecs by name.</span><br><span class="line">install-self</span><br><span class="line">    [DEPRECATED] Install the IPython kernel spec directory <span class="keyword">for</span> this Python.</span><br><span class="line"></span><br><span class="line">To see all available configurables, use `--<span class="built_in">help</span>-all`</span><br></pre></td></tr></table></figure>
+<h3><span id="shan-chu-nei-he">删除内核</span></h3>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> jupyter kernelspec uninstall <span class="built_in">echo</span></span></span><br></pre></td></tr></table></figure>
+<h3><span id="can-kao">参考</span></h3>
+<ul>
+<li><a href="https://jupyter-client.readthedocs.io/en/stable/wrapperkernels.html" target="_blank" rel="noopener">Making simple Python wrapper kernels</a></li>
+<li><a href="http://landcareweb.com/questions/879/ru-he-jiang-python3nei-he-tian-jia-dao-jupyter-ipython" target="_blank" rel="noopener">题 如何将python3内核添加到jupyter（IPython）</a></li>
+<li><a href="https://skyrover.me/2017/12/07/making_kernels_for_jupyter/" target="_blank" rel="noopener">翻译 - Making kernels for Jupyter</a></li>
+</ul>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-142/" class="prev">PREV</a><a href="/qiwihui-blog-127/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-40/';
+var disqus_title = 'Making kernels for jupyter';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-40/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

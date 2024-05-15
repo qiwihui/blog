@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> GitHub Actions 第13天：条件 · QIWIHUI</title><meta name="description" content="GitHub Actions 第13天：条件 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-96/index.html"><meta property="og:title" content="GitHub Actions 第13天：条件"><meta property="og:description" content="GitHub Actions 第13天：条件"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">GitHub Actions 第13天：条件</h1><div class="post-info">Aug 13, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>3 min. read</span></div><div class="post-content"><p>昨天我们看到，当你运行工作流程时，有许多可用数据。你可以在run步骤中使用这些数据，并将其与构建脚本，部署步骤或存储库自动化一起使用。但是你也可以在工作流本身中使用它。</p>
+<p>利用这些数据的一种有用方法是<a href="https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idif" target="_blank" rel="noopener">有条件地使用它来运行工作流步骤</a>。</p>
+<p>例如，你可能想在执行步骤之前检查工作流在其中运行的存储库的名称。如果你正在开发一个开源项目，这将很有帮助──因为fork你的存储库的人拥有<a href="https://qiwihui.com/qiwihui-blog-94/">具有不同权限的令牌</a>，因此你可以跳过fork的发布步骤。</p>
+<a id="more"></a>
+<p>这使fork的存储库仍可以执行连续的集成构建，并确保在运行构建和测试通过时工作流成功，并且不会由于发布步骤上的权限问题而失败。</p>
+<p>你可以设置一个条件，以确保你位于正确的存储库上并在CI构建中运行（来自push事件）。</p>
+<script src="https://gist.github.com/ethomson/9befd0258967e0a3006295b149792c84.js"></script>
+<p>现在，当此工作流在fork中运行时，将跳过“发布文档”步骤。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/77768483-81418880-707d-11ea-8e35-d932d5d032cf.png" alt="image"></p>
+<p>使用条件语句使你可以构建可在分支或分支之间共享的高级工作流，但其中某些步骤是针对特定触发器或环境量身定制的。</p>
+<p>原文链接：<a href="https://www.edwardthomson.com/blog/github_actions_13_conditionals.html" target="_blank" rel="noopener">https://www.edwardthomson.com/blog/github_actions_13_conditionals.html</a></p>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E7%BF%BB%E8%AF%91/">#翻译</a><a href="/tags/tips/">#tips</a><a href="/tags/github-actions/">#github actions</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-86/" class="prev">PREV</a><a href="/qiwihui-blog-132/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-96/';
+var disqus_title = 'GitHub Actions 第13天：条件';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-96/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> word2vec理解思路 · QIWIHUI</title><meta name="description" content="word2vec理解思路 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-66/index.html"><meta property="og:title" content="word2vec理解思路"><meta property="og:description" content="word2vec理解思路"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">word2vec理解思路</h1><div class="post-info">Aug 13, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>6 min. read</span></div><div class="post-content"><p>本文归纳整理了一些论文和博客对word2vec的理解，以期理解word2vec。</p>
+<h2><span id="gai-shu">概述</span></h2>
+<h3><span id="yu-yan-biao-shi-ci-xiang-liang">语言表示：词向量</span></h3>
+<ol>
+<li>
+<p>词的独热表示（One-Hot Representation）</p>
+<p>缺点：</p>
+<ul>
+<li>容易受维数灾难的困扰；</li>
+<li>不能很好地刻画词与词之间的相似性，任意两个词之间都是孤立的；</li>
+</ul>
+</li>
+<li>
+<p>词的分布式表示（Distributed Representation）</p>
+<ol>
+<li>基于矩阵的分布表示：比如，GloVe模型；</li>
+<li>基于聚类的分布表示；</li>
+<li>基于神经网络的分布表示，词嵌入；</li>
+</ol>
+</li>
+</ol>
+<a id="more"></a>
+<h3><span id="yu-yan-mo-xing">语言模型</span></h3>
+<p>文法语言模型，统计语言模型</p>
+<p>核心是上下文的表示以及上下文与目标词之间的关系的建模。</p>
+<p>语言模型就是计算一个句子的概率大小的模型。一个句子的打分概率越高，越说明他是更合乎人说出来的自然句子。
+常见的统计语言模型有N元文法模型（N-gram Model），最常见的是unigram model、bigram model、trigram model等等。
+还有N-pos模型。</p>
+<h3><span id="ci-qian-ru">词嵌入</span></h3>
+<p>2001年，Bengio 等人正式提出神经网络语言模型（ Neural Network Language Model ，NNLM），
+该模型在学习语言模型的同时，也得到了词向量。所以请注意：<strong>词向量可以认为是神经网络训练语言模型的副产品</strong>。</p>
+<p>做法：</p>
+<p>1、将one-hot中的vector每一个元素由整形改为浮点型，变为整个实数范围的表示；
+2、将原来稀疏的巨大维度压缩 <strong>嵌入</strong> 到一个更小维度的空间。</p>
+<h3><span id="shen-jing-wang-luo-yu-yan-mo-xing-yu-word2vec">神经网络语言模型与word2vec</span></h3>
+<h4><span id="shen-jing-wang-luo-yu-yan-mo-xing">神经网络语言模型：</span></h4>
+<p>a. Neural Network Language Model ，NNLM
+b. Log-Bilinear Language Model， LBL
+c. Recurrent Neural Network based Language Model，RNNLM
+d. Collobert 和 Weston 在2008 年提出的 C&amp;W 模型
+e. Mikolov 等人提出了 CBOW（ Continuous Bagof-Words，连续词袋模型）和 Skip-gram 模型</p>
+<p>CBOW和Skip-gram：</p>
+<ul>
+<li>如果是用一个词语作为输入，来预测它周围的上下文，那这个模型叫做“Skip-gram 模型”；</li>
+<li>而如果是拿一个词语的上下文作为输入，来预测这个词语本身，则是 “CBOW 模型”。</li>
+</ul>
+<h4><span id="word2vec">word2vec</span></h4>
+<p>实现CBOW和Skip-gram语言模型的工具（正如C&amp;W模型的实现工具是SENNA）。</p>
+<h3><span id="cbow-he-skip-gram">CBOW和Skip-gram</span></h3>
+<ol>
+<li>原理</li>
+<li>加速训练技巧：
+<ul>
+<li>Negative Sample</li>
+<li>Hierarchical Softmax</li>
+</ul>
+</li>
+</ol>
+<h2><span id="ying-yong">应用</span></h2>
+<p>文本分类，个性化推荐，广告点击等</p>
+<h2><span id="lun-wen-he-wen-zhang">论文和文章</span></h2>
+<ol>
+<li>Mikolov 两篇原论文：
+<ul>
+<li>Distributed Representations of Sentences and Documents</li>
+<li>Efficient estimation of word representations in vector space</li>
+</ul>
+</li>
+<li>Yoav Goldberg 的论文：word2vec Explained- Deriving Mikolov et al.’s Negative-Sampling Word-Embedding Method</li>
+<li>Xin Rong 的论文：word2vec Parameter Learning Explained</li>
+<li>来斯惟的博士论文：《基于神经网络的词和文档语义向量表示方法研究》以及<a href="http://licstar.NET" target="_blank" rel="noopener">博客</a></li>
+<li><a href="https://www.zhihu.com/question/53011711" target="_blank" rel="noopener">word2vec 相比之前的 Word Embedding 方法好在什么地方？</a></li>
+<li>Sebastian 的博客：『On word embeddings - Part 2: Approximating the Softmax』</li>
+<li>《How to Generate a Good Word Embedding?》,Siwei Lai, Kang Liu, Liheng Xu, Jun Zhao</li>
+<li>《面向自然语言处理的分布式表示学习》，邱锡鹏</li>
+<li>《Deep Learning 实战之 word2vec》</li>
+<li>一些博文：
+<ul>
+<li><a href="http://www.cnblogs.com/iloveai/p/word2vec.html" target="_blank" rel="noopener">http://www.cnblogs.com/iloveai/p/word2vec.html</a></li>
+<li><a href="http://www.hankcs.com/nlp/word2vec.html" target="_blank" rel="noopener">http://www.hankcs.com/nlp/word2vec.html</a></li>
+<li><a href="http://licstar.NET/archives/328" target="_blank" rel="noopener">http://licstar.NET/archives/328</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/22477976" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/22477976</a></li>
+<li><a href="http://blog.csdn.Net/itplus/article/details/37969519" target="_blank" rel="noopener">http://blog.csdn.Net/itplus/article/details/37969519</a></li>
+<li><a href="http://www.tuicool.com/articles/fmuyamf" target="_blank" rel="noopener">http://www.tuicool.com/articles/fmuyamf</a></li>
+<li><a href="http://licstar.net/archives/620#comment-1542" target="_blank" rel="noopener">http://licstar.net/archives/620#comment-1542</a></li>
+<li><a href="http://blog.csdn.net/ycheng_sjtu/article/details/48520293" target="_blank" rel="noopener">http://blog.csdn.net/ycheng_sjtu/article/details/48520293</a></li>
+</ul>
+</li>
+</ol>
+<h2><span id="ben-wen-can-kao">本文参考</span></h2>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/32590428" target="_blank" rel="noopener">word embedding与word2vec: 入门词嵌入前的开胃菜</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/26306795" target="_blank" rel="noopener">秒懂词向量Word2vec的本质</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/29076736" target="_blank" rel="noopener">基于 word2vec 和 CNN 的文本分类 ：综述 &amp; 实践</a></li>
+<li><a href="https://x-algo.cn/index.php/2016/03/12/281/" target="_blank" rel="noopener">word2vec在工业界的应用场景</a></li>
+<li><a href="https://www.zhihu.com/question/25269336/answer/49188284" target="_blank" rel="noopener">word2vec有什么应用？ - orangeprince的回答 - 知乎</a></li>
+</ul>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-52/" class="prev">PREV</a><a href="/qiwihui-blog-85/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-66/';
+var disqus_title = 'word2vec理解思路';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-66/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

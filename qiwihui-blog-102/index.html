@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> GitHub Actions 第19天：下载文件 · QIWIHUI</title><meta name="description" content="GitHub Actions 第19天：下载文件 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-102/index.html"><meta property="og:title" content="GitHub Actions 第19天：下载文件"><meta property="og:description" content="GitHub Actions 第19天：下载文件"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">GitHub Actions 第19天：下载文件</h1><div class="post-info">Nov 4, 2020<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>3 min. read</span></div><div class="post-content"><p>昨天，我们研究了如何在工作流运行过程中<a href="https://qiwihui.com/qiwihui-blog-101/">上传文件</a>，然后手动下载它们。这在许多情况下都非常有用，但是我认为使用文件的更强大的部分是使用工件在不同步骤之间传输文件。</p>
+<p>例如：你可能有一个项目，该项目在多个平台上创建二进制文件，将这些二进制文件作为文件上载，然后发布到最后运行作业以将这些不同的二进制文件聚合到一个程序包中。</p>
+<p>或者，你可能想散开──拥有一个创建单个文件的作业，然后在不同平台上运行多个作业以测试该文件。</p>
+<a id="more"></a>
+<p>在这里，我有一个测试我的本机代码的工作流程：首先，我构建本机代码测试运行器，该运行器使用 <a href="https://github.com/clar-test/clar" target="_blank" rel="noopener">clar</a> 单元测试框架，以便它编译一个以 <code>testapp</code> 命名的包含我所有单元测试的二进制文件。该二进制文件作为名为的文件上传 <code>tests</code>。然后，我将创建一个依赖于第一个<code>build</code> 作业的矩阵作业。它将使用最新版本的Ubuntu，Debian，CentOS和Alpine建立一个在容器内执行的矩阵。每个作业将下载 <code>tests</code> 构建作业中生成的文件，然后将设置 testapp 为可执行文件（因为文件不保留Unix权限），最后运行测试应用程序。</p>
+<script src="https://gist.github.com/ethomson/9add864c916083aaf0c0d3b0bd092351.js"></script>
+<p>当我运行它时，构建将产生一个文件，并且当该构建完成时，我的测试作业将全部开始，下载该文件，然后运行它。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/79038436-d64bd580-7c0b-11ea-8984-e28ba788f465.png" alt="image"></p>
+<p>你可以看到，上传文件对于生成构建输出非常有用，你可以在后续构建步骤中下载和使用这些输出。</p>
+<p>原文链接：<a href="https://www.edwardthomson.com/blog/github_actions_19_downloading_artifacts.html" target="_blank" rel="noopener">https://www.edwardthomson.com/blog/github_actions_19_downloading_artifacts.html</a></p>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E7%BF%BB%E8%AF%91/">#翻译</a><a href="/tags/tips/">#tips</a><a href="/tags/github-actions/">#github actions</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-144/" class="prev">PREV</a><a href="/qiwihui-blog-101/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-102/';
+var disqus_title = 'GitHub Actions 第19天：下载文件';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-102/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

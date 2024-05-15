@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> GitHub Actions 第4天：安装工具 · QIWIHUI</title><meta name="description" content="GitHub Actions 第4天：安装工具 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-87/index.html"><meta property="og:title" content="GitHub Actions 第4天：安装工具"><meta property="og:description" content="GitHub Actions 第4天：安装工具"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">GitHub Actions 第4天：安装工具</h1><div class="post-info">Aug 13, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>3 min. read</span></div><div class="post-content"><p>昨天我提到 GitHub Actions 提供了 <a href="https://qiwihui.com/qiwihui-blog-86/">Linux，Windows 和 macOS 虚拟环境</a>，你可以在其中运行工作流。</p>
+<p>但是这些环境上实际安装了什么？ 原来有<a href="https://help.github.com/en/actions/automating-your-workflow-with-github-actions/software-installed-on-github-hosted-runners" target="_blank" rel="noopener">很多安装</a>。</p>
+<p>团队试图通过许多不同的平台使我们的运行器（runners）保持最新状态。 因此，你会发现许多不同版本的Python，Ruby，.NET Core等。 但是──仅仅依靠这些各种各样的开发工具──他们不可能绝对安装所有东西。</p>
+<p>有时你需要自己安装。而且由于你拥有一台完整的虚拟机，因此对于每项作业执行，你都可以在其上安装任何所需的软件。</p>
+<a id="more"></a>
+<p>例如，你可能要安装非常好的“<a href="https://ninja-build.org/" target="_blank" rel="noopener">ninja</a>”构建工具。</p>
+<h3><span id="linux">Linux</span></h3>
+<p>Linux虚拟环境运行Ubuntu，因此你可以使用 <a href="https://en.wikipedia.org/wiki/APT_(Package_Manager)" target="_blank" rel="noopener">apt</a> 安装可能需要的任何其他工具。 默认情况下，你以非 root 用户身份运行，但是可以使用无密码 sudo。这样你就可以：</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">run:</span> <span class="string">sudo</span> <span class="string">apt-get</span> <span class="string">install</span> <span class="string">ninja-build</span></span><br></pre></td></tr></table></figure>
+<h3><span id="windows">Windows</span></h3>
+<p><a href="https://chocolatey.org/" target="_blank" rel="noopener">Chocolatey</a> 是 Windows 的首选软件包管理器，它已安装并可以在 GitHub Actions 虚拟环境中使用。</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">run:</span> <span class="string">choco</span> <span class="string">install</span> <span class="string">ninja</span></span><br></pre></td></tr></table></figure>
+<h3><span id="macos">macOS</span></h3>
+<p>在 macOS 上，<a href="https://brew.sh/" target="_blank" rel="noopener">Homebrew</a> 是推荐的软件包管理器，可在 GitHub Actions 虚拟环境中使用。无需以 root 用户身份运行 Homebrew ──实际上，这是不合时宜的，因此您可以执行 <code>brew install</code>：</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">run:</span> <span class="string">brew</span> <span class="string">install</span> <span class="string">ninja</span></span><br></pre></td></tr></table></figure>
+<h3><span id="he-zai-yi-qi">合在一起</span></h3>
+<p>综上所述，如果你想在所有三个平台上安装 ninja，你的工作流程将<a href="https://gist.github.com/ethomson/68a7e60b9b5fbe081c8edd65237a2f22" target="_blank" rel="noopener">如下所示</a>：</p>
+<script src="https://gist.github.com/ethomson/68a7e60b9b5fbe081c8edd65237a2f22.js"></script>
+<p>原文链接：<a href="https://www.edwardthomson.com/blog/github_actions_4_installing_tools.html" target="_blank" rel="noopener">https://www.edwardthomson.com/blog/github_actions_4_installing_tools.html</a></p>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E7%BF%BB%E8%AF%91/">#翻译</a><a href="/tags/tips/">#tips</a><a href="/tags/github-actions/">#github actions</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-50/" class="prev">PREV</a><a href="/qiwihui-blog-97/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-87/';
+var disqus_title = 'GitHub Actions 第4天：安装工具';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-87/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

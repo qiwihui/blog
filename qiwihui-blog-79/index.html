@@ -1,0 +1,229 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 《编写高质量Python代码的59个有效方法》笔记 · QIWIHUI</title><meta name="description" content="《编写高质量Python代码的59个有效方法》笔记 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-79/index.html"><meta property="og:title" content="《编写高质量Python代码的59个有效方法》笔记"><meta property="og:description" content="《编写高质量Python代码的59个有效方法》笔记"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">《编写高质量Python代码的59个有效方法》笔记</h1><div class="post-info">Sep 1, 2020<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>14 min. read</span></div><div class="post-content"><h3><span id="1-python-ban-ben">1. Python版本</span></h3>
+<ul>
+<li>Python 3</li>
+<li>CPython, PyPy, Jython, IronPython</li>
+</ul>
+<h3><span id="2-pep8">2. PEP8</span></h3>
+<p>代码风格一致</p>
+<h3><span id="3-bytes-str-unicode-zhi-tao-lun-python-3">3. bytes，str，unicode（只讨论Python 3）</span></h3>
+<p>Python 3中：bytes实例包含原始的8位值，str实例包含Unicode字符。把Unicode字符表示为二进制数据，最常见的编码方式是UTF-8。</p>
+<ul>
+<li>Unicode 字符 =&gt; 二进制：<code>encode</code></li>
+<li>二进制 =&gt; Unicode 字符：<code>decode</code></li>
+</ul>
+<a id="more"></a>
+<p>Python程序中，一定要把编码和解码放在最外围来操作。程序的核心部分应该使用Unicode字符类型，而且不要对字符编码做任何假设。</p>
+<p>定义 <code>to_str</code> 和 <code>to_bytes</code> 方法。</p>
+<p>Python 3中，<code>open</code>默认以<code>utf-8</code>编码打开，而不是二进制。</p>
+<h3><span id="4-yong-fu-zhu-han-shu-lai-qu-dai-fu-za-biao-da-shi">4. 用辅助函数来取代复杂表达式</span></h3>
+<h3><span id="5-xu-lie-qie-pian">5. 序列切片</span></h3>
+<ol>
+<li><code>list</code>，<code>str</code>，<code>bytes</code> 以及实现了 <code>__getitem__</code> 和 <code>__setitem__</code>  的类；</li>
+<li>切片时下表可以越界，但访问元素时不能；</li>
+<li>当start索引为0或者end索引为列序列长度时，应该将其省略；</li>
+<li>对list赋值时，使用切片会把原序列相关范围的值替换成新值，即使长度不一样；</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; a = [1,2,3,4,5,6,7]</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; a[1:6] = [9]</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; a</span></span><br><span class="line">[1,9,7]</span><br></pre></td></tr></table></figure>
+<h3><span id="6-bu-jin-shi-qie-ge">6. 步进式切割</span></h3>
+<ol>
+<li>避免在一个切片操作中同时使用 <code>start</code>，<code>end</code>和<code>stride</code>；</li>
+<li>避免使用负数做stride；</li>
+</ol>
+<h3><span id="7-yong-lie-biao-tui-dao-dai-ti-map-he-filter">7. 用列表推导代替map和filter</span></h3>
+<ol>
+<li>list, 字典和集合支持列表推导；</li>
+<li>代码清晰；</li>
+</ol>
+<h3><span id="8-bu-yao-shi-yong-han-you-liang-ge-yi-shang-biao-da-shi-de-lie-biao-tui-dao">8. 不要使用含有两个以上表达式的列表推导</span></h3>
+<p>会变得难理解</p>
+<h3><span id="9-yong-sheng-cheng-qi-biao-da-shi-lai-gai-xie-shu-ju-liang-jiao-da-de-lie-biao-tui-dao-shi">9. 用生成器表达式来改写数据量较大的列表推导式</span></h3>
+<ol>
+<li>
+<p>数据量较大时，列表推导式会占用大量内存</p>
+</li>
+<li>
+<p><code>()</code></p>
+</li>
+</ol>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">a_long_list = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">value = [len(x) <span class="keyword">for</span> x <span class="keyword">in</span> a_long_list]</span><br><span class="line">print(value)</span><br></pre></td></tr></table></figure>
+<p>=&gt;</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">value = (len(x) <span class="keyword">for</span> x <span class="keyword">in</span> a_long_list)</span><br><span class="line">print(next(value))</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>可以组合</li>
+</ol>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">roots = ((v, v ** <span class="number">0.5</span>)<span class="keyword">for</span> v <span class="keyword">in</span> value)</span><br><span class="line">print(next(roots))</span><br></pre></td></tr></table></figure>
+<h3><span id="10-range-gt-enumerate">10. <code>range</code> =&gt; <code>enumerate</code></span></h3>
+<p><code>enumerate</code> 可以把各种迭代器包装成生成器，以便稍后产生输出值。
+<code>enumerate</code> 计数下表默认从 <code>0</code> 开始，可以修改。</p>
+<h3><span id="11-yong-zip-tong-shi-bian-li-liang-ge-die-dai-qi">11. 用 <code>zip</code> 同是遍历两个迭代器</span></h3>
+<ol>
+<li>迭代器长度相同</li>
+<li>不同时使用 <code>itertools.zip_longest</code></li>
+</ol>
+<h3><span id="12-bu-yao-zai-for-he-while-xun-huan-hou-mian-xie-else">12. 不要在 <code>for</code> 和 <code>while</code> 循环后面写 <code>else</code></span></h3>
+<p>与 <code>if/else</code>, <code>try/except/else</code> 的 <code>else</code> 不同，容易误解</p>
+<h3><span id="13-try-except-else-finally">13. <code>try/except/else/finally</code></span></h3>
+<ol>
+<li><code>finally</code>块：既要将异常向上传播，又要在异常发生时做清理工作</li>
+<li><code>ry/except/else</code>：except使异常传播变得清晰，else便于自己处理代码</li>
+</ol>
+<h3><span id="14-jin-liang-yong-yi-chang-lai-biao-shi-te-shu-qing-kuang-er-bu-yao-fan-hui-none">14. 尽量用异常来表示特殊情况，而不要返回 <code>None</code></span></h3>
+<p>比如除以0时，抛出异常</p>
+<h3><span id="15-zai-bi-bao-zhong-shi-yong-wai-wei-zuo-yong-yu-zhong-de-bian-liang">15. 在闭包中使用外围作用域中的变量</span></h3>
+<ol>
+<li>Python3 获取闭包中的变量：<code>nonlocal</code>，但是<code>nonlocal</code>不能延伸到模块级别；</li>
+<li>Python2 中可以使用可变值来实现，比如包含单个元素的列表。</li>
+<li>除非函数简单，尽量不使用 <code>nonlocal</code></li>
+</ol>
+<h3><span id="16-kao-lu-yong-sheng-cheng-qi-gai-xie-zhi-jie-fan-hui-lie-biao-de-han-shu">16. 考虑用生成器改写直接返回列表的函数</span></h3>
+<p><code>yield</code></p>
+<h3><span id="17-zai-can-shu-shang-die-dai-shi-xu-yao-duo-jia-xiao-xin"><em>17. 在参数上迭代时需要多加小心</em></span></h3>
+<ol>
+<li>参数是迭代器时要多加注意；</li>
+<li>迭代器协议：容器和迭代器，<code>iter</code>，<code>next</code></li>
+<li><code>__iter__</code></li>
+<li>判断是否为迭代器：<code>iter(target) == iter(target)</code> 为True，则为迭代器</li>
+</ol>
+<h3><span id="18-yong-shu-liang-ke-bian-de-wei-zhi-can-shu-jian-shao-shi-jue-hun-luan">18. 用数量可变的位置参数减少视觉混乱</span></h3>
+<ol>
+<li>星号参数（<code>*args</code>），<code>*</code>操作符</li>
+<li>变长参数在传给函数时，总是先转化成元组，如果是生成器，注意内存使用；</li>
+<li>添加新参数时，需要修改原来函数使用。可使用关键字形式指定的参数解决这个问题。</li>
+</ol>
+<h3><span id="19-yong-guan-jian-zi-can-shu-biao-da-ke-xuan-xing-wei">19. 用关键字参数表达可选行为</span></h3>
+<ol>
+<li>位置参数必必须出现在关键字之前；每个参数只能指定一次；</li>
+<li>关键字参数；易读，可提供默认值，扩充参数方便；</li>
+</ol>
+<h3><span id="20-yong-none-he-wen-dang-zi-fu-chuan-miao-shu-ju-you-dong-tai-mo-ren-zhi-de-can-shu">20. 用<code>None</code>和文档字符串描述具有动态默认值的参数</span></h3>
+<ol>
+<li>参数的默认值，只会在程序加载模块并读到本函数的定义时评估一次，对于<code>{}</code>，<code>[]</code>等动态值会出现奇怪行为。</li>
+</ol>
+<h3><span id="21-yong-zhi-neng-yi-guan-jian-zhi-xing-shi-zhi-ding-de-can-shu-lai-que-bao-dai-ma-ming-xi">21. 用只能以关键值形式指定的参数来确保代码明晰</span></h3>
+<p>Python 3 中：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">safe_division_before</span><span class="params">(number, divisor, ignore_overflow=False, ignore_zero_divisor=False)</span>:</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>==&gt;</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">safe_division_after</span><span class="params">(number, divisor, *, ignore_overflow=False, ignore_zero_divisor=False)</span>:</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p><code>*</code> 标识着位置参数结束，之后的参数只能以关键字形式指定。</p>
+<h3><span id="22-jin-liang-yong-fu-zhu-lei-lai-wei-hu-cheng-xu-zhuang-tai-er-bu-yong-zi-dian-he-yuan-zu">22. 尽量用辅助类来维护程序状态，而不用字典和元组</span></h3>
+<ol>
+<li>不使用包含字典的字典或者过长的元组；</li>
+<li>具名元组：<code>collections.namedtuple</code>；</li>
+</ol>
+<h3><span id="23-jian-dan-de-jie-kou-ying-gai-jie-shou-han-shu-er-bu-shi-lei-de-shi-li">23. 简单的接口应该接受函数，而不是类的实例</span></h3>
+<ol>
+<li>Python中的函数是一级对象，函数和方法可以像语言中的其他值那样传递和引用；</li>
+<li>举例：
+<ul>
+<li><code>list</code>类型的<code>sort</code>方法</li>
+<li><code>defaultdict</code></li>
+</ul>
+</li>
+<li><code>__call__</code> 使类的实例像普通函数那样调用；</li>
+<li>如果要用函数保存状态，就应该定义新的类，并令其实现 <code>__call__</code> 方法，而不要定义带状态的闭包。</li>
+</ol>
+<h3><span id="24-yi-classmedtod-xing-shi-de-duo-tai-qu-tong-yong-di-gou-jian-dui-xiang">24. 以 <code>@classmedtod</code> 形式的多态去通用地构建对象</span></h3>
+<ol>
+<li>每个类只能有一个构造器，即 <code>__init__</code>；</li>
+<li><code>@@classmedtod</code> 机制可以用一种与构造器相似的方式构造类对象；</li>
+</ol>
+<h3><span id="25-yong-super-chu-shi-hua-fu-lei">25. 用 <code>super</code> 初始化父类</span></h3>
+<ol>
+<li>Python采用标准的方法解析解析顺序来解决 <em>超类初始化次序</em> 和 <em>菱形继承问题</em>；</li>
+<li><code>super</code> 在Python2和Python3不一致；</li>
+</ol>
+<p>Python 3 中以下两种方式效果相同</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Explicit</span><span class="params">(MyBaseClass)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, value)</span>:</span></span><br><span class="line">        super(__class__, self).__init__(value)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Implicit</span><span class="params">(MyBaseClass)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, value)</span>:</span></span><br><span class="line">        super().__init__(value)</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>总是应该使用内置的 <code>super</code> 函数来初始化父类；</li>
+<li>类的 <code>mro</code> 方法可以查看方法解析顺序：<code>MyClass.mro()</code></li>
+</ol>
+<h3><span id="26-zhi-zai-shi-yong-mix-in-zu-jian-zhi-zuo-gong-ju-lei-shi-jin-xing-duo-chong-ji-cheng">26. 只在使用 Mix-in 组件制作工具类时进行多重继承</span></h3>
+<ol>
+<li>mix-in 是一种小型类，它只定义了其他类可能需要提供的一套附加方法，而不定义自己的实例属性，它也不要求使用者调用自己的 <code>__init__</code> 构造器；</li>
+<li>能用 mix-in 组件实现的效果，就不要用多重继承来做；</li>
+<li>将各个功能实现为可插拔的 mix-in 组件，然后让相关类继承自己需要的组件，即可定制该类实例所应具备的行为；</li>
+<li>简单行为封装到 mix-in 组件中，然后用多个组件组合出复杂功能。</li>
+</ol>
+<h3><span id="27-duo-yong-public-shu-xing-shao-yong-private-shu-xing">27. 多用 public 属性，少用 private 属性</span></h3>
+<ol>
+<li>Python解释器无法严格保证 private 字段的私密性（Python中会将类的 private 属性名称变化为 <code>_{类名称}__{原private属性名称}</code>）；</li>
+<li>不要盲目将属性设置为 private，而是一开始就做好规划，并允许子类更多地访问超类内部API；</li>
+<li>多用 protected 属性，并在文档中将这些字段的合理用法告诉开发者，而不要试图用 private 属性来限制子类访问；</li>
+<li>只有当子类不受自己控制时，才可考虑使用 private 属性避免冲突。</li>
+</ol>
+<h3><span id="28-ji-cheng-collections-abc-yi-shi-xian-zi-ding-yi-rong-qi-lei-xing">28. 继承 <code>collections.abc</code> 以实现自定义容器类型</span></h3>
+<p>编写自定义容器类型时，从 <code>collections.abc</code> 模块的抽象基类中继承，那些基类可以确保子类具有适当的接口和行为。</p>
+<h3><span id="49-wei-mei-ge-han-shu-lei-he-mo-kuai-bian-xie-wen-dang-zi-fu-chuan">49. 为每个函数、类和模块编写文档字符串</span></h3>
+<ol>
+<li>docstring</li>
+</ol>
+<h3><span id="54-mo-kuai-ji-bie-dai-ma-pei-zhi-bu-tong-de-bu-shu-huan-jing">54. 模块级别代码配置不同的部署环境</span></h3>
+<ol>
+<li>环境变量</li>
+<li><code>os</code>，<code>sys</code></li>
+</ol>
+<h3><span id="55-yong-repr-shu-chu-diao-shi-xin-xi">55. 用 <code>repr</code> 输出调试信息</span></h3>
+<ol>
+<li><code>print</code> 易于阅读字符串</li>
+<li><code>repr</code> 可供打印字符串，<code>eval</code> 还原为初始值</li>
+<li>格式化字符串：<code>%s</code> =&gt; str; <code>%r</code> =&gt; repr</li>
+<li><code>__repr__</code> 自定义可供打印字符串；</li>
+<li><code>__dict__</code> 任意对象查询实例字典；</li>
+</ol>
+<p>示例：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">print</span>(5)</span></span><br><span class="line">5</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">print</span>(<span class="string">'5'</span>)</span></span><br><span class="line">5</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">print</span>(repr(5))</span></span><br><span class="line">5</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">print</span>(repr(<span class="string">'5'</span>))</span></span><br><span class="line">'5'</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">print</span>(<span class="string">'%s'</span> % 5)</span></span><br><span class="line">5</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">print</span>(<span class="string">'%s'</span> % <span class="string">'5'</span>)</span></span><br><span class="line">5</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">print</span>(<span class="string">'%r'</span> % 5)</span></span><br><span class="line">5</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">print</span>(<span class="string">'%r'</span> % <span class="string">'5'</span>)</span></span><br><span class="line">'5'</span><br></pre></td></tr></table></figure>
+<h3><span id="56-unittest-ce-shi">56. unittest 测试</span></h3>
+<p>要确保 Python 程序能正常运行，唯一的方法就是编写测试。
+Python 语言动态特性，一方面阻碍了静态类型检测，另一方面却有利于开发者进行测试。</p>
+<ol>
+<li>断言（assertion）：<code>assertEqual</code>，<code>assertTrue</code>，<code>assertRaises</code></li>
+<li>mock</li>
+<li><code>setUp</code>，<code>tearDown</code></li>
+<li>单元测试，集成测试</li>
+</ol>
+<h3><span id="57-pdb-jiao-hu-diao-shi">57. <code>pdb</code> 交互调试</span></h3>
+<p><code>import pdb; pdb.set_trace()</code></p>
+<ol>
+<li><code>bt</code>，<code>up</code>，<code>down</code></li>
+<li><code>step</code>，<code>next</code>，<code>return</code>，<code>continue</code></li>
+</ol>
+<h3><span id="58-xing-neng-fen-xi">58. 性能分析</span></h3>
+<ol>
+<li>Python 性能分析工具 <code>profile</code>：<code>profile</code>，<code>cProfile</code></li>
+<li><code>runcall</code></li>
+<li><code>Stats</code></li>
+</ol>
+<h3><span id="59-tracemalloc-nei-cun-shi-yong-ji-xie-lou">59. <code>tracemalloc</code> 内存使用及泄漏</span></h3>
+<p>CPyhton：引用计数，gc</p>
+<ol>
+<li><code>gc.get_objects()</code></li>
+<li><code>tracemalloc.take_snapshot()</code></li>
+</ol>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/tips/">#tips</a><a href="/tags/Python/">#Python</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-100/" class="prev">PREV</a><a href="/qiwihui-blog-55/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-79/';
+var disqus_title = '《编写高质量Python代码的59个有效方法》笔记';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-79/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 树莓派启动时自动连接wifi · QIWIHUI</title><meta name="description" content="树莓派启动时自动连接wifi - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-16/index.html"><meta property="og:title" content="树莓派启动时自动连接wifi"><meta property="og:description" content="树莓派启动时自动连接wifi"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">树莓派启动时自动连接wifi</h1><div class="post-info">Oct 9, 2018<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>3 min. read</span></div><div class="post-content"><p>这篇文章的目的是为了配置树莓派，使其在启动时自动获取静态IP.</p>
+<a id="more"></a>
+<h2><span id="qi-dong-bing-lian-jie-shu-mei-pai">启动并连接树莓派</span></h2>
+<h4><span id="1-qi-dong-shu-mei-pai-bing-zhao-dao-qi-ip-di-zhi">1. 启动树莓派并找到其IP地址</span></h4>
+<p>把树莓派用网线连接到路由器上，插上SD卡，打开树莓派电源，等大约90秒.<br>
+在Mac上打开命令行终端，输入<code>arp -a</code>命令，可以看到树莓派的ip地址为 <code>192.168.199.199</code>.
+当然也可以从路由器后台看到这个IP地址.</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ arp -a</span><br><span class="line">? (169.254.99.51) at (incomplete) on en0 [ethernet]</span><br><span class="line">hiwifi.lan (192.168.199.1) at d4:ee:7:20:18:6e on en0 ifscope [ethernet]</span><br><span class="line">raspberrypi.lan (192.168.199.199) at f0:f6:1c:af:7a:28 on en0 ifscope [ethernet]</span><br></pre></td></tr></table></figure>
+<h4><span id="2-shi-yong-ssh-lian-jie-shu-mei-pai">2. 使用SSH连接树莓派</span></h4>
+<p>输入&quot;ssh <a href="mailto:pi@192.168.199.199" target="_blank" rel="noopener">pi@192.168.199.199</a>&quot;, 根据要求输入密码，默认为<code>raspberry</code>.</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ssh pi@192.168.199.199</span><br><span class="line">pi@192.168.199.199s password: </span><br><span class="line">Linux qiwihuisrpi 3.18.7+ <span class="comment">#755 PREEMPT Thu Feb 12 17:14:31 GMT 2015 armv6l</span></span><br><span class="line"></span><br><span class="line">The programs included with the Debian GNU/Linux system are free software;</span><br><span class="line">the exact distribution terms <span class="keyword">for</span> each program are described <span class="keyword">in</span> the</span><br><span class="line">individual files <span class="keyword">in</span> /usr/share/doc/*/copyright.</span><br><span class="line"></span><br><span class="line">Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent</span><br><span class="line">permitted by applicable law.</span><br><span class="line">Last login: Fri Apr 17 14:45:28 2015 from 192.168.199.186</span><br></pre></td></tr></table></figure>
+<h2><span id="pei-zhi-wang-luo-lian-jie">配置网络连接</span></h2>
+<h4><span id="1-she-zhi-wang-luo-jie-kou-wen-jian-etc-network-interfaces">1. 设置网络接口文件<code>/etc/network/interfaces</code></span></h4>
+<p>编辑这个文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo nano /etc/network/interfaces</span><br></pre></td></tr></table></figure>
+<p>添加如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">auto lo</span><br><span class="line">iface lo inet loopback</span><br><span class="line"></span><br><span class="line">auto eth0</span><br><span class="line">allow-hotplug eth0</span><br><span class="line">iface eth0 inet dhcp</span><br><span class="line"></span><br><span class="line">auto wlan0</span><br><span class="line">allow-hotplug wlan0</span><br><span class="line">iface wlan0 inet manual</span><br><span class="line"><span class="comment"># iface wlan0 inet dhcp # 如果想自动获取ip</span></span><br><span class="line">wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置静态ip</span></span><br><span class="line">iface wlan0 inet static</span><br><span class="line">address 192.168.199.199</span><br><span class="line">netmask 255.255.255.0</span><br><span class="line">gateway 192.168.199.1</span><br><span class="line"></span><br><span class="line">iface default inet dhcp</span><br></pre></td></tr></table></figure>
+<h4><span id="2-she-zhi-wpa-supplicant-conf-pei-zhi-wen-jian">2. 设置<code>wpa_supplicant.conf</code>配置文件</span></h4>
+<p>编辑文件<code>wpa_supplicant.conf</code>设置连接的网络热点.</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo nano /etc/wpa_supplicant/wpa_supplicant.conf</span><br></pre></td></tr></table></figure>
+<p>为：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev</span><br><span class="line">update_config=1</span><br><span class="line"></span><br><span class="line">network=&#123;</span><br><span class="line">    ssid=<span class="string">"YOUR_NETWORK_NAME"</span></span><br><span class="line">    psk=<span class="string">"YOU_NETWORK_PASSWORD"</span></span><br><span class="line">    proto=RSN</span><br><span class="line">    key_mgmt=WPA-PSK</span><br><span class="line">    pairwise=CCMP</span><br><span class="line">    auth_alg=OPEN</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中:</p>
+<ul>
+<li><code>proto</code> 可以是 <code>RSN</code> (WPA2) 或者 <code>WPA</code> (WPA1).</li>
+<li><code>key_mgmt</code> 可以是 <code>WPA-PSK</code> (大部分) 或者 <code>WPA-EAP</code> (企业网络)</li>
+<li><code>pairwise</code> 可以是 <code>CCMP</code> (WPA2) 或者 <code>TKIP</code> (WPA1)</li>
+<li><code>auth_alg</code> 常为 <code>OPEN</code>, 其他可选为 <code>LEAP</code> 和 <code>SHARED</code></li>
+</ul>
+<p>重启树莓派，之后就会自动连上wifi了.</p>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-17/" class="prev">PREV</a><a href="/qiwihui-blog-15/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-16/';
+var disqus_title = '树莓派启动时自动连接wifi';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-16/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

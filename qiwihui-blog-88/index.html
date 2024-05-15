@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> GitHub Actions 第5天：在容器中构建 · QIWIHUI</title><meta name="description" content="GitHub Actions 第5天：在容器中构建 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-88/index.html"><meta property="og:title" content="GitHub Actions 第5天：在容器中构建"><meta property="og:description" content="GitHub Actions 第5天：在容器中构建"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">GitHub Actions 第5天：在容器中构建</h1><div class="post-info">Aug 13, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>3 min. read</span></div><div class="post-content"><p>昨天我讨论了如何 <a href="https://qiwihui.com/qiwihui-blog-87/">在GitHub Actions虚拟环境上安装工具和依赖项</a>。 但是，如果你需要更多控制权怎么办？ 或者，如果你根本不想在 Ubuntu 上运行，该怎么办？ 这是容器发光的地方。</p>
+<p>通过创建一个包含所有需要的开发工具以及项目依赖项的容器，你不必操心在工作流运行开始时就对那些设置和安装步骤进行管理。</p>
+<p>此外，你还将获得基于容器的开发的优势：你可以在用于CI构建的同一个容器中进行本地构建，因此你可以高度自信地确保 GitHub Actions 中的构建与构建时所看到的与本地匹配。</p>
+<p>语法非常简单明了──我不需要自己运行任何 <code>docker pull</code> 或 <code>docker run</code> 命令。 GitHub Actions 为我解决了这个问题。要获取源代码并在 <code>node：current</code> 容器中运行测试，请执行以下操作：</p>
+<a id="more"></a>
+<script src="https://gist.github.com/ethomson/d56f1804295ee1a4779a0d013ec4572b.js"></script>
+<p>当我运行此工作流时，GitHub Actions 将从 DockerHub 下载我指定的容器，启动它，然后直接在该容器中执行我指定的运行步骤。</p>
+<blockquote>
+<p>请注意，在容器内运行时，仍然需要指定运行对象。这是因为 Linux 和 Windows 都支持容器──因此，如果你要运行基于 Linux 的容器，则需要 <code>runs-on: ubuntu-latest</code>。 如果要使用基于Windows的容器，请确保设置 <code>runs-on: windows-latest</code>。</p>
+</blockquote>
+<p>容器还可以帮助扩展构建矩阵：如果要跨多个 Linux 发行版构建和测试工具，则甚至可以在矩阵中设置容器作业。（因为 <a href="https://www.edwardthomson.com/blog/github_actions_2_matrixes.html" target="_blank" rel="noopener">矩阵工作流实际上只是可变的替代</a>。）</p>
+<p>例如，要在 Debian，Ubuntu 和 CentOS 的旧版和最新版本上构建：</p>
+<script src="https://gist.github.com/ethomson/46a2db40d5c1d320fcc79886320f375e.js"></script>
+<p>因此，无论你是要直接在我们提供的虚拟环境中还是在你指定的容器中构建，你都可以灵活地选择工作流的运行位置。</p>
+<p>原文链接：<a href="https://www.edwardthomson.com/blog/github_actions_5_building_in_containers.html" target="_blank" rel="noopener">https://www.edwardthomson.com/blog/github_actions_5_building_in_containers.html</a></p>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E7%BF%BB%E8%AF%91/">#翻译</a><a href="/tags/tips/">#tips</a><a href="/tags/github-actions/">#github actions</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-118/" class="prev">PREV</a><a href="/qiwihui-blog-89/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-88/';
+var disqus_title = 'GitHub Actions 第5天：在容器中构建';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-88/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

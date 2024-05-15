@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Tornado Cash 基本原理 · QIWIHUI</title><meta name="description" content="Tornado Cash 基本原理 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-164/index.html"><meta property="og:title" content="Tornado Cash 基本原理"><meta property="og:description" content="Tornado Cash 基本原理"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">Tornado Cash 基本原理</h1><div class="post-info">Jun 9, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>9 min. read</span></div><div class="post-content"><p>假设地址 A 发送了 100 ETH 给地址 B，由于在区块链上所有的数据都是公开的，所以全世界都知道地址 A 和地址 B 进行了一次交易，如果地址A和地址 B 属于同一个用户 Alice，则大家知道Alice仍然拥有 100 ETH，如果地址B属于用户 Bob，则大家知道 Bob 现在有 100ETH 了。一个问题就是：如何在交易的过程中保持隐蔽呢，或者说隐藏发送用户与接收用户之前的练习？那就要用到 Tornado Cash。</p>
+<p>用户将资金存入Tornado Cash，然后将资金提取到另一个地址中，在区块链上记录上，这两个地址之间的联系就大概率断开了。那 Tornado Cash 是如何做到的呢？</p>
+<a id="more"></a>
+<h2><span id="cun-kuan-deposit-guo-cheng">存款（deposit）过程</span></h2>
+<p>首先我们看一下存款过程。用户在存款时需要生产两个随机数 secret 和 nullifier，并计算这两个数的一个哈希 commitment = hash(secret, nullifier)，然后用户将需要混币的金额（比如 1 ETH）和 commitment 发送给 TC 合约的 deposit 函数，TC合约将保存这两个数据，commitment之后会用于提取存入的资金。</p>
+<p>同时，用户会得到一个凭证，通过这个凭证，用户（或者任何人）就可以提取存入的资金。</p>
+<h3><span id="wei-shi-me-cun-ru-1-eth">为什么存入 1 ETH？</span></h3>
+<p>如果不同的用户会存入不同的金额，比如 Alice 和 Bob 存入 1 ETH，Chris 存入 73 ETH，当取出存款时，某个地址提取了 73 ETH，我们会有很大程度怀疑这个地址属于 Chris。因此，在TC 合约中规定了每次存入的金额为 1 ETH，这样就不会有地址与其他地址不一致。</p>
+<p>实际上，TC 有不同金额的 ETH 存款池，分别为 0.1，1，10，100，以满足不同数量的存取款需求。</p>
+<h2><span id="qu-kuan-withdraw-guo-cheng">取款（withdraw）过程</span></h2>
+<p>当进行取款时，一种错误方法是将之前随机生成的 secret 和 nullifier 作为参数发送给合约的取款函数，合约检查 hash(secret,nullifier) 是否等于之前保存的 commitment，如果相等就发送 1 ETH给取款者。但是这个过程就使得取款者的身份暴露了，因为 hash 过程是不可逆的，当我们从存款日志中找到相等的commitment时，我们就可以通过 commitment 建立存款者和取款者之间的联系，因为只有这个存款者知道获得 commitment 的 secret 和 nullifier。</p>
+<p>如果解决这个过程呢？如果有人有一种方法可以证明他知道一组(secret, nullifier) 使得 hash(secret, nullifier) 在合约记录的commitment列表中，但是却不公开这组(secret, nullifier) ，那这个人就可以只用发送这个证明给合约进行验证，就可以证明他拥有之前存入过资金，当却不知道对应于哪一组存入的资金，所以仍然保持匿名。</p>
+<p>这个证明就是零知识证明，它可以证明你知道某个信息但却不用公开这个信息。TC 使用的零知识证明称为 zk-SNARK。</p>
+<p>我们注意到当用户存款和取款时，使用了两个随机数 secret 和 nullifier，nullifier 的作用是什么呢？当用户取款时，合约其实不知道到底是谁在取款，为了避免用户存入 1 ETH 然后进行多次提取，TC要求当用户发送证明的同时发送 nullifier 的哈希nullifierHash，在zk-SNARK的证明中，他会检查两件事情：一是检查 hash(secret, nullifier) 在 commitment 的列表中，二是 nullifierHash 等于 hash(nullifier)，一旦验证成功，合约就会记录这个哈希。当同一个证明第二次被提交时就会失败，因为对应的 nullifier 哈希已经使用过了，这样就避免了二次提款。</p>
+<h3><span id="tornado-cash-ru-he-bao-cun-commitment-ni">Tornado Cash 如何保存 commitment 呢</span></h3>
+<p>使用 Merkle 树。Merkle树具体参见之前的介绍文章。</p>
+<p>TC 会首先初始化一组叶子节点为 <code>keccak256(&quot;tornado&quot;)</code>，并以这些叶子节点构建一颗 Merkle 树。当用户存款时，对应的 commitment 存入 Merkle 树的第一个叶子节点，然后合约更新整棵 Merkle 树，然后是第二个用户的commitment 存入第二个叶子节点并更新整棵 Merkle 树，依次类推。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/188539564-5178bafe-dd46-4409-8de5-fdcc194e88e4.png" alt="Untitled"></p>
+<p>如何证明 commitment 在这棵 Merkle 树中呢？</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/188539594-233fbff1-9cc8-43c9-99a2-86a7045f3efe.png" alt="Untitled 1"></p>
+<p>假设需要证明c3在这棵Merkel中，我们需要找到从叶子节点 c3 到根的路径过程中的哈希，使得他们与 c3 依次进行 hash 可以得到根哈希，即图中绿色节点的哈希列表。</p>
+<p>Tornado Cash 中，我们需要提供这些节点哈希，并通过 zk-SNARK 生成零知识证明，以此证明 c3 在这棵以 root（<code>=h(h(h(c0,c1),h(c2,c3)),h(h(c4,c5), z1))</code>）为根的 Merkle 中，但却不用告诉大家 c3 的值。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/188539613-fe0ccd14-c7e7-4143-847a-e71d3b475e1f.png" alt="Untitled 2"></p>
+<p>因此我们将证明 proof 和 Merkle 树根 root 发送给合约，一旦合约验证成功，我们就可以取出之前存入的存款。</p>
+<h2><span id="solidity-zhong-de-zk-snark-shi-xian">solidity 中的 zk-SNARK 实现</span></h2>
+<p>TC 合约包含三个部分：</p>
+<ol>
+<li>存款和取款合约，用于与用户交互；</li>
+<li>Merkle 树，用于记录存款哈希；</li>
+<li>zk-SNARK 验证器合约，用于验证取款时证明合法。</li>
+</ol>
+<p>zk-SNARK 验证器合约由 circom 编写的验证电路通过 snarkjs 库生成。</p>
+<h2><span id="can-kao">参考</span></h2>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=z_cRicXX1jI" target="_blank" rel="noopener">Tornado Cash - How it Works | DeFi + Zero Knowledge Proof</a></li>
+</ul>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/">#区块链</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-134/" class="prev">PREV</a><a href="/qiwihui-blog-141/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-164/';
+var disqus_title = 'Tornado Cash 基本原理';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-164/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 理解python索引和切片 · QIWIHUI</title><meta name="description" content="理解python索引和切片 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-15/index.html"><meta property="og:title" content="理解python索引和切片"><meta property="og:description" content="理解python索引和切片"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">理解python索引和切片</h1><div class="post-info">Oct 9, 2018<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>12 min. read</span></div><div class="post-content"><p>许多初次接触Python的人对于索引都会有同样的反应：这太奇怪了。在Python的列表，字符串和条件语句中都充斥着索引，但在我们习惯他们之前，
+这些都会是我们程序的错误来源。因此，让我们硬着头皮上吧！</p>
+<a id="more"></a>
+<p>这片文章会写得很慢，为了解释一些基础和默认的东西。</p>
+<p>我们会使用字符串切片举例，因为这事我们首先接触的，不过这对于列表切片和设定范围是一样的。我们有：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a = <span class="string">'0123456789'</span></span><br></pre></td></tr></table></figure>
+<p>其中第k个位置的字符为k。</p>
+<p>我们使用如下方式对a进行切片：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">b = a[start:stop:step]</span><br></pre></td></tr></table></figure>
+<p>或者直接地：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">'0123456789'</span>[start:stop:step]</span><br></pre></td></tr></table></figure>
+<p>在Python中，字符串和指向字符串的变量都是对象，所以都可以进行切片（事实上，Python中所有东西都是对象：数字，变量，字符串，函数，文件）。</p>
+<p>有三件事情需要记住：</p>
+<ol>
+<li><code>start</code> 是我们想要的第一项（当然）</li>
+<li><code>stop</code> 是我们第一个不想要的项</li>
+<li><code>step</code> 可以是正整数，也可以是负数，定义了向前（从第一个位置到向末尾）还是向后（从最后一个位置向开始位置）索引。</li>
+</ol>
+<p>一个小提醒：但我们学习python之外其他语言的时候，stop的定义是Python索引和切片在熟悉其语言的程序员看来如此奇怪的原因之一。在大部分计算机
+语言中，stop应该是“我们需要的最后一项”。不管这个定义是否比其他语言更好或者更坏，Python的确是不寻常的一种语言。</p>
+<p>在索引中使用负数是python另一个奇怪的特性。在大部分C衍生的语言（C/C++/C#，Java,，Javascript等）中，负数索引是不合法的，因为索引表示从
+字符串初始内存地址的偏移，所以负数索引会指向字符串开始位置之前的位置（更详细的请参见这篇博客：
+<a href="http://blog.daozhang.info/Why-does-indexing-begin-at-0/" target="_blank" rel="noopener">为什么python中索引从0开始</a>）。然而，Python并不是唯一使用负数索引的语言，比如，
+<a href="http://www.tutorialspoint.com/perl/perl_arrays.htm" target="_blank" rel="noopener">Perl</a>像python一样使用负数索引来表示从字符串末尾开始的位置；
+<a href="http://www.r-tutor.com/r-introduction/vector/vector-index" target="_blank" rel="noopener">R</a>语言面向统计，A[-i]表示所有除第i位置的值。不过，只有很少的语言
+在任意情况下使用负数索引。</p>
+<p>现在让我们回到Python索引上。</p>
+<p>** 使用正数和负数索引 **</p>
+<p>我们可以使用正整数表示字符串中的位置，由字符串开头从0开始计数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">b = <span class="string">"my mistress' eyes are nothing like the sun"</span></span><br><span class="line">     ^         ^                              ^</span><br><span class="line">    b[<span class="number">0</span>]      b[<span class="number">10</span>]                          b[<span class="number">41</span>]</span><br></pre></td></tr></table></figure>
+<p>我们用len()函数来获取一个字符串的长度。因此，b有42个字符，故len(b)=42。因为b最后一个字符是<code>b[41]</code>，所以<code>len(b)</code>比b字符串最后位置索引多1。</p>
+<p>有些时候这对从字符串末尾开始找字符是很有帮助的。所以我们用负数，从字符串末尾开始计数，即从-1（不是0）：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">b = <span class="string">"my mistress' eyes are nothing like the sun"</span></span><br><span class="line">     ^         ^                              ^</span><br><span class="line">   b[<span class="number">-42</span>]   b[<span class="number">-32</span>]                          b[<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+<p>从末尾看的最后一个字符串是b[-42]，那么它前面的位置会是-len(b)-1 = -43。</p>
+<p>所以，在这个例子中<code>len(b) = 42</code>：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">b[<span class="number">0</span>]        = b[-len(b)] = b[<span class="number">-42</span>] = <span class="string">'m'</span></span><br><span class="line">b[len(b)<span class="number">-1</span>] = b[<span class="number">-1</span>]      = b[<span class="number">41</span>]  = <span class="string">'n'</span></span><br><span class="line">b[<span class="number">10</span>]       = b[<span class="number">-32</span>]              = <span class="string">'s'</span></span><br></pre></td></tr></table></figure>
+<p>并且一般地，</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">b[k]        = b[-len(b)+k]</span><br></pre></td></tr></table></figure>
+<p>hmm, 这很令人疑惑。我们需要了解索引的一般机制，但是，我们不需要记住这些边界值，这些是python中默认的。</p>
+<p>默认值是引用一个变量的时候，我们没有指定明确的值。这就和我们“默认地”称呼一位女性为女士(<a href="http://en.wikipedia.org/wiki/Ms." target="_blank" rel="noopener">Ms.</a>)一样。如果我们没有被告知需要称呼她为太太（Mrs.）或者小姐(Miss），或者如果我们忽略了实际的尊称，我们降退回到“默认”值。Python对于很常用的<code>start</code>, <code>stop</code> and <code>step</code>都有默认值。</p>
+<p>** 如果<code>step</code>是正数，我们向前移动（如果<code>step</code>值为空，则默认为+1）**</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a[<span class="number">2</span>:<span class="number">6</span>] = <span class="string">'0123456789'</span>[<span class="number">2</span>:<span class="number">6</span>:<span class="number">1</span>] = <span class="string">'2345'</span></span><br></pre></td></tr></table></figure>
+<p>如上例，我们想要的第一个值在第二个位置，第一个不想要的在第6个位置。</p>
+<p>更进一步，我们从字符串末尾开始看：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a[<span class="number">-8</span>:<span class="number">-4</span>] = <span class="string">'0123456789'</span>[<span class="number">-8</span>:<span class="number">-4</span>:<span class="number">1</span>] = <span class="string">'2345'</span></span><br></pre></td></tr></table></figure>
+<p>我们想要的第一个值是从后数第8个（2），第一个不想要的是从后数第4个（6）。</p>
+<p>所以，对于任意正数<code>step</code>，我们有如下的默认值：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">     |-&gt; -&gt; -&gt;|</span><br><span class="line">a = <span class="string">'0123456789'</span></span><br><span class="line">     ^         ^</span><br><span class="line">  start:<span class="number">0</span>   stop: len(a), i.e, 超出了字符串的末尾的位置</span><br></pre></td></tr></table></figure>
+<p>所以：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a[:]    = a[<span class="number">0</span>:len(a):<span class="number">1</span>] = <span class="string">'0123456789'</span> <span class="comment"># a +1 step 默认</span></span><br><span class="line">a[::<span class="number">2</span>]  = a[<span class="number">0</span>:len(a):<span class="number">2</span>] = <span class="string">'02468'</span>      <span class="comment"># 所有偶数位置</span></span><br><span class="line">a[<span class="number">1</span>::<span class="number">2</span>] = <span class="string">'13579'</span>                      <span class="comment"># 所有奇数位置</span></span><br><span class="line">a[::<span class="number">3</span>]  = <span class="string">'0369'</span>                       <span class="comment"># 所有3的倍数位置</span></span><br></pre></td></tr></table></figure>
+<p>所以，只要我们从字符串头部或者尾部使用切片，Python都会使用默认值。</p>
+<p>** 如果<code>step</code>是负数，而我们从后往前数**</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a[<span class="number">6</span>:<span class="number">2</span>:<span class="number">-1</span>] = <span class="string">'0123456789'</span>[<span class="number">6</span>:<span class="number">2</span>:<span class="number">-1</span>] = <span class="string">'6543'</span></span><br></pre></td></tr></table></figure>
+<p>我们需要的第一个值在第六个位置，不需要的第一个值在第二个位置。</p>
+<p>或者进一步，</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a[<span class="number">-4</span>:<span class="number">-8</span>:<span class="number">-1</span>] = <span class="string">'0123456789'</span>[<span class="number">-4</span>:<span class="number">-8</span>:<span class="number">-1</span>] = <span class="string">'6543'</span></span><br></pre></td></tr></table></figure>
+<p>我们想要的第一个值是从后数第4个（6），第一个不想要的是从后数第8个（2）。</p>
+<p>注意到我们可以在索引中使用正数或者负数，以及从前或者从后搜寻字符串，所以我们甚至可以将它们混合起来使用：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a[<span class="number">6</span>:<span class="number">-8</span>:<span class="number">-1</span>] = <span class="string">'6543'</span></span><br><span class="line">a[<span class="number">-4</span>:<span class="number">2</span>:<span class="number">-1</span>] = <span class="string">'6543'</span></span><br></pre></td></tr></table></figure>
+<p>有时候这样的混合式非常方便的：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">url = <span class="string">'&lt;a href="http://udacity.com"&gt;'</span>[<span class="number">9</span>:<span class="number">-2</span>]</span><br><span class="line">    = <span class="string">'http://udacity.com'</span></span><br></pre></td></tr></table></figure>
+<p>我们需要记住的是使用负数索引不意味着我们就是向后移动，只是我们从字符串末尾开始索引。向前还是向后是仅由step变量的符号决定的。</p>
+<p>为了向后移动，我们需要在我们的意识中反转这个字符串：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">     |&lt;- &lt;- &lt;-|</span><br><span class="line">a = <span class="string">'0123456789'</span></span><br><span class="line">    ^         ^</span><br><span class="line">    ^      start:<span class="number">-1</span></span><br><span class="line">stop:在字符串开始位置之前的位置</span><br></pre></td></tr></table></figure>
+<p>所以：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a[::<span class="number">-1</span>] = a[<span class="number">-1</span>::<span class="number">-1</span>] = <span class="string">'9876543210'</span> <span class="comment"># 我们只是学习如何反转字符串</span></span><br><span class="line">a[::<span class="number">-2</span>] = a[<span class="number">-1</span>:-len(a)<span class="number">-1</span>:<span class="number">-2</span>] = <span class="string">'97531'</span></span><br><span class="line">a[::<span class="number">-3</span>] = a[<span class="number">-1</span>:-len(a)<span class="number">-1</span>:<span class="number">-3</span>] = <span class="string">'9630'</span></span><br></pre></td></tr></table></figure>
+<p>再一次，只要我们从字符串的头部或者尾部对字符串切片，我们可以使用空的start和stop变量，Python会使用默认值。</p>
+<p>只用6个字符就反转了一个字符串，厉害吧！可惜的是这个只在Python中有用，许多其他的语言并不支持这种方式。这类问题只是用来是我们熟悉这种结构，不只是在Python中，也包括其他语言在内。因此，考虑需要反转字符串的这类问题（比如回文问题）可以让我们学习如何使用循环，索引，并且尝试不同切片来解决这些问题。这样，你就有两手准备了。</p>
+<hr>
+<p>所以现在，我们已经掌握了Python的索引，应该能明白底下这些了：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">'0123456789'</span>[<span class="number">8</span>:<span class="number">2</span>:<span class="number">-2</span>]   = <span class="string">'864'</span></span><br><span class="line"><span class="string">'0123456789'</span>[<span class="number">8</span>:<span class="number">-8</span>:<span class="number">-2</span>]  = <span class="string">'864'</span></span><br><span class="line"><span class="string">'0123456789'</span>[<span class="number">-2</span>:<span class="number">2</span>:<span class="number">-2</span>]  = <span class="string">'864'</span></span><br><span class="line"><span class="string">'0123456789'</span>[<span class="number">-2</span>:<span class="number">-8</span>:<span class="number">-2</span>] = <span class="string">'864'</span></span><br></pre></td></tr></table></figure>
+<p>Good luck!</p>
+<p>原文在<a href="http://forums.udacity.com/questions/2017002/python-101-unit-1-understanding-indices-and-slicing" target="_blank" rel="noopener">这儿</a></p>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E7%BF%BB%E8%AF%91/">#翻译</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-16/" class="prev">PREV</a><a href="/qiwihui-blog-14/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-15/';
+var disqus_title = '理解python索引和切片';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-15/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

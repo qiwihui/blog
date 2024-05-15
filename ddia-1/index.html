@@ -1,0 +1,218 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 第一章：可靠性，可扩展性，可维护性 · QIWIHUI</title><meta name="description" content="第一章：可靠性，可扩展性，可维护性 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/ddia-1/index.html"><meta property="og:title" content="第一章：可靠性，可扩展性，可维护性"><meta property="og:description" content="Hello World!"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">第一章：可靠性，可扩展性，可维护性</h1><div class="post-info">Sep 10, 2018<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>13 min. read</span></div><div class="post-content"><h1><span id="di-yi-zhang-ke-kao-xing-ke-kuo-zhan-xing-ke-wei-hu-xing">第一章：可靠性，可扩展性，可维护性</span></h1>
+<p>数据密集型（data-intensive）而非计算密集型（compute-intensive）：</p>
+<ul>
+<li>数据量、数据复杂性、以及数据的变更速度</li>
+<li>数据密集型应用基本组件
+<ul>
+<li>存储数据，以便自己或其他应用程序之后能再次找到 （<strong><em>数据库（database）</em></strong>）</li>
+<li>记住开销昂贵操作的结果，加快读取速度（<strong><em>缓存（cache）</em></strong>）</li>
+<li>允许用户按关键字搜索数据，或以各种方式对数据进行过滤（<strong><em>搜索索引（search indexes）</em></strong>）</li>
+<li>向其他进程发送消息，进行异步处理（<strong><em>流处理（stream processing）</em></strong>）</li>
+<li>定期处理累积的大批量数据（<strong><em>批处理（batch processing）</em></strong>）</li>
+</ul>
+</li>
+<li>一个可能的组合使用多个组件的数据系统架构：</li>
+</ul>
+<p><img src="https://user-images.githubusercontent.com/3297411/125434927-f4ac7199-069a-4bd5-8ed8-b5748a1b97da.png" alt="Untitled"></p>
+<p>影响数据系统设计的因素很多，包括参与人员的技能和经验、历史遗留问题、系统路径依赖、交付时限、公司的风险容忍度、监管约束等。</p>
+<p>重要的三个问题；</p>
+<ul>
+<li>
+<p><strong><em>可靠性（Reliability）</em></strong></p>
+<p>系统在<strong>困境（adversity）</strong>（硬件故障、软件故障、人为错误）中仍可正常工作（正确完成功能，并能达到期望的性能水准）。</p>
+</li>
+<li>
+<p><strong><em>可扩展性（Scalability）</em></strong></p>
+<p>有合理的办法应对系统的增长（数据量、流量、复杂性）。</p>
+</li>
+<li>
+<p><strong><em>可维护性（Maintainability）</em></strong></p>
+<p>随着时间的推移，许多新的人员参与到系统开发和运维， 以维护现有功能或适配 新场景等，系统都应高效运转。</p>
+</li>
+</ul>
+<h2><span id="ke-kao-xing">可靠性</span></h2>
+<p>期望:</p>
+<ul>
+<li>应用程序执行用户所期望的功能。</li>
+<li>可以容忍用户出现错误或者不正确的软件使用方怯 。</li>
+<li>性能可以应对典型场 景 、 合 理负载压力和数据 量。</li>
+<li>系统可防止任何未经授权的访问和滥用。</li>
+</ul>
+<p>故障（fault）和失效（failure）：</p>
+<ul>
+<li>故障：系统的一部分状态偏离其标准；</li>
+<li>失效：系统作为一个整体停止向用户提供服务。</li>
+<li>由于出现fault的几率不可能为0，因此倾向于设计fault-tolerant而不是fault-preventing的系统。</li>
+</ul>
+<h3><span id="ying-jian-gu-zhang">硬件故障</span></h3>
+<ul>
+<li>随机的、相互独立的</li>
+<li>计算机系统中的硬盘、内存、power grid等零件都可能出问题，这可以通过增加单个硬件的冗余度（redundancy）来减少整个系统宕机的概率；</li>
+<li>随着数据量和应用计算需求的增加，增加设备冗余也无法解决，就需要考虑如何在某个机器宕机的情况下通过软件调度来防止整个服务崩溃。</li>
+</ul>
+<h3><span id="ruan-jian-gu-zhang">软件故障</span></h3>
+<ul>
+<li>系统性错误的BUG难以预料，通常在异常情况被触发，例如Linux内核的润秒BUG；</li>
+<li>没有快速解决办法，只能在实现时：
+<ul>
+<li>认真检查依赖的假设条件与系统之间交互</li>
+<li>进行全面的测试</li>
+<li>进程隔离</li>
+<li>允许进程崩愤并自动重启</li>
+<li>反复评估</li>
+<li>监控井分析生产环节的行为表现</li>
+</ul>
+</li>
+</ul>
+<h3><span id="ren-wei-gu-zhang">人为故障</span></h3>
+<ul>
+<li>人类是不可靠的，操作人员的不当操作占系统崩溃的75%～90%</li>
+<li>如何降低：
+<ul>
+<li>以最小出错的方式来设计系统；</li>
+<li>想办住分离最容易出错的地方、容易引发故障的接口，提供sandbox让他们熟悉使用方法，随意犯错而不会影响生产；</li>
+<li>充分的测试：unit/integration/manual；</li>
+<li>当出现人为失误时，提供快速的恢复机制以尽量减少故障影响；</li>
+<li>设置详细而清晰的监控子系统，包括性能指标和错误率；</li>
+<li>推行管理流程井加以培训。</li>
+</ul>
+</li>
+</ul>
+<h2><span id="ke-kuo-zhan-xing"><strong><em>可扩展性</em></strong></span></h2>
+<p>系统不见得一直可靠，比如负载增加，系统需要持续变化。</p>
+<h3><span id="heng-liang-fu-zai-load">衡量负载（Load）</span></h3>
+<ul>
+<li>根据系统特性简洁描述，例如服务器的每秒请求处理次数，数据库读写比例，用户数量， 缓存命中率</li>
+<li>Twitter例子
+<ul>
+<li>需求
+<ul>
+<li>用户发推(avg 4.6k RPS，max 12k RPS)</li>
+<li>查看个人主页时间线(300k RPS)</li>
+</ul>
+</li>
+<li>挑战：如何快速为用户提供timeline。
+<ol>
+<li>直接从数据库读查询，涉及join，在请求多的时候数据库无法处理；</li>
+<li>考虑为每个用户维护时间线的缓存，只是发推的时候就需要更新对应用户的缓存；</li>
+<li>混合：由于发推的RPS远小于查询，缓存的方法对读更有优势，但是对于follower众多的大号，发推需要写入的缓存可能非常多，因此可以考虑针对这种大号直接写入数据库，在时间线单独从数据库读大号的推。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h3><span id="heng-liang-xing-neng-performance">衡量性能（Performance）</span></h3>
+<ul>
+<li>两个问题：
+<ul>
+<li>增加负载参数并保持系统资源（CPU、内存、网络带宽等）不变时，系统性能将受到什么影响？</li>
+<li>增加负载参数并希望保持性能不变时，需要增加多少系统资源？</li>
+</ul>
+</li>
+<li>吞吐量（throughput）：每秒可以处理的记录数量，或者在特定规模数据集上运行作业的总时间；</li>
+<li>响应时间（response time）和延迟（latency）
+<ul>
+<li>响应时间：网络延迟 + queuing + service time</li>
+<li>延迟：请求花费在处理上的时间。</li>
+</ul>
+</li>
+<li>百分位数（Percentile）：
+<ul>
+<li>响应时间如果直接数学平均，无法反映大致有多少请求受到影响</li>
+<li>p95, p99, p999表示有95%, 99%, 99.9%的请求的响应时间快于某个值。</li>
+</ul>
+</li>
+<li>尾部延迟（tail latencies）：响应时间的高百分位点有时也很重要
+<ul>
+<li>对于Amazon，大客户请求的数据量大，响应时间也就更长，不能不关注。</li>
+</ul>
+</li>
+<li>SLO/SLA: Service Level Objective/Agreements, 用百分位数来判断系统是否可用。</li>
+<li>测试时负载生成独立于响应时间来持续发送请求，不能等到收到响应才轰下一个请求。</li>
+</ul>
+<h3><span id="ying-dui-fu-zai-zeng-jia-de-fang-fa">应对负载增加的方法</span></h3>
+<ul>
+<li>纵向扩展（scaling up）（垂直扩展（vertical scaling），转向更强大的机器）</li>
+<li>横向扩展（scaling out） （水平扩展（horizontal scaling），将负载分布到多台小机器上）</li>
+</ul>
+<h2><span id="ke-wei-hu-xing">可维护性</span></h2>
+<p>软件开发本身开销并不算大，日后的维护升级需要花费更多。</p>
+<p>软件系统的三个设计原则：</p>
+<ul>
+<li>
+<p>可运维性（Operability）</p>
+<p>方便运营团队来保持系统平稳运行。</p>
+</li>
+<li>
+<p>简单性（Simplicity）
+简化系统复杂性，使新工程师能够轻松理解系统。注意这与用户界面的简单性并
+不一样。</p>
+</li>
+<li>
+<p>可演化性（Evolvability）
+后续工程师能够轻松地对系统进行改进，井根据需求变化将其适配到非典型场
+景，也称为可延伸性、易修改性或可塑性。</p>
+</li>
+</ul>
+<h3><span id="ke-yun-wei-xing">可运维性</span></h3>
+<ul>
+<li>良好的监控</li>
+<li>自动化</li>
+<li>避免依赖单台机器</li>
+<li>良好的文档和易于理解的操作模型</li>
+<li>默认行为和可覆盖</li>
+<li>自我修复</li>
+<li>行为可预测</li>
+<li>其他
+<ul>
+<li>适当的日志来跟踪出问题（系统故障或性能下降）的根源</li>
+<li>保证系统能升级，尤其是安全补丁</li>
+<li>正确的配置</li>
+<li>开发时遵循最佳实践</li>
+</ul>
+</li>
+</ul>
+<h3><span id="jian-dan-xing">简单性</span></h3>
+<p>保证代码简洁，让新加入的码农也能理解代码。一个很有效的方法是抽象，用高级类来描述统一的行为。</p>
+<ul>
+<li>防止状态空间爆炸</li>
+<li>让系统中的模块尽量解耦，减少依赖</li>
+<li>保证一致的命名</li>
+<li>减少短视的hacks</li>
+</ul>
+<h3><span id="ke-yan-hua-xing">可演化性</span></h3>
+<p>方便后续重构、加入新功能那个，与前面的简单性息息相关。</p>
+<ul>
+<li>敏捷工作模式比较方便改变</li>
+<li>TDD：测试驱动开发</li>
+</ul>
+<h2><span id="can-kao">参考</span></h2>
+<ul>
+<li><a href="https://bobbyliujb.github.io/2020/01/14/designing_data_intensive_app/" target="_blank" rel="noopener">https://bobbyliujb.github.io/2020/01/14/designing_data_intensive_app/</a></li>
+</ul>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-1/" class="prev">PREV</a><a href="/qiwihui-blog-43/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'ddia-1/';
+var disqus_title = '第一章：可靠性，可扩展性，可维护性';
+var disqus_url = 'https://qiwihui.com/ddia-1/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

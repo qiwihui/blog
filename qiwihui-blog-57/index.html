@@ -1,0 +1,168 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 使用 Sphinx 撰写技术文档并生成 PDF 总结 · QIWIHUI</title><meta name="description" content="使用 Sphinx 撰写技术文档并生成 PDF 总结 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-57/index.html"><meta property="og:title" content="使用 Sphinx 撰写技术文档并生成 PDF 总结"><meta property="og:description" content="使用 Sphinx 撰写技术文档并生成 PDF 总结"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">使用 Sphinx 撰写技术文档并生成 PDF 总结</h1><div class="post-info">Aug 13, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>15 min. read</span></div><div class="post-content"><p>这几天准备编排部分翻译的书籍和文档，找了好些工具，最终定格在 Sphinx 上，并基于 <a href="https://readthedocs.org" target="_blank" rel="noopener">ReadTheDocs</a> 提供的 SaaS 服务进行分发和分享。本篇博客是对整个过程的一次记录和总结。</p>
+<p>项目代码：<a href="https://github.com/qiwihui/sphinx-doc-starter" target="_blank" rel="noopener">qiwihui/sphinx-doc-starter</a></p>
+<h2><span id="ren-shi-sphinx">认识 Sphinx</span></h2>
+<p><a href="http://sphinx-doc.org/" target="_blank" rel="noopener">Sphinx</a> 是一个基于 Python 的文档生成项目。最早只是用来生成 <a href="https://docs.python.org/3/" target="_blank" rel="noopener">Python</a> 的项目文档，使用 <em>reStructuredText</em> 格式。但随着项目的逐渐完善，很多非 Python 的项目也采用 Sphinx 作为文档写作工具，甚至完全可以用 Sphinx 来写书。</p>
+<p>使用 <a href="http://sphinx-doc-zh.readthedocs.org/en/latest/" target="_blank" rel="noopener">Sphinx 生成文档的优点</a>包括：</p>
+<ul>
+<li><em>丰富的输出格式</em>: 支持输出为 HTML（包括 Windows 帮助文档），LaTeX（可以打印PDF版本）, manual pages（man 文档）, 纯文本等若干种格式；</li>
+<li><em>完备的交叉引用</em>: 语义化的标签，并可以自动化链接函数、类、引文、术语等；</li>
+<li><em>明晰的分层结构</em>: 轻松定义文档树，并自动化链接同级/父级/下级文章；</li>
+<li><em>美观的自动索引</em>: 可自动生成美观的模块索引；</li>
+<li><em>精确的语法高亮</em>: 基于 Pygments 自动生成语法高亮；</li>
+<li><em>开放的扩展</em>: 支持代码块的自动测试，自动包含 Python 的模块自述文档，等等。</li>
+</ul>
+<a id="more"></a>
+<h2><span id="kai-shi">开始</span></h2>
+<p>这个过程包括如下步骤：</p>
+<ul>
+<li>安装 Sphinx</li>
+<li>第一个文档</li>
+<li>在线托管</li>
+<li>生成 PDF</li>
+</ul>
+<h3><span id="an-zhuang-sphinx">安装 Sphinx</span></h3>
+<p>Sphinx 依赖于 Python，并提供了 Python 包，所以使用 pip 安装既可。这里我只安装了 <code>sphinx-doc</code> 这个包。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install sphinx-doc</span><br></pre></td></tr></table></figure>
+<p>这时，通过 bash 自动补全（连续两下 <code>tab</code>），可以看到有几个命令，Sphinx 推荐使用 <code>sphinx-quickstart</code>，这是一个设置向导。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sphinx-</span></span><br><span class="line">sphinx-apidoc      sphinx-autogen     sphinx-build       sphinx-quickstart</span><br></pre></td></tr></table></figure>
+<h3><span id="she-zhi-sphinx">设置 Sphinx</span></h3>
+<p>运行 <code>sphinx-quickstart</code>，以下主要设置项目名称，作者名称以及语言（<code>zh_CN</code>）即可，其他默认。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sphinx-quickstart</span></span><br><span class="line">Welcome to the Sphinx 1.8.4 quickstart utility.</span><br><span class="line"></span><br><span class="line">Please enter values for the following settings (just press Enter to</span><br><span class="line">accept a default value, if one is given in brackets).</span><br><span class="line"></span><br><span class="line">Selected root path: .</span><br><span class="line"></span><br><span class="line">You have two options for placing the build directory for Sphinx output.</span><br><span class="line">Either, you use a directory "_build" within the root path, or you separate</span><br><span class="line">"source" and "build" directories within the root path.</span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Separate <span class="built_in">source</span> and build directories (y/n) [n]: y</span></span><br><span class="line"></span><br><span class="line">Inside the root directory, two more directories will be created; "_templates"</span><br><span class="line">for custom HTML templates and "_static" for custom stylesheets and other static</span><br><span class="line">files. You can enter another prefix (such as ".") to replace the underscore.</span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Name prefix <span class="keyword">for</span> templates and static dir [_]: </span></span><br><span class="line"></span><br><span class="line">The project name will occur in several places in the built documentation.</span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Project name: 一本书</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Author name(s): qiwihui</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Project release []: 0.0.1</span></span><br><span class="line"></span><br><span class="line">If the documents are to be written in a language other than English,</span><br><span class="line">you can select a language here by its language code. Sphinx will then</span><br><span class="line">translate text that it generates into that language.</span><br><span class="line"></span><br><span class="line">For a list of supported codes, see</span><br><span class="line">http://sphinx-doc.org/config.html#confval-language.</span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Project language [en]: zh_CN</span></span><br><span class="line"></span><br><span class="line">The file name suffix for source files. Commonly, this is either ".txt"</span><br><span class="line">or ".rst".  Only files with this suffix are considered documents.</span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Source file suffix [.rst]: </span></span><br><span class="line"></span><br><span class="line">One document is special in that it is considered the top node of the</span><br><span class="line">"contents tree", that is, it is the root of the hierarchical structure</span><br><span class="line">of the documents. Normally, this is "index", but if your "index"</span><br><span class="line">document is a custom template, you can also set this to another filename.</span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Name of your master document (without suffix) [index]: </span></span><br><span class="line">Indicate which of the following Sphinx extensions should be enabled:</span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> autodoc: automatically insert docstrings from modules (y/n) [n]: </span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> doctest: automatically <span class="built_in">test</span> code snippets <span class="keyword">in</span> doctest blocks (y/n) [n]: </span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> intersphinx: link between Sphinx documentation of different projects (y/n) [n]: </span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> todo: write <span class="string">"todo"</span> entries that can be shown or hidden on build (y/n) [n]: </span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> coverage: checks <span class="keyword">for</span> documentation coverage (y/n) [n]: </span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> imgmath: include math, rendered as PNG or SVG images (y/n) [n]: </span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> mathjax: include math, rendered <span class="keyword">in</span> the browser by MathJax (y/n) [n]: </span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> ifconfig: conditional inclusion of content based on config values (y/n) [n]: </span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> viewcode: include links to the <span class="built_in">source</span> code of documented Python objects (y/n) [n]: </span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> githubpages: create .nojekyll file to publish the document on GitHub pages (y/n) [n]: </span></span><br><span class="line"></span><br><span class="line">A Makefile and a Windows command file can be generated for you so that you</span><br><span class="line">only have to run e.g. `make html` instead of invoking sphinx-build</span><br><span class="line">directly.</span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Create Makefile? (y/n) [y]: </span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> Create Windows <span class="built_in">command</span> file? (y/n) [y]: </span></span><br><span class="line"></span><br><span class="line">Creating file ./source/conf.py.</span><br><span class="line">Creating file ./source/index.rst.</span><br><span class="line">Creating file ./Makefile.</span><br><span class="line">Creating file ./make.bat.</span><br><span class="line"></span><br><span class="line">Finished: An initial directory structure has been created.</span><br><span class="line"></span><br><span class="line">You should now populate your master file ./source/index.rst and create other documentation</span><br><span class="line">source files. Use the Makefile to build the docs, like so:</span><br><span class="line">   make builder</span><br><span class="line">where "builder" is one of the supported builders, e.g. html, latex or linkcheck.</span><br></pre></td></tr></table></figure>
+<p>解释1，整个设置过程包括：</p>
+<ol>
+<li>
+<p>是否分离源文件目录 <code>source</code> 和生成文件目录 <code>build</code>，默认否；</p>
+</li>
+<li>
+<p>模板目录 <code>templates</code> 和静态文件目录 <code>static</code> 前缀，默认为<code>_</code>；</p>
+</li>
+<li>
+<p>项目名称；</p>
+</li>
+<li>
+<p>项目作者；</p>
+</li>
+<li>
+<p>项目版本，默认为空；</p>
+</li>
+<li>
+<p>项目语言，默认为 <code>en</code>；</p>
+</li>
+<li>
+<p>文档扩展名，默认为 <code>.rst</code>；</p>
+</li>
+<li>
+<p>首页文件名，默认为 <code>index</code>；</p>
+</li>
+<li>
+<p>开启的扩展，均默认为否：</p>
+<ul>
+<li>autodoc</li>
+<li>doctest</li>
+<li>intersphinx</li>
+<li>todo</li>
+<li>coverage</li>
+<li>imgmath</li>
+<li>mathjax</li>
+<li>ifconfig</li>
+<li>viewcode</li>
+<li>githubpages</li>
+</ul>
+</li>
+<li>
+<p>生成 Makefile，默认是；</p>
+</li>
+<li>
+<p>生成 Windows 用命令行，默认是。</p>
+</li>
+</ol>
+<p>解释2，项目目录文件结构如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sphinx-test</span><br><span class="line">├── Makefile</span><br><span class="line">├── build</span><br><span class="line">├── make.bat</span><br><span class="line">└── source</span><br><span class="line">    ├── _static</span><br><span class="line">    ├── _templates</span><br><span class="line">    ├── conf.py</span><br><span class="line">    └── index.rst</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ul>
+<li><code>Makefile</code>：可以看作是一个包含指令的文件，在使用 make 命令时，可以使用这些指令来构建文档输出。</li>
+<li><code>build</code>：生成的文件的输出目录。</li>
+<li><code>make.bat</code>：Windows 用命令行。</li>
+<li><code>_static</code>：静态文件目录，比如图片等。</li>
+<li><code>_templates</code>：模板目录。</li>
+<li><code>conf.py</code>：存放 Sphinx 的配置，包括在 <code>sphinx-quickstart</code> 时选中的那些值，可以自行定义其他的值。</li>
+<li><code>index.rst</code>：文档项目起始文件。</li>
+</ul>
+<p>接下来看看默认生成的内容：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> make html</span></span><br><span class="line">Running Sphinx v1.8.4</span><br><span class="line">loading translations [zh_CN]... done</span><br><span class="line">making output directory...</span><br><span class="line">building [mo]: targets for 0 po files that are out of date</span><br><span class="line">building [html]: targets for 1 source files that are out of date</span><br><span class="line">updating environment: 1 added, 0 changed, 0 removed</span><br><span class="line">reading sources... [100%] index                                                                                                         looking for now-outdated files... none found</span><br><span class="line">pickling environment... done</span><br><span class="line">checking consistency... done</span><br><span class="line">preparing documents... done</span><br><span class="line">writing output... [100%] index                                                                                                          generating indices... genindex</span><br><span class="line">writing additional pages... search</span><br><span class="line">copying static files... done</span><br><span class="line">copying extra files... done</span><br><span class="line">dumping search index in Chinese (code: zh) ... done</span><br><span class="line">dumping object inventory... done</span><br><span class="line">build succeeded.</span><br><span class="line"></span><br><span class="line">The HTML pages are in build/html.</span><br></pre></td></tr></table></figure>
+<p>然后直接在浏览器中打开 <code>build/html/index.html</code> 这个文件。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/53294694-86068e00-3826-11e9-93e6-4f3ad80cc245.png" alt="initial"></p>
+<p>默认风格为 <code>alabaster</code>，可以改成 ReadTheDocs 的风格： <code>sphinx_rtd_theme</code>。</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -- Options for HTML output -------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The theme to use for HTML and HTML Help pages.  See the documentation for</span></span><br><span class="line"><span class="comment"># a list of builtin themes.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">html_theme = <span class="string">'sphinx_rtd_theme'</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://user-images.githubusercontent.com/3297411/53294697-9585d700-3826-11e9-9eab-13d1d4e46aa4.png" alt="rtd_theme"></p>
+<h3><span id="di-yi-ge-wen-dang">第一个文档</span></h3>
+<p>我们以一下文档为例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">This is a Title</span><br><span class="line">===============</span><br><span class="line">That has a paragraph about a main subject and is set when the &apos;=&apos;</span><br><span class="line">is at least the same length of the title itself.</span><br><span class="line"></span><br><span class="line">Subject Subtitle</span><br><span class="line">----------------</span><br><span class="line">Subtitles are set with &apos;-&apos; and are required to have the same length</span><br><span class="line">of the subtitle itself, just like titles.</span><br><span class="line"></span><br><span class="line">Lists can be unnumbered like:</span><br><span class="line"></span><br><span class="line"> * Item Foo</span><br><span class="line"> * Item Bar</span><br><span class="line"></span><br><span class="line">Or automatically numbered:</span><br><span class="line"></span><br><span class="line"> #. Item 1</span><br><span class="line"> #. Item 2</span><br><span class="line"></span><br><span class="line">Inline Markup</span><br><span class="line">-------------</span><br><span class="line">Words can have *emphasis in italics* or be **bold** and you can define</span><br><span class="line">code samples with back quotes, like when you talk about a command: ``sudo``</span><br><span class="line">gives you super user powers!</span><br></pre></td></tr></table></figure>
+<p>将之写入 <code>example.rst</code> 中，并修改 <code>index.rst</code> 为:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Welcome to 一本书&apos;s documentation!</span><br><span class="line">==================================</span><br><span class="line"></span><br><span class="line">.. toctree::</span><br><span class="line">   :maxdepth: 2</span><br><span class="line">   :caption: 目录:</span><br><span class="line"></span><br><span class="line">   example</span><br><span class="line"></span><br><span class="line">Indices and tables</span><br><span class="line">==================</span><br><span class="line"></span><br><span class="line">* :ref:`genindex`</span><br><span class="line">* :ref:`modindex`</span><br><span class="line">* :ref:`search`</span><br></pre></td></tr></table></figure>
+<p>重新编译，这时文档已经改变。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/53294701-a5052000-3826-11e9-972f-85631118b372.png" alt="first_doc">
+<img src="https://user-images.githubusercontent.com/3297411/53294703-a9c9d400-3826-11e9-9c63-9fd73f19792c.png" alt="first_doc_page"></p>
+<h3><span id="zai-xian-tuo-guan">在线托管</span></h3>
+<p><a href="https://readthedocs.org" target="_blank" rel="noopener">ReadTheDocs</a> 可是直接用于托管 sphinx 生成的网页文档。
+将之前的文档用 Git 管理，并推送到 Github，然后在 ReadTheDocs 中 <code>Import a Project</code> 即可。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/53294710-dd0c6300-3826-11e9-9b50-f257ccc9049d.png" alt="rtd"></p>
+<p>另外，可以设置自定义域名：</p>
+<ol>
+<li>在域名管理中添加 DNS 的 CNAME 记录到 <code>readthedocs.io</code>，比如 <code>onebook.qiwihui.com</code></li>
+<li>在项目的 <code>Admin</code> -&gt; <code>Domains</code> 中设置上一步添加的域名，开启 HTTPS，保存即可。</li>
+</ol>
+<p><img src="https://user-images.githubusercontent.com/3297411/53294706-b4846900-3826-11e9-8cc7-570d0f6e4430.png" alt="add_new_domain"></p>
+<p>过程很简单。</p>
+<h3><span id="sheng-cheng-pdf">生成 PDF</span></h3>
+<p>Sphinx 生成 PDF 的过程先将 rst 转换为 tex，再生成 PDF。这个过程遇到了比较多的坑，最后总结下来过程如下：</p>
+<p>首先，安装 Tex 环境。在 Mac 上，推荐安装 <code>MacTex</code> 而不是 <code>BasicTex</code>，对于新手来说 BasicTex 上需要自己处理很多依赖问题。完成后使用 <code>tlmgr</code> 更新 TexLive。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> brew cask install mactex</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo tlmgr update --self</span></span><br></pre></td></tr></table></figure>
+<p>然后，在 <a href="http://con.py" target="_blank" rel="noopener">con.py</a> 中设置 <code>latex_engine</code> 和 <code>latex_elements</code> 两个参数，同时也可以设置 <code>latex_documents</code> 参数来设置文档。因为 ReadTheDocs 上只有 pdflatex 引擎，如果需要同时在 ReadTheDocs 和本地化都能顺利编译中文pdf的话，可以在 <a href="http://conf.py" target="_blank" rel="noopener">conf.py</a> 中添加如下配置：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -- Options for LaTeX output ------------------------------------------------</span></span><br><span class="line"><span class="comment"># 检查是否为 READTHEDOCS 环境</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">on_rtd = os.environ.get(<span class="string">'READTHEDOCS'</span>, <span class="literal">None</span>) == <span class="string">'True'</span></span><br><span class="line"><span class="keyword">if</span> on_rtd:</span><br><span class="line">    latex_elements = &#123;</span><br><span class="line">        <span class="string">'preamble'</span>: <span class="string">r'''</span></span><br><span class="line"><span class="string">\hypersetup&#123;unicode=true&#125;</span></span><br><span class="line"><span class="string">\usepackage&#123;CJKutf8&#125;</span></span><br><span class="line"><span class="string">\DeclareUnicodeCharacter&#123;00A0&#125;&#123;\nobreakspace&#125;</span></span><br><span class="line"><span class="string">\DeclareUnicodeCharacter&#123;2203&#125;&#123;\ensuremath&#123;\exists&#125;&#125;</span></span><br><span class="line"><span class="string">\DeclareUnicodeCharacter&#123;2200&#125;&#123;\ensuremath&#123;\forall&#125;&#125;</span></span><br><span class="line"><span class="string">\DeclareUnicodeCharacter&#123;2286&#125;&#123;\ensuremath&#123;\subseteq&#125;&#125;</span></span><br><span class="line"><span class="string">\DeclareUnicodeCharacter&#123;2713&#125;&#123;x&#125;</span></span><br><span class="line"><span class="string">\DeclareUnicodeCharacter&#123;27FA&#125;&#123;\ensuremath&#123;\Longleftrightarrow&#125;&#125;</span></span><br><span class="line"><span class="string">\DeclareUnicodeCharacter&#123;221A&#125;&#123;\ensuremath&#123;\sqrt&#123;&#125;&#125;&#125;</span></span><br><span class="line"><span class="string">\DeclareUnicodeCharacter&#123;221B&#125;&#123;\ensuremath&#123;\sqrt[3]&#123;&#125;&#125;&#125;</span></span><br><span class="line"><span class="string">\DeclareUnicodeCharacter&#123;2295&#125;&#123;\ensuremath&#123;\oplus&#125;&#125;</span></span><br><span class="line"><span class="string">\DeclareUnicodeCharacter&#123;2297&#125;&#123;\ensuremath&#123;\otimes&#125;&#125;</span></span><br><span class="line"><span class="string">\begin&#123;CJK&#125;&#123;UTF8&#125;&#123;gbsn&#125;</span></span><br><span class="line"><span class="string">\AtEndDocument&#123;\end&#123;CJK&#125;&#125;</span></span><br><span class="line"><span class="string">'''</span>,</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># 本地</span></span><br><span class="line">    latex_engine = <span class="string">'xelatex'</span></span><br><span class="line">    latex_elements = &#123;</span><br><span class="line">        <span class="string">'papersize'</span>: <span class="string">'a4paper'</span>,</span><br><span class="line">        <span class="string">'pointsize'</span>: <span class="string">'11pt'</span>,</span><br><span class="line">        <span class="string">'preamble'</span>: <span class="string">r'''</span></span><br><span class="line"><span class="string">\usepackage&#123;xeCJK&#125;</span></span><br><span class="line"><span class="string">\setCJKmainfont[BoldFont=STZhongsong, ItalicFont=STKaiti]&#123;STSong&#125;</span></span><br><span class="line"><span class="string">\setCJKsansfont[BoldFont=STHeiti]&#123;STXihei&#125;</span></span><br><span class="line"><span class="string">\setCJKmonofont&#123;STFangsong&#125;</span></span><br><span class="line"><span class="string">\XeTeXlinebreaklocale "zh"</span></span><br><span class="line"><span class="string">\XeTeXlinebreakskip = 0pt plus 1pt</span></span><br><span class="line"><span class="string">\parindent 2em</span></span><br><span class="line"><span class="string">\definecolor&#123;VerbatimColor&#125;&#123;rgb&#125;&#123;0.95,0.95,0.95&#125;</span></span><br><span class="line"><span class="string">\setcounter&#123;tocdepth&#125;&#123;3&#125;</span></span><br><span class="line"><span class="string">\renewcommand\familydefault&#123;\ttdefault&#125;</span></span><br><span class="line"><span class="string">\renewcommand\CJKfamilydefault&#123;\CJKrmdefault&#125;</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment"># 设置文档</span></span><br><span class="line">latex_documents = [</span><br><span class="line">    (master_doc, <span class="string">'sphinx.tex'</span>, <span class="string">'你的第一本 Sphinx 书'</span>,</span><br><span class="line">     <span class="string">'作者：qiwihui'</span>, <span class="string">'manual'</span>, <span class="literal">True</span>),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>最后，编译：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> make latexpdf</span></span><br></pre></td></tr></table></figure>
+<p><code>make latexpdf</code> 会完成 rst转换为 tex 并将 tex 生成 PDF，可以手动分开：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> make latex</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> build/latex</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> make</span></span><br></pre></td></tr></table></figure>
+<p>在 <code>build/latex</code> 下可以查看到生成的 PDF 文档。</p>
+<h4><span id="zi-ti">字体</span></h4>
+<p>使用 <code>fc-list</code> 来获取字体信息，修改相应字体设置即可。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> brew install fontconfig</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">fc</span>-list :lang=zh</span></span><br></pre></td></tr></table></figure>
+<h4><span id="yu-dao-de-wen-ti">遇到的问题:</span></h4>
+<ol>
+<li>遇到 <code>&quot;! LaTeX Error: File '*.sty' not found.&quot;</code> 类的问题：</li>
+</ol>
+<p>解决：使用 <code>sudo tlmgr install</code> 安装相应的包即可。</p>
+<h2><span id="zong-jie">总结</span></h2>
+<p>简单过了一下整个文档的流程，总体来说，Sphinx非常适合用来编写项目文档，reStructuredText 比起 Markdown 也有太多的优势，值得推荐。</p>
+<h3><span id="comments">Comments</span></h3>
+<hr>
+<blockquote>
+<p>from: <a href="https://github.com/qiwihui/blog/issues/57#issuecomment-468518848" target="_blank" rel="noopener"><strong>qiwihui</strong></a> on: <strong>3/1/2019</strong></p>
+</blockquote>
+<p>添加 gooogle analytics</p>
+<ul>
+<li><a href="http://www.milos.curuvija.com/miscellaneous/sphinx/sphinx_google_analytics_integration.html" target="_blank" rel="noopener">http://www.milos.curuvija.com/miscellaneous/sphinx/sphinx_google_analytics_integration.html</a></li>
+<li><a href="https://www.ericholscher.com/blog/2009/apr/5/adding-google-analytics-sphinx-docs/" target="_blank" rel="noopener">https://www.ericholscher.com/blog/2009/apr/5/adding-google-analytics-sphinx-docs/</a></li>
+</ul>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-47/" class="prev">PREV</a><a href="/qiwihui-blog-90/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-57/';
+var disqus_title = '使用 Sphinx 撰写技术文档并生成 PDF 总结';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-57/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

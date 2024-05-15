@@ -1,0 +1,319 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> CSS 基础──样式篇 · QIWIHUI</title><meta name="description" content="CSS 基础──样式篇 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-147/index.html"><meta property="og:title" content="CSS 基础──样式篇"><meta property="og:description" content="CSS 基础──样式篇"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">CSS 基础──样式篇</h1><div class="post-info">May 15, 2024<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>23 min. read</span></div><div class="post-content"><p>《<a href="https://lefex.github.io/books/html-book/introduction.html" target="_blank" rel="noopener">前端小课──用好HTML</a>》的读书笔记。</p>
+<h3><span id="shi-yong-css-san-chong-fang-shi">使用css三种方式</span></h3>
+<ol>
+<li>
+<p>外部引入：通过 link 的方式引用 CSS 样式</p>
+ <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"style.css"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>内部引入，在 HTML 中的 head 位置添加 style 标签</p>
+ <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line">    .title &#123;</span><br><span class="line">      color: red;</span><br><span class="line">      font-size: 18px;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>内联样式</p>
+ <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">"color: red; font-size: 18px;"</span>&gt;</span>内容<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3><span id="kuai-ji-biao-qian-he-inline-biao-qian">块级标签和 inline 标签</span></h3>
+<ul>
+<li>块级标签独占一行；</li>
+<li>inline 标签会「累加」，如同打字一样，一个字一个字往后拼接，单行显示不全会折行显示；
+<ul>
+<li><code>white-space</code> 属性作用就是告诉浏览器遇到「空格」该如何处理，这里的空格不是单纯意义上的空格。
+<ul>
+<li><code>normal</code></li>
+<li><code>nowrap</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3><span id="overflow-shu-xing"><code>overflow</code> 属性</span></h3>
+<ul>
+<li>控制对于超出可视区域的内容如何处理</li>
+<li><code>overflow-x</code> ， <code>overflow-y</code></li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 默认值。内容不会被修剪，会呈现在元素框之外 */</span></span><br><span class="line"><span class="selector-tag">overflow</span>: <span class="selector-tag">visible</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 内容会被修剪，并且其余内容不可见 */</span></span><br><span class="line"><span class="selector-tag">overflow</span>: <span class="selector-tag">hidden</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 内容会被修剪，浏览器会显示滚动条以便查看其余内容 */</span></span><br><span class="line"><span class="selector-tag">overflow</span>: <span class="selector-tag">scroll</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 由浏览器定夺，如果内容被修剪，就会显示滚动条（默认值） */</span></span><br><span class="line"><span class="selector-tag">overflow</span>: <span class="selector-tag">auto</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 规定从父元素继承overflow属性的值 */</span></span><br><span class="line"><span class="selector-tag">overflow</span>: <span class="selector-tag">inherit</span>;</span><br></pre></td></tr></table></figure>
+<h3><span id="qing-chu-biao-qian-mo-ren-bian-ju">清除标签默认边距</span></h3>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*清除标签默认边距*/</span></span><br><span class="line">* &#123;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="css-zhong-de-xuan-ze-qi">CSS中的选择器</span></h3>
+<p><img src="https://user-images.githubusercontent.com/3297411/129540047-12aa2048-3121-4d5d-a40d-c4d052a52bbc.png" alt="Untitled"></p>
+<p>注意：写 CSS 代码的时候，即使某个属性写错，浏览器也不会报错，只会忽略无法识别的 CSS 样式。</p>
+<ul>
+<li>
+<p>标签选择器： 如 <code>p</code> ， <code>li</code> 等</p>
+</li>
+<li>
+<p>class 选择器：如 <code>.first</code></p>
+</li>
+<li>
+<p>ID 选择器： <code>#firstid</code></p>
+</li>
+<li>
+<p>通用选择器： <code>*</code> ，作用于所有的标签</p>
+</li>
+<li>
+<p>属性选择器：根据属性来匹配HTML元素</p>
+  <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 匹配所有使用属性 "lefe" 的元素 */</span></span><br><span class="line"><span class="selector-attr">[lefe]</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: green;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*匹配所有使用属性为 "lefe"，且值为 liquid 的元素*/</span></span><br><span class="line"><span class="selector-attr">[lefe=<span class="string">"liquid"</span>]</span> &#123;</span><br><span class="line">    <span class="attribute">background-color</span>: goldenrod;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*匹配所有使用属性为 "lefe"，且值包含 spicy 的元素*/</span></span><br><span class="line"><span class="selector-attr">[lefe~=<span class="string">"spicy"</span>]</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>类似于“正则表达式”的属性选择器，比如： <code>[attr^=val]</code> 匹配以 val 开头的元素， <code>[attr$=val]</code> ,匹配以 val 结尾的元素， <code>[attr*=val]</code> 匹配包含 val 的字符串的元素</p>
+</li>
+<li>
+<p>伪选择器（pseudo-selectors）：它包含伪类（pseudo-classes）和伪元素（pseudo-elements）。这类选择器不是真正意义上的选择器，它作为选择器的一部分，起到选择器匹配元素的限定条件。</p>
+  <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 匹配超链接样式 */</span></span><br><span class="line"><span class="selector-tag">a</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: blue;</span><br><span class="line">    <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 访问后的状态 */</span></span><br><span class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:visited</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: yellow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 鼠标悬停、点击、聚焦时的样式 */</span></span><br><span class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:hover</span>,</span><br><span class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:active</span>,</span><br><span class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:focus</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: darkred;</span><br><span class="line">    <span class="attribute">text-decoration</span>: none;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>伪元素（pseudo-elements）选择器，它以“ :: ” 为标识符</p>
+  <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">p</span><span class="selector-pseudo">::first-letter</span>&#123;</span><br><span class="line">  <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">p</span><span class="selector-pseudo">::first-line</span>&#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">3em</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Selects any &lt;p&gt; that is the first element</span></span><br><span class="line"><span class="comment">   among its siblings </span></span><br><span class="line"><span class="comment">	 p:first-child 选择的是孩子节点中第一个元素是 p 的元素</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="selector-tag">p</span><span class="selector-pseudo">:first-child</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: lime;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>组合选择器（Combinators）: 这种选择器可以作用于多个 HTML 元素，有多种组合方式</p>
+<ul>
+<li><code>A B {}</code> : A 元素的所有后代元素 B 都会起作用。</li>
+<li><code>A &gt; B {}</code> : A 元素的直接子节点会起作用，也就是只适用于 A 节点的第一层所有的子节点。</li>
+<li><code>A + B {}</code> : 匹配 A 的下一个兄弟节点，AB具有相同的父节点，并且 B 紧跟在 A 的后面；</li>
+<li><code>A ~ B {}</code> : B是 A 之后的任意一个（所有）兄弟节点。</li>
+<li><code>A, B {}</code>：A 和 B 元素具有同一规则的 CSS 样式，不同元素使用逗号隔开。</li>
+</ul>
+</li>
+</ul>
+<h3><span id="wei-xuan-ze-qi">伪选择器</span></h3>
+<ol>
+<li>
+<p>伪类选择器：作用是选中某个元素中符合某些条件的元素。作用于现有元素，相当于给现有元素添加某些属性。使用单个冒号 <code>:</code></p>
+ <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-pseudo">:first-child</span></span><br><span class="line"><span class="selector-pseudo">:not</span></span><br><span class="line"><span class="selector-pseudo">:nth-child()</span></span><br><span class="line"><span class="selector-pseudo">:only-child()</span></span><br><span class="line"><span class="selector-pseudo">:root()</span></span><br><span class="line"><span class="selector-pseudo">:disabled</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>伪元素选择器：作用就是给现有元素添加某些新的内容，就好比给某个元素添加了一个新的标签，使用2个冒号 <code>::</code></p>
+ <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-pseudo">::first-letter</span> 表示对首字母进行操作</span><br><span class="line"><span class="selector-pseudo">::first-line</span> 对首行内容进行操作</span><br><span class="line"><span class="selector-pseudo">::before</span> 给已知元素的前面拼接新的内容</span><br><span class="line"><span class="selector-pseudo">::after</span> 给已知元素的后面拼接新的内容</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3><span id="gui-ze">@规则</span></h3>
+<p>@规则在CSS中用于传递元数据、条件信息或其他描述性信息。它们以at符号（@）开头，后跟一个标识符来说明它是什么类型的规则，然后是某种类型的语法块，以分号（；）结尾。由标识符定义的每种类型的 at 规则都有其自己的内部语法和语义。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@charset</span> <span class="keyword">and</span> @import (metadata)</span><br><span class="line">@media <span class="keyword">or</span> @document (条件，嵌套申明)</span><br><span class="line">@font-face (描述信息)</span><br></pre></td></tr></table></figure>
+<p>下面这个 CSS 只适用于屏幕超过 800px 的设备：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@media</span> (<span class="attribute">min-width:</span> <span class="number">801px</span>) &#123;</span><br><span class="line">  <span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">800px</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>@media</code> 语法</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@media</span> mediaType <span class="keyword">and</span>|<span class="keyword">not</span>|<span class="keyword">only</span> (media feture) &#123;</span><br><span class="line">  // css</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="border">border</span></h3>
+<ul>
+<li>简写属性，包含 border-width, border-style, border-color。</li>
+<li><code>border-width</code>：表示边框的宽度，可以分别设置上下左右边框为不同的宽度，比如 border-bottom-width；</li>
+<li><code>border-style</code>: 表示边框的样式，可以分别设置上下左右边框为不同的样式，比如 border-bottom-style，可以取下面几种值：node、hidden、dotted、dashed、solid 等；</li>
+<li><code>border-color</code>：表示边框的颜色，可以分别设置上下左右边框为不同的颜色。</li>
+</ul>
+<h3><span id="yi-xie-wen-zi-shu-xing">一些文字属性</span></h3>
+<p>font-size: 文字大小；</p>
+<p>font-weight：字重，字体粗细，可以这样理解吧；</p>
+<p>color：字体颜色；</p>
+<p>text-align：字体对齐方式；</p>
+<p>text-decoration: 文字修饰，比如下划线，删除线；</p>
+<p>letter-spacing: 文字间距；</p>
+<p>line-height: 行高；</p>
+<p>font-style:  文字样式，比如斜体；</p>
+<h3><span id="he-zi-mo-xing">盒子模型</span></h3>
+<p>两种盒子类型</p>
+<ol>
+<li>块级盒子（block）
+<ul>
+<li>尽可能扩大可利用的空间</li>
+<li>独占一行，也就说一个块级元素占一行</li>
+<li>可以使用 width 和 height 属性</li>
+<li>使用 padding、margin 和 border 会影响其它元素的位置</li>
+</ul>
+</li>
+<li>行内盒子（inline）
+<ul>
+<li>不会单行显示，除非一行没有足够多的空间，它会一个接一个地排列；</li>
+<li>width 和 height 属性不起作用，如果给 span 标签设置 width 或 height 时，发现无效；</li>
+<li>padding、margin 和 border 会起作用，但不会影响其它元素。</li>
+</ul>
+</li>
+</ol>
+<p>通过 <code>display</code> 修改盒子的显示方式</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.title</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: inline;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>盒模型</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/129540095-2a436855-1b09-4423-9b72-1fdab450c68e.png" alt="Untitled 1"></p>
+<ul>
+<li>margin（外边距）：它表示盒子之间的距离，可以通过 margin-top、margin-bottom、margin-left、margin-right 来控制各个方向的边距，<strong>它们可以为负值</strong>；</li>
+<li>border（边框）：表示盒子的边框；</li>
+<li>padding（内边距）：表示与内容之间的距离；</li>
+<li>content（内容）：表示内容的大小；</li>
+</ul>
+<p>模式</p>
+<ol>
+<li>
+<p>标准的盒子模型</p>
+<p>对于这种盒子模式，给它设置的 width 和 height 是 content 的宽高，当给盒子添加 padding 和 border 的时候，会增加盒子的整体大小。「外边距不会计入盒子的大小，它只是表示外部的边距」。</p>
+</li>
+<li>
+<p>诡异盒子模型（The alternative CSS box model）</p>
+<p>对于这种盒子模式，给它设置的 width 和 height 是盒子的宽高，也就是说内容 content 的宽需要减去 border 和 padding 的宽。</p>
+</li>
+</ol>
+<p>谷歌浏览器默认的是标准的盒模型，可以通过：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">box-sizing</span>: <span class="selector-tag">border-box</span>;</span><br></pre></td></tr></table></figure>
+<p>来修改盒模型为诡异盒模型。</p>
+<h3><span id="display">display</span></h3>
+<ol>
+<li>
+<p><code>display：inline</code></p>
+</li>
+<li>
+<p><code>display：block</code></p>
+</li>
+<li>
+<p><code>display：inline-block</code></p>
+<p>这种布局方式结合了 inline 和 block 这两种元素的特性，它与块级元素不同的是：元素不会单独占用一行；相同的是：可以使用 width 和 height，可以通过 padding、margin 和 border 来控制元素的显示位置。</p>
+<p>说白了就是除了不会单独占一行，其余的与块级元素一致。</p>
+</li>
+<li>
+<p><code>display：none</code> 隐藏元素</p>
+</li>
+<li>
+<p><code>display：flex</code> 一维</p>
+</li>
+<li>
+<p><code>display：grid</code> 二维</p>
+</li>
+</ol>
+<h3><span id="shi-yong-tu-pian">使用图片</span></h3>
+<ol>
+<li>
+<p>设置背景图</p>
+ <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">background-color</span>: <span class="selector-tag">antiquewhite</span>;</span><br><span class="line">  background-image: url('./logo_suyan.png');</span><br><span class="line">  <span class="selector-tag">background-repeat</span>: <span class="selector-tag">no-repeat</span>;</span><br><span class="line">  <span class="selector-tag">background-position</span>: <span class="selector-tag">center</span>;</span><br><span class="line">  <span class="selector-tag">background-size</span>: <span class="selector-tag">cover</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>background-postion: 表示背景图的起始位置；
+<ul>
+<li>background-postion： <code>top | left | bottom | right</code>，在某个边缘的位置，另一个维度为 50%。比如 top，背景图的起始位置为顶部，在X轴方向为 50%，居中显示；</li>
+<li>background-postion：center，居中背景图；</li>
+<li>background-postion：25% 75%，设置基于背景区域的开始位置，可以为负值；</li>
+<li>background-postion-x：背景在 x 轴上的位置；</li>
+<li>background-postion-y：背景在 y 轴上的位置；</li>
+</ul>
+</li>
+<li>background-repeat: 背景的重复方式， <code>no-repat</code> 不重复， <code>repeat</code> 重复， <code>repat-x</code> X轴上重复，还有其它关键字。</li>
+<li>background-size: 背景图的大小；</li>
+</ul>
+</li>
+<li>
+<p><code>img</code> 标签</p>
+<p>行内（inline）元素</p>
+ <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">"logo"</span> <span class="attr">src</span>=<span class="string">"./images/1.png"</span> <span class="attr">alt</span>=<span class="string">"图片"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.logo</span> &#123;</span><br><span class="line">		<span class="comment">/* 表示设置图片的宽度，如果只设置宽度，那么 img 标签的高度会根据图片的大小进行等比缩放。</span></span><br><span class="line"><span class="comment">       只设置高度也是同样的道理。</span></span><br><span class="line"><span class="comment">       如果即设置了高度又设置了宽度，那么图片的高度和宽度即为设置的宽高。 */</span></span><br><span class="line">    <span class="attribute">width</span>: <span class="number">30px</span>;</span><br><span class="line">    <span class="comment">/* 指定行内元素的垂直对齐方式 */</span></span><br><span class="line">    <span class="attribute">vertical-align</span>: middle;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3><span id="xian-shi-duo-xing-wen-zi">显示多行文字</span></h3>
+<p>text-overflow 和 -webkit-line-clamp</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.singal-line</span> &#123;</span><br><span class="line">    <span class="attribute">overflow</span>: hidden;</span><br><span class="line">    <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">    <span class="attribute">text-overflow</span>: ellipsis;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.two-line</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: -webkit-box;</span><br><span class="line">    <span class="attribute">overflow</span>: hidden;</span><br><span class="line">    <span class="attribute">text-overflow</span>: ellipsis;</span><br><span class="line">    <span class="attribute">-webkit-line-clamp</span>: <span class="number">2</span>;</span><br><span class="line">    <span class="attribute">-webkit-box-orient</span>: vertical;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>text-overflow：只对块级元素起作用，表示对超出指定区域的内容该如何显示</p>
+<ul>
+<li>ellipsis：以 … 省略号显示</li>
+<li>clip截断显示</li>
+</ul>
+<p>-webkit-box：webkit 的 CSS 扩展属性</p>
+<h3><span id="css-quan-chong">CSS权重</span></h3>
+<p><img src="https://user-images.githubusercontent.com/3297411/129540137-817a8c61-d9e3-4763-b984-b6a89f02f5de.png" alt="Untitled 2"></p>
+<ul>
+<li><code>*</code>：通用选择器，权重最低，就是 0，第 1 张图就是此意；</li>
+<li>div、li&gt;ul、body：元素选择器，有几个值权重值就是几。li&gt;ul 是两个元素，&gt; 号不会干扰权重计算；第 2、3、4张图能看懂了吧，就是元素选择器，1个元素选择器就是 0-0-1，12个元素选择器就是 0-0-12；</li>
+<li><code>.myClass, [type=chekbox], :only-of-type</code> : 类、属性、伪类选择器。第 5 张图，一个类选择器，权重值表示为 0-1-0；5-15张图能看懂了吧；</li>
+<li><code>#myDiv</code>：id选择器，一条鲨鱼，权重比较高，权重值为 1-0-0；`</li>
+<li><code>style</code>：权重值更高，权重值为 1-0-0-0；</li>
+<li><code>!important</code>: 无敌，我是老大，告诉浏览器必须使用我定义的属性；</li>
+</ul>
+<p><img src="https://user-images.githubusercontent.com/3297411/129540180-af9db964-ba31-4349-ba31-d271eba84078.png" alt="Untitled 3"></p>
+<ul>
+<li><code>g</code>：直接在元素中使用属性，权重最高，可以看做 1-0-0-0；</li>
+<li><code>z</code>：id选择器，权重次子，可以看做 0-1-0-0；</li>
+<li><code>y</code>：类、伪类、属性选择器，权重低，可以看做 0-0-1-0；</li>
+<li><code>x</code>：元素、伪元素选择器，权重最低，可以看做 0-0-0-1；</li>
+</ul>
+<h3><span id="dong-hua">动画</span></h3>
+<p>主要有两种方式</p>
+<ul>
+<li>animation：CSS动画，可设置不同帧的动效；</li>
+<li>transition：这种属于过渡动画，也就是说在修改某些 CSS 属性的时候，属性会有一个渐变的过程。</li>
+</ul>
+<ol>
+<li>animation</li>
+</ol>
+<ul>
+<li>animation-name: 动画的名字，这个是通过 <code>@keyframes</code> 定义的名字。 <code>@keyframes</code> 指定某一帧的动画如何变化，可通过 % 来控制各个阶段的属性值</li>
+<li>animation-duration：动画的持续时间；</li>
+<li>animation-delay：动画开始时的延迟时间；</li>
+<li>animation-iteration-count：动画循环次数；</li>
+<li>animation-direction：动画的方向，比如 alternate 表示先正向后逆序，nomal 正向，reverse 逆序；</li>
+<li>animation-timing-function：动画的时间曲线，它的值有 ease、ease-in、ease-out、ease-in-out、linear；</li>
+<li>animation-fill-mode：动画执行后的填充模式，它的值有 forwards、backwards、none、both；</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.move-box-animation</span> &#123;</span><br><span class="line">    <span class="comment">/* animation: name duration timing-function delay iteration-count direction fill-mode; */</span></span><br><span class="line">    <span class="comment">/* 名字，为 @keyframes 的名字 */</span></span><br><span class="line">    <span class="attribute">animation-name</span>: move;</span><br><span class="line">    <span class="comment">/*  动画的时间 */</span></span><br><span class="line">    <span class="attribute">animation-duration</span>: <span class="number">5s</span>;</span><br><span class="line">    <span class="comment">/* 动画执行函数 */</span></span><br><span class="line">    <span class="attribute">animation-timing-function</span>: ease-in-out;</span><br><span class="line">    <span class="comment">/* 动画延迟时间 */</span></span><br><span class="line">    <span class="attribute">animation-delay</span>: <span class="number">1s</span>;</span><br><span class="line">    <span class="comment">/* 动画重复次数 */</span></span><br><span class="line">    <span class="attribute">animation-iteration-count</span>: <span class="number">10</span>;</span><br><span class="line">    <span class="comment">/* 动画的方向，先正向后逆向 */</span></span><br><span class="line">    <span class="attribute">animation-direction</span>: alternate;</span><br><span class="line">    <span class="comment">/* 动画执行后的填充模式 */</span></span><br><span class="line">    <span class="attribute">animation-fill-mode</span>: backwards;</span><br><span class="line">    <span class="comment">/* 动画的运行状态 */</span></span><br><span class="line">    <span class="attribute">animation-play-state</span>: running;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@keyframes</span> move &#123;</span><br><span class="line">    0% &#123;</span><br><span class="line">        <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">        <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    25% &#123;</span><br><span class="line">        <span class="attribute">left</span>: <span class="number">100px</span>;</span><br><span class="line">        <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    50% &#123;</span><br><span class="line">        <span class="attribute">left</span>: <span class="number">100px</span>;</span><br><span class="line">        <span class="attribute">top</span>: <span class="number">100px</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    75% &#123;</span><br><span class="line">        <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">        <span class="attribute">top</span>: <span class="number">100px</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    100% &#123;</span><br><span class="line">        <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">        <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>transition</li>
+</ol>
+<ul>
+<li>过渡动画，修改某些属性的时候不会立刻生效，它会以动画的形式逐渐过渡到要设置的值</li>
+<li>transition-property: 指需要使用过渡动画的属性，这里设置了背景色，高度和宽度。也可以通过关键字 all 设置所有的属性；</li>
+<li>transition-duration: 动画持续的时间，可以单独控制某个属性的时间， transition-duration：1.8s, 1.0s, 1.0s 表示修改 background-color 需要 1.8s, 修改 height 需要 1.0s,  修改 width 需要 1.0s;</li>
+<li>transition-delay：动画开始时需要延迟多长时间才开始执行；</li>
+<li>transition-timing-function：表示动画执行时的时间函数，不同函数走过的曲线不一样；</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.move-transition</span> &#123;</span><br><span class="line">    <span class="comment">/* transition-property: all; */</span></span><br><span class="line">    <span class="attribute">transition-property</span>: background-color, height, width;</span><br><span class="line">    <span class="attribute">transition-duration</span>: <span class="number">1.8s</span>, <span class="number">1.0s</span>, <span class="number">1.0s</span>;</span><br><span class="line">    <span class="attribute">transition-delay</span>: <span class="number">0.1s</span>;</span><br><span class="line">    <span class="attribute">transition-timing-function</span>: linear;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="chang-du-dan-wei">长度单位</span></h3>
+<ol>
+<li>相对单位：相对单位指它的尺寸是相对于另外一个元素的尺寸。常用的是 em、rem、vh、vw、vmin、vmax。
+<ul>
+<li>em: 它是相对于「自身或父元素」的 font-size 来计算自身的尺寸</li>
+<li>rem（font size of root element）: 这个单位是依据「根元素 html 标签」的 font-size 来计算最终的值，这个单位对移动端web开发十分实用，通过设置 html 的 font-size 来等比缩放元素的大小。</li>
+<li><strong>vw（viewport width）</strong>，可视区域宽度，比如设置 50vw，相当于可视区域宽度的一半；</li>
+<li><strong>vh（viewport height）</strong>，可视区域高度，比如设置 50vh，相当于可视区域高度的一半；</li>
+<li><strong>vmax</strong>: vw 和 vh 中最大的；</li>
+<li><strong>vmin</strong>: vw 和 vh 中最小的；</li>
+</ul>
+</li>
+<li>绝对单位
+<ul>
+<li>像素 px， cm等</li>
+</ul>
+</li>
+<li>时间单位
+<ul>
+<li>s</li>
+<li>ms</li>
+</ul>
+</li>
+</ol>
+<h3><span id="yi-fu-yong-yi-wei-hu-jie-gou-qing-xi-de-css">易复用、易维护、结构清晰的 CSS</span></h3>
+<p>less，sass</p>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">#读书笔记</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-153/" class="prev">PREV</a><a href="/qiwihui-blog-154/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-147/';
+var disqus_title = 'CSS 基础──样式篇';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-147/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

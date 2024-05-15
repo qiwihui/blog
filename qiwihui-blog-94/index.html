@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> GitHub Actions 第11天：密码（Secrets） · QIWIHUI</title><meta name="description" content="GitHub Actions 第11天：密码（Secrets） - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-94/index.html"><meta property="og:title" content="GitHub Actions 第11天：密码（Secrets）"><meta property="og:description" content="GitHub Actions 第11天：密码（Secrets）"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">GitHub Actions 第11天：密码（Secrets）</h1><div class="post-info">Aug 13, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>5 min. read</span></div><div class="post-content"><p>昨天我们建立了一个基于<a href="https://qiwihui.com/qiwihui-blog-93/">改变路径</a>触发的工作流; 它的目标是发布文档。如果仔细看，在工作流程的底部，我们引用了一个变量。看起来有点像我们<a href="https://qiwihui.com/qiwihui-blog-85/">引用矩阵变量</a>的方式 ，而这里引用了一个密码。</p>
+<p>在部署场景中，你通常会需要令牌或密码之类的东西──GitHub Actions支持将这些作为密码保存在存储库中。</p>
+<p>要设置密码，请转到“存储库设置”页面，然后选择“密码”。你的密码名称将在你的工作流中用于引用数据，你可以将密码本身放入值中。</p>
+<a id="more"></a>
+<p><img src="https://user-images.githubusercontent.com/3297411/77734745-39523f80-7044-11ea-8aed-91f6dde277e0.png" alt="image"></p>
+<p>要使用该密码，你可以在工作流中使用上下文 <code>secrets</code> 来引用它。如果你有一个密码的名字 <code>SECRET_KEY</code>，你可以将其称为 <code>$</code>。</p>
+<script src="https://gist.github.com/ethomson/eb722482cfd7f955f17c3231efe8804a.js"></script>
+<h2><span id="github-token"><code>GITHUB_TOKEN</code></span></h2>
+<p>GitHub Actions会为每次运行的工作流自动在存储库中设置一个密码 <code>GITHUB_TOKEN</code>。该令牌使你可以与存储库进行交互，而无需自己创建新令牌或设置密码。</p>
+<p>该令牌为你提供了对存储库本身，issue和<a href="https://www.edwardthomson.com/blog/github_actions_9_deploy_to_github_packages.html" target="_blank" rel="noopener">GitHub Packages</a>进行读写的有限访问权限。但是它不能完全访问所有内容──你无法与组织中的其他存储库一起使用，也无法发布到GitHub Pages──因此，对于某些工作流，你可能仍需要设置令牌。</p>
+<h2><span id="mi-ma-an-quan">密码安全</span></h2>
+<p>GitHub试图防止你的密码被窥视。在输出日志中，你定义的所有密码都会被清除，并在输出日志之前用星号替换。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/77734893-7ddddb00-7044-11ea-93af-18ab47df2ffd.png" alt="image"></p>
+<p>这有助于保护你的密码，防止他人窥视，尤其是利用那些导出值的工具。但这当然不是完美的，你应该谨慎保护密码。</p>
+<h2><span id="forks">Forks</span></h2>
+<p>如果你的项目使用fork来接受来自贡献者的pull request（例如，如果你正在开发一个开源项目），则可能对在工作流程中使用密码有所警惕。</p>
+<p>GitHub明确 <strong>禁用</strong> 了对来自fork的工作流提供密码的功能。这意味着，当用户从fork打开对你的项目的pull request时，不会向此工作流提供任何密码。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/77734903-86361600-7044-11ea-8475-410b7380eb83.png" alt="image"></p>
+<p>这有助于防止用户修改工作流程本身──或工作流程调用的任何脚本──试图获取你的密码副本。这些密码根本无法获得。</p>
+<p>（<code>GITHUB_TOKEN</code>仍然为fork提供了特殊功能，以便它们可以克隆你的存储库（以便构建它），但已将其降级为只读令牌，以防止fork工作流在你的存储库中进行更改。）</p>
+<p>原文链接：<a href="https://www.edwardthomson.com/blog/github_actions_11_secrets.html" target="_blank" rel="noopener">https://www.edwardthomson.com/blog/github_actions_11_secrets.html</a></p>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+<h3><span id="comments">Comments</span></h3>
+<hr>
+<blockquote>
+<p>from: <a href="https://github.com/qiwihui/blog/issues/94#issuecomment-828274529" target="_blank" rel="noopener"><strong>Volcano-Yang</strong></a> on: <strong>4/28/2021</strong></p>
+</blockquote>
+<h2><span id="sha-fa-gan-xie-lou-zhu-de-fan-yi">沙发🛋  感谢楼主的翻译</span></h2>
+<blockquote>
+<p>from: <a href="https://github.com/qiwihui/blog/issues/94#issuecomment-828275735" target="_blank" rel="noopener"><strong>Volcano-Yang</strong></a> on: <strong>4/28/2021</strong></p>
+</blockquote>
+<p><img src="https://user-images.githubusercontent.com/43328103/116375203-a173e600-a841-11eb-8535-4212b723be16.png" alt="image">
+现在还支持设置环境secrets 限制不同分支对secret的读取权限</p>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E7%BF%BB%E8%AF%91/">#翻译</a><a href="/tags/tips/">#tips</a><a href="/tags/github-actions/">#github actions</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-84/" class="prev">PREV</a><a href="/qiwihui-blog-104/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-94/';
+var disqus_title = 'GitHub Actions 第11天：密码（Secrets）';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-94/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

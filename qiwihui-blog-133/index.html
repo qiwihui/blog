@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 15. 多线程和多进程 — Python 进阶 · QIWIHUI</title><meta name="description" content="15. 多线程和多进程 — Python 进阶 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-133/index.html"><meta property="og:title" content="15. 多线程和多进程 — Python 进阶"><meta property="og:description" content="15. 多线程和多进程 — Python 进阶"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">15. 多线程和多进程 — Python 进阶</h1><div class="post-info">Aug 13, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>8 min. read</span></div><div class="post-content"><p>我们有两种常用的方法来并行运行代码（实现多任务并加快程序速度）：通过线程或通过多进程。</p>
+<a id="more"></a>
+<h2><span id="jin-cheng">进程</span></h2>
+<p>进程是程序的一个实例，例如Python解释器。它们彼此独立，并且不共享相同的内存。</p>
+<p>关键事实：</p>
+<ul>
+<li>一个新进程独立于第一个进程启动</li>
+<li>充分利用多个CPU和内核</li>
+<li>单独的内存空间</li>
+<li>进程之间不共享内存</li>
+<li>每个进程一个GIL（全局解释器锁），即避免了GIL限制</li>
+<li>非常适合CPU密集型处理</li>
+<li>子进程可中断/可终止</li>
+<li>启动进程慢于启动线程</li>
+<li>更大的内存占用</li>
+<li>IPC（进程间通信）更加复杂</li>
+</ul>
+<h3><span id="xian-cheng">线程</span></h3>
+<p>线程是可以调度执行的进程（也称为“轻量级进程”）中的实体。一个进程可以产生多个线程。主要区别在于，进程中的所有线程共享同一内存。</p>
+<p>关键事实：</p>
+<ul>
+<li>可以在一个进程中产生多个线程</li>
+<li>内存在所有线程之间共享</li>
+<li>启动线程比启动进程要快</li>
+<li>适用于 I/O 密集型任务</li>
+<li>轻量</li>
+<li>内存占用少</li>
+<li>所有线程使用一个GIL，即线程受GIL限制</li>
+<li>由于GIL，多线程处理对CPU密集的任务无效</li>
+<li>不可中断/杀死-&gt;注意内存泄漏</li>
+<li>出现竞态情况的可能性增加</li>
+</ul>
+<h3><span id="python-zhong-de-xian-cheng">Python中的线程</span></h3>
+<p>使用 <code>threading</code> 模块。</p>
+<p>注意：由于受CPU限制，以下示例通常不会从多个线程中受益。 它应显示如何使用线程的示例。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> threading <span class="keyword">import</span> Thread</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">square_numbers</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">        result = i * i</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:        </span><br><span class="line">    threads = []</span><br><span class="line">    num_threads = <span class="number">10</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建线程，并给每一个线程分配函数</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(num_threads):</span><br><span class="line">        thread = Thread(target=square_numbers)</span><br><span class="line">        threads.append(thread)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 启动所有线程</span></span><br><span class="line">    <span class="keyword">for</span> thread <span class="keyword">in</span> threads:</span><br><span class="line">        thread.start()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 等待所有线程结束</span></span><br><span class="line">    <span class="comment"># 阻塞主线程直到所有线程结束</span></span><br><span class="line">    <span class="keyword">for</span> thread <span class="keyword">in</span> threads:</span><br><span class="line">        thread.join()</span><br></pre></td></tr></table></figure>
+<h3><span id="xian-cheng-he-shi-you-yong">线程何时有用</span></h3>
+<p>尽管使用了GIL，但在程序必须与速度较慢的设备（例如硬盘驱动器或网络连接）进行通讯时，它仍可用于 I/O 密集型任务。 通过线程化，程序可以花费时间等待这些设备并同时智能地执行其他任务。</p>
+<p>示例：从多个站点下载网站信息。 为每个站点使用一个线程。</p>
+<h3><span id="duo-jin-cheng">多进程</span></h3>
+<p>使用 <code>multiprocessing</code> 模块。 语法与上面非常相似。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">square_numbers</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">        result = i * i</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    processes = []</span><br><span class="line">    num_processes = os.cpu_count()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建进程，并给每一个线程分配函数</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(num_processes):</span><br><span class="line">        process = Process(target=square_numbers)</span><br><span class="line">        processes.append(process)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 启动所有进程</span></span><br><span class="line">    <span class="keyword">for</span> process <span class="keyword">in</span> processes:</span><br><span class="line">        process.start()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 等待所有进程结束</span></span><br><span class="line">    <span class="comment"># 阻塞主线程直到所有进程结束</span></span><br><span class="line">    <span class="keyword">for</span> process <span class="keyword">in</span> processes:</span><br><span class="line">        process.join()</span><br></pre></td></tr></table></figure>
+<h3><span id="shi-me-shi-hou-duo-jin-cheng-you-yong">什么时候多进程有用</span></h3>
+<p>这对于必须对大量数据执行大量CPU操作且需要大量计算时间的CPU密集型任务很有用。通过多进程，你可以将数据分成相等的部分，然后在不同的CPU上进行并行计算。</p>
+<p>示例：计算从1到1000000的所有数字的平方数。将数字分成相等大小的部分，并对每个子集使用一个过程。</p>
+<h3><span id="gil-quan-ju-jie-shi-qi-suo">GIL-全局解释器锁</span></h3>
+<p>这是一个互斥锁（或锁），仅允许一个线程控制Python解释器。这意味着即使在多线程体系结构中，GIL一次也只允许一个线程执行。</p>
+<h3><span id="wei-shi-me-xu-yao-ta">为什么需要它？</span></h3>
+<p>之所以需要它，是因为CPython（Python的引用实现）的内存管理不是线程安全的。 Python使用引用计数进行内存管理。这意味着在Python中创建的对象具有引用计数变量，该变量跟踪指向该对象的引用数。当此计数达到零时，将释放对象占用的内存。问题在于该引用计数变量需要保护，以防止两个线程同时增大或减小其值的竞争条件。如果发生这种情况，则可能导致从未释放的内存泄漏，或者在仍然存在对该对象的引用的情况下错误地释放了内存。</p>
+<h3><span id="ru-he-bi-mian-gil">如何避免GIL</span></h3>
+<p>GIL在Python社区中引起很大争议。避免GIL的主要方法是使用多线程而不是线程。另一个（但是很不舒服）的解决方案是避免CPython实现，而使用 <code>Jython</code> 或 <code>IronPython</code> 之类的自由线程Python实现。第三种选择是将应用程序的部分移到二进制扩展模块中，即使用Python作为第三方库的包装器（例如在C / C ++中）。这是 <code>numpy</code> 和 <code>scipy</code> 采取的路径。</p>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/Python/">#Python</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-107/" class="prev">PREV</a><a href="/qiwihui-blog-142/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-133/';
+var disqus_title = '15. 多线程和多进程 — Python 进阶';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-133/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

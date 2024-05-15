@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> CPython Internals 笔记 ── 介绍、开发环境设置 · QIWIHUI</title><meta name="description" content="CPython Internals 笔记 ── 介绍、开发环境设置 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-148/index.html"><meta property="og:title" content="CPython Internals 笔记 ── 介绍、开发环境设置"><meta property="og:description" content="CPython Internals 笔记 ── 介绍、开发环境设置"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">CPython Internals 笔记 ── 介绍、开发环境设置</h1><div class="post-info">May 15, 2024<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>4 min. read</span></div><div class="post-content"><h1><span id="jie-shao">介绍</span></h1>
+<p>这本书将涵盖 CPython 内部实现的主要概念，并学习如何：</p>
+<ul>
+<li>阅读和浏览源代码</li>
+<li>从源代码编译 CPython</li>
+<li>更改 Python 语法并将其编译到你的 CPython 版本中</li>
+<li>导航并理解诸如列表、字典和生成器的概念的内部工作原理</li>
+<li>掌握 CPython 的内存管理能力</li>
+<li>使用并行和并发扩展你的 Python 代码</li>
+<li>使用新功能修改核心类型</li>
+<li>运行测试套件</li>
+<li>分析和基准测试 Python 代码和运行时的性能</li>
+<li>像专家一样调试 C 和 Python 代码</li>
+<li>修改或升级 CPython 库的组件并将它们贡献给未来的版本</li>
+</ul>
+<a id="more"></a>
+<h2><span id="zai-xian-zi-yuan">在线资源</span></h2>
+<p><a href="https://realpython.com/cpython-internals/resources/" target="_blank" rel="noopener">CPython Internals resources</a></p>
+<h2><span id="dai-ma-xie-yi">代码协议</span></h2>
+<p>遵循 <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener">Creative Commons Public Domain (CC0) License</a>。</p>
+<blockquote>
+<p>这书中的代码已经在 Windows 10、macOS 10.15 和 Linux 上使用 Python 3.9.0b1 进行了测试。</p>
+</blockquote>
+<h1><span id="she-zhi-kai-fa-huan-jing">设置开发环境</span></h1>
+<p>CPython 源代码大约 65% 是 Python（测试是重要的部分）、24% C，其余是其他语言的混合。</p>
+<h2><span id="she-zhi-visual-studio-code">设置 Visual Studio Code</span></h2>
+<p>从 <a href="https://code.visualstudio.com/" target="_blank" rel="noopener">code.visualstudio.com</a> 下载 Visual Studio Code，并在本地安装。</p>
+<p>推荐的扩展：</p>
+<ul>
+<li><a href="https://github.com/Microsoft/vscode-cpptools" target="_blank" rel="noopener">C/C++(ms-vscode.cpptools)</a> 提供对 C/C++ 的支持，包括 IntelliSense、调试和代码高亮。</li>
+<li><a href="https://github.com/Microsoft/vscode-python" target="_blank" rel="noopener">Python(ms-python.python)</a> 为编辑、调试和阅读 Python 代码提供丰富的 Python 支持。</li>
+<li><a href="https://github.com/vscode-restructuredtext/vscode-restructuredtext" target="_blank" rel="noopener">Restructured Text (lextudio.restructuredtext)</a>  为 reStructuredText（CPython 文档中使用的格式）提供丰富的支持。</li>
+<li><a href="https://github.com/spmeesseman/vscode-taskexplorer" target="_blank" rel="noopener">Task Explorer (spmeesseman.vscode-taskexplorer)</a> 在资源管理器选项卡内添加“任务资源管理器”面板，可以更容易启动 make 任务。</li>
+</ul>
+<h3><span id="pei-zhi-ren-wu-he-qi-dong-wen-jian">配置任务和启动文件</span></h3>
+<p>VS Code 在工作区目录中创建一个文件夹 <code>.vscode</code>。 在此文件夹中，你可以创建：</p>
+<ul>
+<li><code>tasks.json</code> 用于执行项目命令的快捷方式</li>
+<li><code>launch.json</code> 用于配置调试器</li>
+<li>其他特定于插件的文件</li>
+</ul>
+<p>在 <code>.vscode</code> 目录中创建一个 <code>tasks.json</code> 文件，并添加以下内容：</p>
+<p><code>cpython-book-samples/11/tasks.json</code>：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"version"</span>: <span class="string">"2.0.0"</span>,</span><br><span class="line">    <span class="attr">"tasks"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"label"</span>: <span class="string">"build"</span>,</span><br><span class="line">            <span class="attr">"type"</span>: <span class="string">"shell"</span>,</span><br><span class="line">            <span class="attr">"group"</span>: &#123;</span><br><span class="line">                <span class="attr">"kind"</span>: <span class="string">"build"</span>,</span><br><span class="line">                <span class="attr">"isDefault"</span>: <span class="literal">true</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"windows"</span>:&#123;</span><br><span class="line">                <span class="attr">"command"</span>: <span class="string">"PCBuild\build.bat"</span>,</span><br><span class="line">                <span class="attr">"args"</span>: [<span class="string">"-p x64 -c Debug"</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"linux"</span>:&#123;</span><br><span class="line">                <span class="attr">"command"</span>: <span class="string">"make -j2 -s"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"osx"</span>:&#123;</span><br><span class="line">                <span class="attr">"command"</span>: <span class="string">"make -j2 -s"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用任务资源管理器插件，你将在 vscode 组中看到你配置的任务列表。</p>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/Python/">#Python</a><a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">#读书笔记</a><a href="/tags/CPythonInternals/">#CPythonInternals</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-152/" class="prev">PREV</a><a href="/qiwihui-blog-151/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-148/';
+var disqus_title = 'CPython Internals 笔记 ── 介绍、开发环境设置';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-148/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

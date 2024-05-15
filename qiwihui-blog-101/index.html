@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> GitHub Actions 第18天：文件 · QIWIHUI</title><meta name="description" content="GitHub Actions 第18天：文件 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-101/index.html"><meta property="og:title" content="GitHub Actions 第18天：文件"><meta property="og:description" content="GitHub Actions 第18天：文件"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">GitHub Actions 第18天：文件</h1><div class="post-info">Nov 4, 2020<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>3 min. read</span></div><div class="post-content"><p>当你构建执行pull request验证或持续集成构建的工作流时，你通常希望获取该构建输出并保存它，以便以后使用。有时创建一个软件包并将其发布到<a href="https://qiwihui.com/qiwihui-blog-92/">GitHub packages</a>之类的软件包仓库中是有意义的 。但是有时你只想将其存储为构建输出的一部分，以后可以下载。GitHub Actions允许你将文件上传为工作流的一部分，以供日后下载。</p>
+<p>要将文件作为构建的一部分进行上传，可以使用 <a href="https://github.com/actions/upload-artifact" target="_blank" rel="noopener"><code>upload-artifact</code></a> 操作。你可以指定为其创建文件的路径–你可以指定单个文件或文件夹，以及文件的名称。你指定的路径将以你指定的工件名称存档到一个zip文件中。</p>
+<a id="more"></a>
+<p>例如，我可以构建和测试我的项目，然后创建一个nuget包，最后将该nuget包作为文件上传。</p>
+<script src="https://gist.github.com/ethomson/5101813150c57362ee072ee696d60be7.js"></script>
+<p>现在，当我的工作流程运行时，我将在该运行的右上角获得一个选项，向我展示我的文件并让我下载它们。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/79037750-64bd5880-7c06-11ea-8267-76a83bafe0ea.png" alt="image"></p>
+<p>将构建输出作为文件上载可以与包仓库一起使用：我喜欢将CI构建包上载到GitHub packages，并从pull request中创建工件。这使我可以选择在本地运行和测试PR验证构建──我可以将它们作为文件下载──而不会影响我的GitHub Packages帐户。如果你希望选择在本地运行，那很好，即使你很少这样做。</p>
+<p>原文连接：<a href="https://www.edwardthomson.com/blog/github_actions_18_artifacts.html" target="_blank" rel="noopener">https://www.edwardthomson.com/blog/github_actions_18_artifacts.html</a></p>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E7%BF%BB%E8%AF%91/">#翻译</a><a href="/tags/tips/">#tips</a><a href="/tags/github-actions/">#github actions</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-102/" class="prev">PREV</a><a href="/qiwihui-blog-100/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-101/';
+var disqus_title = 'GitHub Actions 第18天：文件';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-101/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

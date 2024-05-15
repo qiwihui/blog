@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> GitHub Actions 第8天：处理过时的 issue · QIWIHUI</title><meta name="description" content="GitHub Actions 第8天：处理过时的 issue - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-91/index.html"><meta property="og:title" content="GitHub Actions 第8天：处理过时的 issue"><meta property="og:description" content="GitHub Actions 第8天：处理过时的 issue"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">GitHub Actions 第8天：处理过时的 issue</h1><div class="post-info">Aug 13, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>5 min. read</span></div><div class="post-content"><p>存储库中存在过时的issue可能是一个很大的危害。如果你有数年不打算解决的issue，那么就很难找到要关注的重要问题。你永远不会合并的pull request使你看起来好像在忽略该项目。项目中的所有这些杂项都增加了无形的认知负担。</p>
+<a id="more"></a>
+<p>在服务行业工作的任何人都会理解此问题。这就像一个厨师的 <em>场面调度连接</em> 的地方──在他们与他们的配料厨房的设置。</p>
+<blockquote>
+<p>如果让你的现场发生故障，变脏和混乱，你会很快发现自己旋转到位并需要备份。我和一位厨师一起工作，他曾经在匆忙中走到排队的肮脏厨师的工作台旁，解释为什么违规的厨师落后了。他将手掌压在切菜板上，切菜板上撒满了胡椒粒，飞溅的酱汁，一些香菜，面包屑以及通常会漂浮在工作台上的漂浮物和抛弃物，如果不时常用潮湿的侧毛巾将其擦掉。“你看到了吗？” 他打了个招呼，抬起他的手掌，这样厨师就可以看到灰尘和碎屑粘在厨师的手掌上。“那就是你现在的脑袋。”</p>
+<p>Anthony Bourdain，厨房机密</p>
+</blockquote>
+<p>当GitHub着手创建Actions平台时，他们希望构建一些对CI/CD工作流程非常有用的东西──构建项目，运行测试并部署它──但这也可以帮助你自动化项目中的常见任务。在这种情况下，请保持存储库的美观和整洁。</p>
+<p><a href="https://qiwihui.com/qiwihui-blog-90/">启动程序工作流程</a>的底部是关闭陈旧issue和 pull request 的工作流程。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/77284675-3258c380-6d0a-11ea-9be3-0b06abf407f8.png" alt="image"></p>
+<p>它会按计划触发运行，因此在每天UTC午夜：</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">schedule:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">cron:</span> <span class="string">"0 0 * * *"</span></span><br></pre></td></tr></table></figure>
+<p>当它运行时，它将运行<a href="https://github.com/actions/stale" target="_blank" rel="noopener">过时的操作</a>，该操作将查看存储库中的issue和pull request，并找到几个月没有执行任何操作的请求。然后它将在问题中发布一条消息，并添加一个标签，指示该问题是过时的。如果该问题再保持一周的陈旧状态，则将其关闭。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/77284876-b6ab4680-6d0a-11ea-99cf-dd4aa447a612.png" alt="image"></p>
+<p>这样可以确保识别出每一个过时的issue，但同时也给人们足够的时间告诉过时的操作以使issue或pull request保持打开状态──许多这些旧issue和PR毕竟具有价值！</p>
+<p>最终，处理过时issue的的工作流程是减少存储库中某些干扰并允许你“工作干净”的简便方法。</p>
+<p>原文链接：<a href="https://www.edwardthomson.com/blog/github_actions_8_stale_issues_and_pull_requests.html" target="_blank" rel="noopener">https://www.edwardthomson.com/blog/github_actions_8_stale_issues_and_pull_requests.html</a></p>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E7%BF%BB%E8%AF%91/">#翻译</a><a href="/tags/tips/">#tips</a><a href="/tags/github-actions/">#github actions</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-56/" class="prev">PREV</a><a href="/qiwihui-blog-135/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-91/';
+var disqus_title = 'GitHub Actions 第8天：处理过时的 issue';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-91/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

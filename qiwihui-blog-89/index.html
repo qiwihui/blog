@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> GitHub Actions 第6天：快速失败的矩阵工作流 · QIWIHUI</title><meta name="description" content="GitHub Actions 第6天：快速失败的矩阵工作流 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-89/index.html"><meta property="og:title" content="GitHub Actions 第6天：快速失败的矩阵工作流"><meta property="og:description" content="GitHub Actions 第6天：快速失败的矩阵工作流"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">GitHub Actions 第6天：快速失败的矩阵工作流</h1><div class="post-info">Aug 13, 2022<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>5 min. read</span></div><div class="post-content"><p>因此，关于 GitHub Actions 的这些帖子甚至还不到一周，我已经写了很多有关 <a href="https://qiwihui.com/qiwihui-blog-85/">矩阵工作流</a> 的文章。如你还没猜到，我是忠实粉丝。 😍</p>
+<p>但是，如果你开始设置第一个矩阵工作流程，那么你需要注意：默认情况下，矩阵工作流程会<a href="https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idstrategyfail-fast" target="_blank" rel="noopener">快速失败</a>。这就是说：如果矩阵扩展中的一个作业失败，则其余作业将被取消。</p>
+<p>这种行为通常非常有益：如果你正在运行 pull request 验证构建，而矩阵中的构建之一失败，则你可能根本不在乎其余的构建是否成功。任何失败都足以表明存在使你无法合并 PR 的问题。</p>
+<a id="more"></a>
+<p>但是，当你从头开始创建工作流时，可能需要迭代一下才能使其第一次正常工作。当作业失败是由于工作流设置中存在问题而不是代码本身存在问题时，关闭快速故障行为作为调试工具会很有帮助。</p>
+<p>假设你有一个在 Linux 上运行良好的工作流程，并且希望使用矩阵将其扩展到可以在 macOS 和 Windows 上运行。对于简单的工作流程，这可能会正常工作。但是对于更复杂的事情，你可能需要先设置一些依赖项或安装一些工具，然后才能起作用。因此，很可能你的Linux上运行的工作流如果不做一些修改就无法在 macOS 或 Windows 上运行。</p>
+<p>那么，当你第一次运行此新矩阵工作流时会发生什么？你的 Linux，macOS 和 Windows 作业将全部启动，并且 macOS 作业或 Windows 作业将失败，其余工作流程将被取消。</p>
+<p>想象一下，首先失败的是 Windows 作业。你会看到的：</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/77217607-b9693880-6b5e-11ea-91df-11d70a9388f1.png" alt="image"></p>
+<p>好的，因此你决定需要修复 Windows 工作流程。 因此，你可以查看出了什么问题，更新工作流程，然后推送更改以将新构建放入队列。 但是，由于排队和调度不是很确定，因此也许这次 macOS 构建首先完成──失败。 现在，你的 Windows 运行被取消，甚至无法找出它是否有效：</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/77217652-0220f180-6b5f-11ea-99bb-0bcf357f6db1.png" alt="image"></p>
+<p>现在，在调试工作流时，可以通过设置 <code>fail-fast: false</code> 来关闭此行为：</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">strategy:</span></span><br><span class="line">  <span class="attr">matrix:</span></span><br><span class="line">    <span class="attr">os:</span> <span class="string">[ubuntu-latest,</span> <span class="string">macos-latest,</span> <span class="string">windows-latest]</span></span><br><span class="line">  <span class="attr">fail-fast:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>现在，工作流不会在第一个失败的作业时被取消。它将允许 Windows 和 macOS 作业运行完成。</p>
+<p><img src="https://user-images.githubusercontent.com/3297411/77217688-48765080-6b5f-11ea-9fad-063aecf682f5.png" alt="image"></p>
+<p>关闭 <code>fail-fast</code> 将帮助你更轻松地迭代工作流程。准备好在生产中运行时，请务必将其重新打开！这将帮助你节省CI运行时间（和金钱）。</p>
+<p>原文链接：<a href="https://www.edwardthomson.com/blog/github_actions_6_fail_fast_matrix_workflows.html" target="_blank" rel="noopener">https://www.edwardthomson.com/blog/github_actions_6_fail_fast_matrix_workflows.html</a></p>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a><a href="/tags/%E7%BF%BB%E8%AF%91/">#翻译</a><a href="/tags/tips/">#tips</a><a href="/tags/github-actions/">#github actions</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-88/" class="prev">PREV</a><a href="/qiwihui-blog-98/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-89/';
+var disqus_title = 'GitHub Actions 第6天：快速失败的矩阵工作流';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-89/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

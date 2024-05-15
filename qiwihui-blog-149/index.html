@@ -1,0 +1,113 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> CPython Internals 笔记 ── 编译 Python · QIWIHUI</title><meta name="description" content="CPython Internals 笔记 ── 编译 Python - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-149/index.html"><meta property="og:title" content="CPython Internals 笔记 ── 编译 Python"><meta property="og:description" content="CPython Internals 笔记 ── 编译 Python"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">CPython Internals 笔记 ── 编译 Python</h1><div class="post-info">May 15, 2024<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><span>12 min. read</span></div><div class="post-content"><p>现在你已经下载了 CPython 开发环境并对其进行了配置，你可以将 CPython 源代码编译成一个可执行的解释器。</p>
+<p>与 Python 文件不同，C 源代码每次更改时都必须重新编译。</p>
+<p>在前一章中，我们已经设置开发环境，并设置了运行“Build”阶段的选项，该选项将重新编译 CPython。
+在构建步骤工作之前，你需要一个 C 编译器和一些构建工具。
+使用的工具取决于你使用的操作系统。</p>
+<a id="more"></a>
+<blockquote>
+<p>如果你担心这些步骤中的任何一个会干扰您现有的 CPython 安装，请不要担心。CPython 源目录的行为就像一个虚拟环境。</p>
+<p>对于编译 CPython、修改源代码和标准库，这些都保留在源目录的沙箱中。</p>
+<p>如果要安装自定义版本，本章也将介绍此步骤。</p>
+</blockquote>
+<h2><span id="zai-macos-xi-tong-shang-bian-yi-cpython">在 macOS 系统上编译 CPython</span></h2>
+<p>在 macOS 上编译 CPython 需要一些额外的应用程序和库。你首先需要基本的 C 编译器工具包。
+“Command Line Development Tools” 是一个可以在 macOS 中通过 App Store 更新的应用程序。
+你需要在终端上执行初始安装。</p>
+<p>在终端中，通过运行以下命令安装 C 编译器和工具包：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ xcode-select --install</span><br></pre></td></tr></table></figure>
+<p>该命令会弹出一个提示，提示下载并安装一组工具，包括 Git、Make 和 GNU C 编译器。</p>
+<p>你还需要一份 <a href="https://www.openssl.org/" target="_blank" rel="noopener">OpenSSL</a> 的工作副本，用于从 <a href="http://PyPi.org" target="_blank" rel="noopener">PyPi.org</a> 网站获取包。
+如果你以后计划使用此构建版本来安装其他软件包，则需要进行 SSL 验证。</p>
+<p>在 macOS 上安装 OpenSSL 的最简单方法是使用 <a href="https://brew.sh/" target="_blank" rel="noopener">Homebrew</a>。</p>
+<p>可以使用一下命令安装 Homebrew：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ /usr/bin/ruby -e <span class="string">"<span class="variable">$(curl -fsSL \</span></span></span><br><span class="line"><span class="string"><span class="variable"> https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></span><br></pre></td></tr></table></figure>
+<p>一旦安装完成，你就可以使用 <code>brew install</code> 命令来安装所需的工具。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ brew install openssl xz zlib gdbm sqlite</span><br></pre></td></tr></table></figure>
+<p>现在你已经安装了依赖项，你可以运行 <code>configure</code> 脚本。
+Homebrew 有一个命令 <code>brew --prefix [package]</code> ，它将给出安装包的目录。
+你将通过编译 Homebrew 使用的位置来启用对 SSL 的支持。</p>
+<p>标志 <code>--with-pydebug</code> 启用调试挂钩。如果你打算出于开发或测试目的进行调试，请添加此项。</p>
+<p>配置阶段只需要运行一次，同时指定 <code>zlib</code> 包的位置：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ CPPFLAGS=<span class="string">"-I<span class="variable">$(brew --prefix zlib)</span>/include"</span> \</span><br><span class="line"> LDFLAGS=<span class="string">"-L<span class="variable">$(brew --prefix zlib)</span>/lib -L<span class="variable">$(brew --prefix bzip2)</span>/lib"</span> \</span><br><span class="line"> ./configure --with-openssl=$(brew --prefix openssl) --with-pydebug</span><br></pre></td></tr></table></figure>
+<p>运行 <code>configure</code> 将在存储库的根目录中生成一个 <code>Makefile</code>，你可以使用它来自动化构建过程。</p>
+<p>你现在可以通过运行一下命令来构建 CPython 二进制文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ make -j2 -s</span><br></pre></td></tr></table></figure>
+<p>在构建过程中，你可能会收到一些错误。在构建摘要中，<code>make</code> 会通知你并非所有包都已构建。
+例如，<code>ossaudiodev</code>、<code>spwd</code> 和 <code>_tkinter</code> 将无法使用这组指令进行构建。
+如果你不打算针对这些软件包进行开发，那也没关系。
+如果是，请查看<a href="https://devguide.python.org/" target="_blank" rel="noopener">官方开发指南</a>网站以获取更多信息。</p>
+<p>构建将需要几分钟并生成一个名为 <code>python.exe</code> 的二进制文件。每次对源代码进行更改时，
+你都会需要使用相同的标志重新运行 <code>make</code>。
+<code>python.exe</code> 二进制文件是 CPython 的调试二进制文件。
+执行 <code>python.exe</code> 以查看有效的 REPL：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ./python.exe</span><br><span class="line">Python 3.9.0b1 (tags/v3.9.0b1:97fe9cf, May 19 2020, 10:00:00)</span><br><span class="line">[Clang 10.0.1 (clang-1001.0.46.4)] on darwin</span><br><span class="line">Type <span class="string">"help"</span>, <span class="string">"copyright"</span>, <span class="string">"credits"</span> or <span class="string">"license"</span> <span class="keyword">for</span> more information.</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>是的，没错，macOS 版本的文件扩展名为 <code>.exe</code>。 这个扩展<em>不是</em>因为它是 Windows 二进制文件！
+因为 macOS 有一个不区分大小写的文件系统，并且在使用二进制文件时，
+开发人员不希望人们不小心引用 <code>Python/</code> 目录，因此附加了 <code>.exe</code> 以避免歧义。
+如果你稍后运行 <code>make install</code> 或 <code>make altinstall</code>，
+它将在将文件安装到你的系统之前将文件重命名回 python。</p>
+</blockquote>
+<h2><span id="pei-zhi-wen-jian-yin-dao-you-hua">配置文件引导优化</span></h2>
+<p>macOS、Linux 和 Windows 构建过程具有“PGO”或“Profile Guided Optimization”标志。
+PGO 不是 Python 团队创建的东西，而是许多编译器的特性，包括 CPython 使用的编译器。</p>
+<p>PGO 的工作方式是进行初始编译，然后通过运行一系列测试来分析应用程序。
+然后分析创建的配置文件，编译器将对二进制文件进行更改以提高性能。</p>
+<p>对于 CPython，分析阶段运行 <code>python -m test --pgo</code>，
+它执行在 <code>Lib/test/libregrtest/pgo.py</code> 中指定的回归测试。
+这些测试是专门选择的，因为它们使用常用的 C 扩展模块或类型。</p>
+<blockquote>
+<p>PGO 过程非常耗时，因此在整本书中，我将其排除在推荐步骤列表之外，以缩短编译时间。
+如果要将自定义编译版本的 CPython 分发到生产环境中，
+则应在 Linux 和 macOS 中使用 <code>--with-pgo</code> 标志运行 <code>./configure</code>，
+并在 Windows 上使用 <code>--pgo</code> 标志运行 <code>build.bat</code>。</p>
+</blockquote>
+<p>由于优化特定于执行配置文件的平台和架构，因此无法在操作系统或 CPU 架构之间共享 PGO 配置文件。
+<a href="http://python.org" target="_blank" rel="noopener">python.org</a> 上的 CPython 发行版已经通过 PGO，所以如果你在编译的二进制文件上运行基准测试，
+它会比从 <a href="http://python.org" target="_blank" rel="noopener">python.org</a> 下载的要慢。</p>
+<p>Windows、macOS 和 Linux 配置文件引导的优化包括以下检查和改进：</p>
+<ul>
+<li><strong>函数内联</strong> ── 如果函数被另一个函数定期调用，那么它将被“内联”以减少堆栈大小。</li>
+<li><strong>虚拟调用推测和内联</strong> ── 如果一个虚拟函数调用频繁地针对某个函数，
+PGO 可以插入一个有条件执行的对该函数的直接调用。然后可以内联直接调用。</li>
+<li><strong>寄存器分配优化</strong> ── 基于配置文件数据结果，PGO 将优化寄存器分配。</li>
+<li><strong>基本块优化</strong> ── 基本块优化允许在给定帧内临时执行的共同执行的基本块放置在同一组页面（局部性）中。
+它最大限度地减少了使用的页面数量，从而最大限度地减少了内存开销。</li>
+<li><strong>热点优化</strong> ── 程序花费最多执行时间的函数可以优化速度。</li>
+<li><strong>函数布局优化</strong> ── 在分析调用图之后，倾向于沿着相同执行路径的函数被移动到编译应用程序的同一部分。</li>
+<li><strong>条件分支优化</strong> - PGO 可以查看决策分支，如 <code>if..else if</code> 或 <code>switch</code> 语句，并找出最常用的路径。
+例如，如果 <code>switch</code> 语句中有 10 个 <code>case</code>，其中一个使用了 95% 的时间，那么它会被移到顶部，以便在代码路径中立即执行。</li>
+<li><strong>死点分离</strong> ── 在 PGO 期间未调用的代码被移动到应用程序的单独部分。</li>
+</ul>
+<h2><span id="jie-lun">结论</span></h2>
+<p>在本章中，你已经了解了如何将 CPython 源代码编译成可工作的解释器。
+在探索和改编源代码时，你可以在整本书中使用这些知识。</p>
+<p>在使用 CPython 时，你可能需要重复编译步骤数十次甚至数百次。
+如果你可以调整你的开发环境来创建重新编译的快捷方式，最好现在就这样做，这样可以节省大量时间。</p>
+<blockquote>
+<p>GitHub repo: <a href="https://github.com/qiwihui/blog" target="_blank" rel="noopener">qiwihui/blog</a></p>
+<p>Follow me: <a href="https://github.com/qiwihui" target="_blank" rel="noopener">@qiwihui</a></p>
+<p>Site: <a href="https://qiwihui.com">QIWIHUI</a></p>
+</blockquote>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/Python/">#Python</a><a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">#读书笔记</a><a href="/tags/CPythonInternals/">#CPythonInternals</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-151/" class="prev">PREV</a><a href="/qiwihui-blog-162/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-149/';
+var disqus_title = 'CPython Internals 笔记 ── 编译 Python';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-149/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>

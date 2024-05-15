@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 使用 Git Hooks 实现项目自动部署 · QIWIHUI</title><meta name="description" content="使用 Git Hooks 实现项目自动部署 - qiwihui"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/nella.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-8935595858652656",
+enable_page_level_ads: true
+});
+</script><link rel="search" type="application/opensearchdescription+xml" href="https://qiwihui.com/atom.xml" title="QIWIHUI"><meta property="og:site_name" content="QIWIHUI"><meta property="og:url" content="https://qiwihui.com/qiwihui-blog-18/index.html"><meta property="og:title" content="使用 Git Hooks 实现项目自动部署"><meta property="og:description" content="使用 Git Hooks 实现项目自动部署"><meta property="og:type" content="article"><script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/images/avatar.jpg" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/about/" target="_self" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="/search/" target="_self" class="nav-list-link">SEARCH</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">HOME</a></li><li class="nav-list-item"><a href="/projects/" target="_self" class="nav-list-link">PROJECTS</a></li><li class="nav-list-item"><a href="/tags/" target="_self" class="nav-list-link">TAGS</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="/links/" target="_self" class="nav-list-link">LINKS</a></li><!--li.nav-list-item--><!--    a.nav-list-link(class="search" href=url_for("search") target="_self") SEARCH--></ul></header><main class="container"></main><div class="post"><article class="post-block"><h1 class="post-title">使用 Git Hooks 实现项目自动部署</h1><div class="post-info">Oct 9, 2018<span class="categories"><i class="fa fa-bookmark" aria-hidden="true"></i></span><a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">#技术</a><span>7 min. read</span></div><div class="post-content"><p>自动化部署解放双手，发展生产力，更重要的是可以减少部署过程中的错误操作。</p>
+<a id="more"></a>
+<p>之前使用git做为我博客的版本控制，使用Github Pages托管我的博客，所以部署方面都交给了github，
+但是当我要部署另一个web应用时，显然要部署在自己的VPS上，把VPS做为git服务器的同时，每次push
+代码到服务器上都要手动运行一次脚本更新服务，这样做简直劳神伤力。</p>
+<p>幸运的是Git提供了Hook机制用来帮助我们实现自动部署。Hooks分为客户端和服务端，可以用来处理不同
+的工作，这些hooks都被存储在 Git 目录下的hooks子目录中，
+即大部分项目中的<code>.git/hooks</code>。 Git 默认会放置一些脚本样本在这个目录中，除了可以作为hooks使用，
+这些样本本身是可以独立使用的，这些样本名都是以.sample结尾，必须重新命名。</p>
+<p>这次主要用到服务端的hooks: <code>post-receive</code>。当用户在本地仓库执行<code>git push</code>命令时，服务器上运端
+仓库就会对应执行<code>git receive pack</code>命令；在所有远程仓库的引用(ref)都更新后，这个钩子就会被调用。
+与之对应的是<code>pre-receive</code>，这个会在更新之前被调用。</p>
+<p>环境要求：</p>
+<ol>
+<li>要求客户端和服务端都有git环境，而且服务端最好已经部署好了；</li>
+<li>能连上服务器</li>
+</ol>
+<h2><span id="0x01-shi-jian">0x01 实践</span></h2>
+<p>我们的实践过程会按照下边的过程实施：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">+------------------------+          +------------------------+</span><br><span class="line">|                        |          |                        |</span><br><span class="line">|  +-----------------+   |   push   |  +-------------------+ |</span><br><span class="line">|  |local repository |---+----------+-&gt;| remote repository | |</span><br><span class="line">|  +-----------------+   |          |  +-------------------+ |</span><br><span class="line">|                        |          |             |          |</span><br><span class="line">+------------------------+          |             |pull      |</span><br><span class="line">                                    |             V          |</span><br><span class="line">     local machine                  |  +-------------------+ |</span><br><span class="line">                                    |  |     deployment    | |</span><br><span class="line">                                    |  +-------------------+ |</span><br><span class="line">                                    |                        |</span><br><span class="line">                                    +------------------------+</span><br><span class="line"></span><br><span class="line">                                             server</span><br></pre></td></tr></table></figure>
+<h4><span id="zai-server-shang-chu-shi-hua-yi-ge-yuan-cheng-luo-cang-ku">在server上初始化一个远程裸仓库：</span></h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~</span><br><span class="line">$ mkdir remoteRepo</span><br><span class="line">$ <span class="built_in">cd</span> remoteRepo</span><br><span class="line">$ git init --bare webapp.git</span><br></pre></td></tr></table></figure>
+<h4><span id="zai-server-shang-chu-shi-hua-yi-ge-ben-di-cang-ku-zuo-wei-web-app-de-dai-ma">在server上初始化一个本地仓库，做为web app的代码：</span></h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~</span><br><span class="line">$ mkdir deployment</span><br><span class="line">$ <span class="built_in">cd</span> deployment</span><br><span class="line">$ git <span class="built_in">clone</span> ~/remoteRepo/webapp.git webapp</span><br></pre></td></tr></table></figure>
+<h4><span id="wei-yuan-cheng-cang-ku-tian-jia-hook">为远程仓库添加hook：</span></h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/remoteRepo/webapp.git/hooks</span><br><span class="line">$ vim post-receive</span><br><span class="line">$ cat post-receive</span><br></pre></td></tr></table></figure>
+<p><code>post-receive</code>中的命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line"># Check the remote git repository whether it is bare</span><br><span class="line">IS_BARE=$(git rev-parse --is-bare-repository)</span><br><span class="line">if [ -z &quot;$IS_BARE&quot; ]; then</span><br><span class="line">    echo &gt;&amp;2 &quot;fatal: post-receive: IS_NOT_BARE&quot;</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">unset GIT_DIR</span><br><span class="line"># current user is git</span><br><span class="line">DeployPath=/home/git/deployment/webapp</span><br><span class="line">if [ ! -d $DeployPath ] ; then</span><br><span class="line">    echo &gt;&amp;2 &quot;fatal: post-receive: DEPLOY_DIR_NOT_EXIST: \&quot;$DeployPath\&quot;&quot;</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">cd $DeployPath</span><br><span class="line">git add . -A &amp;&amp; git stash</span><br><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
+<p>为<code>post-receive</code>添加可执行权限</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chmod +x post-receive</span><br></pre></td></tr></table></figure>
+<h4><span id="wei-local-machined-de-ben-di-cang-ku-tian-jia-yuan-cheng-cang-ku-yuan">为local machined的本地仓库添加远程仓库源：</span></h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> &lt;your-local-repository-folder&gt;</span><br><span class="line">$ git remote add deploy git@&lt;server.ip&gt;:/home/git/remoteRepo/webapp.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># then you need to merge conflict between local changes and deploy/master before you push it.</span></span><br><span class="line"><span class="comment"># 'git merge remotes/deploy/master' or some other git commands.</span></span><br><span class="line"></span><br><span class="line">$ git push deploy master</span><br></pre></td></tr></table></figure>
+<p>或者从头开始创建一个项目：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+<p>这样，当我们在本地完成更新并push到server上时，这些代码就会被自动更新。</p>
+<h2><span id="0x02-hou-lai">0x02 后来</span></h2>
+<h4><span id="gai-jin-1">改进1</span></h4>
+<p>可以在最初在server上创建裸仓库时使用local machine上的现有项目，即将local machine上
+的项目仓库导出为裸仓库 — 即一个不包含当前工作目录的仓库：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> --bare my_project my_project.git</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ cp -Rf my_project/.git my_project.git</span><br></pre></td></tr></table></figure>
+<p>然后将这个裸仓库移到server上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ scp -r my_project.git git@&lt;server.ip&gt;:/home/git/remoteRepo</span><br></pre></td></tr></table></figure>
+<p>之后，其他人要进行更新时就可以clone这个项目了：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git@&lt;server.ip&gt;:/home/git/remoteRepo/my_project.git</span><br></pre></td></tr></table></figure>
+<h4><span id="gai-jin-2">改进2</span></h4>
+<p>有一种情况是当本地更新了webapp，结果push到远程仓库后这个更新被reset了（虽然我觉得这个问题应该避免，
+但是还是有可能发生），这是，简单地在hook中使用<code>git push deploy master</code>是无法完成这个过程的，因为
+远端的代码版本低于deploy端的代码版本，再使用pull的时候就不能实现同步，这时就应该使用另一种方式
+更新代码：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git fetch --all</span><br><span class="line">git reset --hard origin/master</span><br></pre></td></tr></table></figure>
+<p>即<code>git reset</code>把HEAD 指向了新下载的未合并的节点，也就是在local machine上reset之后的。</p>
+<p>参考：<a href="http://blog.csdn.net/a06062125/article/details/11727273" target="_blank" rel="noopener">git 放弃本地修改 强制更新</a></p>
+<h3><span id="comments">Comments</span></h3>
+</div><p class="post-tags"><i class="fa fa-tags" aria-hidden="true"></i><a href="/tags/%E6%8A%80%E6%9C%AF/">#技术</a></p></article></div><div class="post-copyright"><blockquote><p>版权声明：本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">署名-相同方式共享 | CC BY-SA 4.0 </a>许可协议。</p></blockquote></div><footer><div class="paginator"><a href="/qiwihui-blog-19/" class="prev">PREV</a><a href="/qiwihui-blog-17/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'blog-qiwihui-com';
+var disqus_identifier = 'qiwihui-blog-18/';
+var disqus_title = '使用 Git Hooks 实现项目自动部署';
+var disqus_url = 'https://qiwihui.com/qiwihui-blog-18/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//blog-qiwihui-com.disqus.com/count.js" async></script><!-- block copyright--></footer></div><script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ["script","noscript","style","textarea","code","pre"]
+    }
+});
+</script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-46660488-3",'auto');ga('send','pageview');</script><link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css" media="screen" type="text/css"><script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script><script>$(function(){$('.datatable').dataTable( {"order": [[ 0, "desc" ]],"iDisplayLength": -1,"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]} );});</script></body></html>
