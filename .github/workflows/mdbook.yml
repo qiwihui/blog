@@ -7,10 +7,9 @@ name: Deploy blog to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    branches: ["master"]
     paths:
       - "src/**"
-      - "po/**"
       - "theme/**"
       - "justfile"
       - "book.toml"
