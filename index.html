@@ -1,0 +1,569 @@
+<!DOCTYPE HTML>
+<html lang="cn" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>README - World of Z2O-K7E</title>
+
+
+        <!-- Custom HTML head -->
+        <meta property="og:title" content="../index.md" />
+        <meta name="description" content="零知世界">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./mdbook-admonish.css">
+        <link rel="stylesheet" href="theme/css/mdbook-admonish.css">
+        <link rel="stylesheet" href="theme/css/open-in.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../index.html" class="active">README</a></li><li class="spacer"></li><li class="chapter-item "><a href="zk-everything/zk-roadmap.html">ZKP 新手村入门攻略</a></li><li class="spacer"></li><li class="chapter-item "><a href="zkp-intro/toc.html">探索零知识证明系列</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="zkp-intro/1/zkp-back.html">（一）初识「零知识」与「证明」</a></li><li class="chapter-item "><a href="zkp-intro/2/zkp-simu.html">（二）理解「模拟」</a></li><li class="chapter-item "><a href="zkp-intro/3/zkp-pok.html">（三）寻找「知识」</a></li><li class="chapter-item "><a href="zkp-intro/4/zkp-rom.html">（四）随机「挑战」</a></li><li class="chapter-item "><a href="zkp-intro/5/zkp-crs.html">（五）埋藏「秘密」</a></li><li class="spacer"></li></ol></li><li class="chapter-item "><a href="plonk-intro-cn/plonk-intro.html">理解Plonk系列</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="plonk-intro-cn/plonk-arithmetization.html">1-Plonkish Arithmetization</a></li><li class="chapter-item "><a href="plonk-intro-cn/plonk-lagrange-basis.html">2-多项式编码</a></li><li class="chapter-item "><a href="plonk-intro-cn/plonk-permutation.html">3-置换证明</a></li><li class="chapter-item "><a href="plonk-intro-cn/plonk-constraints.html">4-算术约束与拷贝约束</a></li><li class="chapter-item "><a href="plonk-intro-cn/plonk-polycom.html">5-多项式承诺</a></li><li class="chapter-item "><a href="plonk-intro-cn/plonk-randomizing.html">6-实现  Zero Knowledge</a></li><li class="chapter-item "><a href="plonk-intro-cn/plonk-lookup.html">7-Lookup Gate</a></li><li class="spacer"></li></ol></li><li class="chapter-item "><a href="zk-snarks/toc.html">从零开始学习 zk-SNARK</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="zk-snarks/1-Polynomial-Interaction-and-Proof.html">1-Polynomial-Interaction-and-Proof</a></li><li class="chapter-item "><a href="zk-snarks/2-Non-interactivity&Distributed-Setup.html">2-Non-interactivity&Distributed-Setup</a></li><li class="chapter-item "><a href="zk-snarks/3-General-Purpose-Computation.html">3-General-Purpose-Computation</a></li><li class="chapter-item "><a href="zk-snarks/4-Construction-Properties.html">4-Construction-Properties.md</a></li><li class="chapter-item "><a href="zk-snarks/5-Pinocchio-Protocol.html">5-Pinocchio-Protocol</a></li><li class="spacer"></li></ol></li><li class="chapter-item "><a href="halo2/halo2.html">Halo2</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="halo2/chap-1/index.html">Chap-1</a></li><li class="chapter-item "><div>Chap-2 (editing...)</div></li><li class="chapter-item "><a href="halo2/tmp/halo2-learning-materials.html">Appendix-learning-materials</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="halo2/tmp/1-Simple-Example.html">1-Simple Examples</a></li><li class="chapter-item "><a href="halo2/tmp/2-Fibonacci-example-1.html">2-Fibonacci-example-1</a></li><li class="chapter-item "><a href="halo2/tmp/3-Fibonacci-example-2.html">3-Fibonacci-example-2</a></li><li class="chapter-item "><a href="halo2/tmp/4-IsZero-Check-example-3.html">4-IsZero Check-example-3</a></li><li class="chapter-item "><a href="tmp/halo2/5-Range-check.html">5-Range check-example-1.md</a></li><li class="chapter-item "><a href="halo2/tmp/6-Range-Check(code-explanation).html">6-Range Check (code explanation)</a></li><li class="chapter-item "><a href="halo2/tmp/7-Range-Check-lookup(example-2).html">7-Range-Check-Lookup-example-2)</a></li><li class="chapter-item "><a href="halo2/tmp/8-Range-Check(example-3).html">8-Range-Check-Lookup-example-3)</a></li><li class="chapter-item "><a href="halo2/tmp/9-decomposed.html">9-Range-Check-Decompose)</a></li><li class="chapter-item "><a href="halo2/tmp/ZKP-APP.html">ZKP Apps with halo2</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="halo2/tmp/Zordle.html">Zordle</a></li><li class="chapter-item "><a href="halo2/tmp/Hammster.html">Hammster</a></li><li class="spacer"></li></ol></li></ol></li></ol></li><li class="chapter-item "><a href="zk-everything/toc.html">zk-everything</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="zk-everything/BabySNARK tutorial.html">BabySNARK tutorial</a></li><li class="chapter-item "><a href="zk-everything/zk-learning-miles/KZG.html">KZG</a></li><li class="chapter-item "><a href="zk-everything/zk-learning-miles/Lecture1:Overview about Zeroknowledge.html">Lecture1:Overview about Zeroknowledge</a></li><li class="chapter-item "><a href="zk-everything/zk-learning-miles/Lecture2:Introduction to Modern SNARKs.html">Lecture2:Introduction to Modern SNARKs</a></li><li class="chapter-item "><a href="zk-everything/zk-learning-miles/Lecture12:ZKEVM.html">Lecture12:ZKEVM</a></li><li class="chapter-item "><a href="zk-everything/zk-learning-miles/Lecture16:Hardware acceleration.html">Lecture16:Hardware acceleration</a></li><li class="chapter-item "><a href="zk-everything/zk-everything-joe/GKR_with_ZK_Argument.html">Spartan preliminary: GKR with ZK Argument</a></li><li class="chapter-item "><a href="zk-everything/zk-everything-joe/Hyrax.html">Spartan preliminary: Hyrax</a></li><li class="chapter-item "><a href="zk-everything/zk-everything-joe/Spartan.html">Spartan In Depth</a></li><li class="chapter-item "><a href="Nova/SuperNova.html">SuperNova</a></li><li class="spacer"></li></ol></li><li class="chapter-item "><a href="public goods/toc.html">ZKP Public Goods</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="public goods/第二章.html">ch2</a></li><li class="chapter-item "><a href="public goods/4-Proving-System.html">ch4-Proving System</a></li><li class="chapter-item "><a href="public goods/5-plonk-intro.html">ch5-plonk-intro</a></li><li class="spacer"></li></ol></li><li class="chapter-item "><a href="materials/ZK-Materials.html">ZK Materials</a></li><li class="spacer"></li><li class="chapter-item "><a href="exp/toc.html">经验心得</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="exp/guoyu.html">郭宇：ZK 技术的学习心得和经验分享</a></li><li class="chapter-item "><a href="exp/freeyao.html">对话姚翔：解读零知识证明的前世今生</a></li><li class="chapter-item "><a href="https://zhuanlan.zhihu.com/p/268305208.html">邓燚：零知识，模拟与归约（一个个人化的视角）</a></li><li class="spacer"></li></ol></li><li class="chapter-item "><a href="zkp-space/toc.html">ZKP Space</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="zkp-space/2023-10-22-zkp-coprocessor.html">2023.10.12: 聊聊 ZKP Coprocessor</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">World of Z2O-K7E</h1>
+
+                    <div class="right-buttons">
+                        <button id="lang-toggle" class="icon-button" type="button" title="Change Language" aria-label="Change Language" aria-haspopup="true" aria-expanded="false" aria-controls="lang-list">
+                            <i class="fa fa-globe"></i>
+                        </button>
+                        <ul id="lang-list" class="theme-popup" style="left: auto;" aria-label="Languages" role="menu">
+                            <li role="none"><button role="menuitem" class="theme"><a id="lang-cn">中文</a></button></li>
+                            <li role="none"><button role="menuitem" class="theme"><a id="lang-en">English</a></button></li>
+                        </ul>
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/zkp-co-learning/zkp-co-learning.github.io" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/zkp-co-learning/zkp-co-learning.github.io/edit/main/src/../README.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <div class="sidetoc"><nav class="pagetoc"></nav></div>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<p><span style="color: grey;"><strong>Welcome to the</strong></span></p>
+<p><img src="logo.png" alt="" /></p>
+<p><span style="color: grey;"><strong>World!</strong></span></p>
+<!-- 这边 logo 的寻址地点是 .src , 所以本地 MD 渲染不会显示，mkbook serve --open 能看到就好了-->
+<br />
+<blockquote>
+<p><a href="https://github.com/zkp-co-learning">github</a> of <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8556em;vertical-align:-0.1667em;"></span><span class="mord"><span class="mord mathcal" style="margin-right:0.07944em;">Z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0794em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathbb">O</span><span class="mspace"> </span><span class="mord"><span class="mord text"><span class="mord">-</span></span></span><span class="mspace"> </span><span class="mord"><span class="mord mathcal" style="margin-right:0.01445em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0144em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">7</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathbb">E</span></span></span></span></p>
+</blockquote>
+<br />
+<h3 id="给贡献者的小帖士"><a class="header" href="#给贡献者的小帖士">「给贡献者的小帖士」</a></h3>
+<h4 id="贡献流程"><a class="header" href="#贡献流程">贡献流程</a></h4>
+<ol>
+<li>Github 上 fork 本 <a href="https://github.com/zkp-co-learning/zkp-co-learning.github.io">Repo</a></li>
+<li>可以在 <code>./src/zk-everything</code> 下 <code>mkdir</code> 一个以自己名字命名的文件夹</li>
+<li><code>src/SUMMARY.md</code> 是前端网站显示的文件组织目录，可以修改该文件，找到一个合适的放置目录，将文章的本地 <code>.md</code> 文件位置链接过去</li>
+<li>正常的 PR 流程</li>
+<li>经老师们审核后领取 Bounty！</li>
+</ol>
+<h4 id="文章格式"><a class="header" href="#文章格式">文章格式</a></h4>
+<h5 id="内容模板"><a class="header" href="#内容模板">内容模板:</a></h5>
+<ol>
+<li>文章 metadata ，如 「贡献者作者信息 (required）」，  「标签、联系方式 (optional） 」</li>
+</ol>
+<pre><code class="language-bash">&gt; 作者: 如 @大壮 https://github.com/dazhuang      
+&gt; 标签: 如 halo2, Nova, STARK, Folding schema .... # mdbook 暂不支持 tag 功能
+&gt; 时间: 2023-09-10
+</code></pre>
+<blockquote>
+<p>作者：<a href="https://github.com/Demian101">Demian</a></p>
+</blockquote>
+<p>or</p>
+<blockquote>
+<p>Author: <a href="https://github.com/Demian101">Demian</a></p>
+</blockquote>
+<ol start="2">
+<li>文章开始之前，可以添加 <code>[TOC] </code>来生成该文章的 Table of contents（目录）</li>
+</ol>
+<pre><code class="language-bash">[TOC]
+</code></pre>
+<ol start="3">
+<li>可添加admonition block，语法见<a href="https://tommilligan.github.io/mdbook-admonish/">这里</a></li>
+</ol>
+<div id="admonition-default" class="admonition admonish-success">
+<div>
+<p>This will take a while, go and grab a drink of water.</p>
+</div>
+</div>
+<ol start="4">
+<li>
+<p>文章正文（Markdown 格式的正文内容，无需担心 github 糟糕的渲染）</p>
+</li>
+<li>
+<p>文章末尾可以列出 「致谢」 &amp; 「参考文献 References」</p>
+</li>
+</ol>
+<pre><code># References
+ - [trapdoor-tech halo2 book](https://trapdoor-tech.github.io/halo2-book-chinese/user/simple-example.html)
+ - [icemelon/HaiCheng Shen](https://github.com/icemelon/halo2-examples/blob/master/src/fibonacci/example3.rs)
+ - [0xPARC halo2](https://learn.0xparc.org/)
+</code></pre>
+<hr />
+<p>如何添加图片？</p>
+<ul>
+<li>推荐直接在 <code>.md</code> 文章同级目录 <code>mkdir ./imgs</code> 目录，mdbook 中直接引用该 imgs 目录相对路径</li>
+<li>如果您使用的是 OSS 云存储，则无需考虑图片存储，只需一个 <code>.md</code> 文件即可~</li>
+</ul>
+<h5 id="配套代码optional"><a class="header" href="#配套代码optional">配套代码(optional)</a></h5>
+<p>如果文章有对应的实战代码那就再好不过啦！</p>
+<p>可以直接 PR 到另一个 <a href="https://github.com/zkp-co-learning/zkp-co-learn">Repo</a>，新建一个目录即可。</p>
+<pre><code class="language-bash">├── Nova
+├── README.md
+├── halo2-doc
+├── halo2-learn
+├── [Your code repo here !!]  # mkdir your code repo here !!
+└── zk-everything
+</code></pre>
+<blockquote>
+<p>这边还没想好怎么放，可能后面位置有改动，不过…反正先放就好了 ！</p>
+</blockquote>
+<h4 id="关于-md-渲染"><a class="header" href="#关于-md-渲染">关于 md 渲染</a></h4>
+<p>众所周知，Github  网站的 <code>Latex</code> 等渲染功能非常弱鸡，往往需要一些奇技淫巧才能让公式等正常渲染出来。而在本 MDBOOK 中，您完全不需要关注这种伤害身心的问题，不需要给 github markdown 做专门的适配和魔改。在 Obsidian（或者如 Typora 等主流 Markdown 编辑器）里的  <code>.md</code> 文件显示是什么样的，本网站中都可完美无痛渲染！</p>
+<p><strong>本地 Dev 预览方法：</strong></p>
+<pre><code class="language-bash">$ [安装 Rust]
+$ cargo install mdbook mkbook-latex  mdbook-toc
+$ mkbook serve --open       # 本地预览
+
+</code></pre>
+<p>Tips :</p>
+<ul>
+<li><code>src/SUMMARY.md</code> 是会在前端组织显示的所有文件目录及其链接</li>
+<li>公式测试：可以在 <a href="katex.org">katex.org</a> 测试，大家在 Obisidian notes 里怎么写公式，前端就会咋显示，</li>
+</ul>
+<p>（contribution by PR process）</p>
+<br />
+<br />
+<br />
+<br />
+<br />
+<ul>
+<li><a href="#playlists">Playlists</a></li>
+<li><a href="#project-description">Project Description:</a>
+<ul>
+<li><a href="#problem-statement">Problem Statement:</a></li>
+<li><a href="#team-background">Team Background:</a></li>
+<li><a href="#vision-and-mission">Vision and Mission:</a></li>
+<li><a href="#roadmap">Roadmap:</a></li>
+<li><a href="#project-description-1">Project Description：</a></li>
+<li><a href="#problem-statement-1">Problem Statement</a></li>
+<li><a href="#team-background-1">Team Background</a></li>
+<li><a href="#%E6%84%BF%E6%99%AF">愿景</a></li>
+<li><a href="#roadmap-1">Roadmap</a></li>
+<li><a href="#%E6%8A%95%E7%A8%BF">投稿</a></li>
+<li><a href="#themes-">Themes ！</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="playlists"><a class="header" href="#playlists">Playlists</a></h1>
+<p><a href="https://www.youtube.com/watch?v=vDvyzVsyJm4&amp;list=PLbQFt1T_44DySCe3glmsa6DoCJNFftCo5&amp;index=1&amp;t=2s&amp;pp=iAQB">Overview of jolt and lasso CN</a> </p>
+<p><a href="https://www.youtube.com/watch?v=w4UcrbKKjEo&amp;list=PLbQFt1T_44DySCe3glmsa6DoCJNFftCo5&amp;index=2">Simple example for lasso CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=aHjrkWUvJ8g&amp;list=PLbQFt1T_44DySCe3glmsa6DoCJNFftCo5&amp;index=3">ProtoStar Compressing verification CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=VfJogiQ---A&amp;list=PLbQFt1T_44DySCe3glmsa6DoCJNFftCo5&amp;index=4">Some details of lasso polynomial commitment CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=VKZMZuKZ7JI&amp;list=PLbQFt1T_44DySCe3glmsa6DoCJNFftCo5&amp;index=5">Differences Between Nova and HyperNova CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=LoXX6EAUTYc&amp;list=PLbQFt1T_44DySCe3glmsa6DoCJNFftCo5&amp;index=6">Cycle fold based NOVA CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=7Zs_Y-wVrP0&amp;list=PLbQFt1T_44DySCe3glmsa6DoCJNFftCo5&amp;index=7">Nova relaxed R1CS and it’s implementation CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=3ag5jZh5OHQ&amp;list=PLbQFt1T_44DySCe3glmsa6DoCJNFftCo5&amp;index=8">Protostar Accumulation scheme for NARK’s verifier checks CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=MNZ-Sm7jQic&amp;list=PLbQFt1T_44DySCe3glmsa6DoCJNFftCo5&amp;index=9">ProtoStar Overview CN</a></p>
+<p><strong>Nova Study session</strong></p>
+<p><a href="https://www.youtube.com/watch?v=gopJn_QAdqU&amp;list=PLbQFt1T_44DwtG7Qv_BEyCP_t37qT9yMV&amp;index=1">Nova讨论-Primary和Secondary电路 CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=z4aEW9hxEs8&amp;list=PLbQFt1T_44DwtG7Qv_BEyCP_t37qT9yMV&amp;index=2">Nova讨论-延展性攻击 CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=at2U9iOvEBg&amp;list=PLbQFt1T_44DwtG7Qv_BEyCP_t37qT9yMV&amp;index=3">Nova讨论-Spartan协议part1 CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=xmMF5qn1T0M&amp;list=PLbQFt1T_44DwtG7Qv_BEyCP_t37qT9yMV&amp;index=4">SuperNova原理及其ROM实现CN</a></p>
+<p><strong>ZKML</strong></p>
+<p><a href="https://www.youtube.com/watch?v=jkUIR_aM9JU&amp;list=PLbQFt1T_44DwLHk3TOWUoFMYmVLksr3i6&amp;index=2&amp;t=51s">Painless Zero-Knowledge Circuitry with Nior - Aztec EN</a></p>
+<p><a href="https://www.youtube.com/watch?v=fWbKeJeh0fY&amp;list=PLbQFt1T_44DwLHk3TOWUoFMYmVLksr3i6&amp;index=4">Things we should build on ZKML NOW By Dr Cathie @PSE EN</a></p>
+<p><strong>ZK co-learning</strong></p>
+<p><a href="https://www.youtube.com/watch?v=bgYsKXo4his&amp;list=PLbQFt1T_44Dzl6glAwuL9DoegcFFAeipt&amp;index=5">halo2 (zkEVM gadgets) 分享者 Dream @Scroll CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=jXI4f7F8p94&amp;list=PLbQFt1T_44Dzl6glAwuL9DoegcFFAeipt&amp;index=7">PSE - Semaphore CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=Qsqk_D_jabg&amp;list=PLbQFt1T_44Dzl6glAwuL9DoegcFFAeipt&amp;index=8">代码分享：plonkathon、babyPLONK CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=mnDkTYqU9nM&amp;list=PLbQFt1T_44DwN1zWl-KWhkp3s0LAkF2a8&amp;index=8">用 Python来写简单的加密算法 CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=HtKmRcSJUG4&amp;list=PLbQFt1T_44DwN1zWl-KWhkp3s0LAkF2a8&amp;index=5">分享 PLONK 原理 一 CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=O5HGp3EHDI0&amp;list=PLbQFt1T_44DwN1zWl-KWhkp3s0LAkF2a8&amp;index=4">分享 PLONK 原理 二 CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=StvnHnC4Dk4&amp;list=PLbQFt1T_44DwN1zWl-KWhkp3s0LAkF2a8&amp;index=3">分享Plonk 原理 三 Lookup argument CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=l19roUItyUE&amp;list=PLbQFt1T_44DwN1zWl-KWhkp3s0LAkF2a8&amp;index=2">郭宇@安比：Nova - Recursive SNARKs without trusted setup CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=7zPfVUSyrVI&amp;list=PLbQFt1T_44Dx9oPmtQBZzhlPkxsGqjLm0&amp;index=7">ZKSAFE wallet案例分享 CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=XLgvaccfx64&amp;list=PLbQFt1T_44Dx9oPmtQBZzhlPkxsGqjLm0&amp;index=5">From +-/ to Elliptic Curve @Boyuan Feng CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=ZxpA0gyjEn4&amp;list=PLbQFt1T_44Dx9oPmtQBZzhlPkxsGqjLm0&amp;index=4">zkiap session 6 &amp; 8 QA @Jason Mortan EN</a></p>
+<p><a href="https://www.youtube.com/watch?v=qvLmM3AYmhs&amp;list=PLbQFt1T_44DylOOLHiWCIpVGJsrXHhzbs&amp;index=9">Zkstudy Session 01: Spartan sum-check part 1 EN</a></p>
+<p><a href="https://www.youtube.com/watch?v=BLh_o2lZAbw&amp;list=PLbQFt1T_44DylOOLHiWCIpVGJsrXHhzbs&amp;index=8">ZKstudy Session 02 - Spartan: Encoding of R1CS  EN</a></p>
+<p><a href="https://www.youtube.com/watch?v=LPuMWgvJWgc&amp;list=PLbQFt1T_44DylOOLHiWCIpVGJsrXHhzbs&amp;index=7">ZKstudy Session 03 - CCS: Represent R1CS and Plonkish EN</a></p>
+<p><a href="https://www.youtube.com/watch?v=D4HmInmuaYI&amp;list=PLbQFt1T_44DylOOLHiWCIpVGJsrXHhzbs&amp;index=6">ZKstudy Session 04 - 1- Represent R1CS and Plonkish; SuperSpartan’s polynomial IOP for CCS EN</a></p>
+<p><a href="https://www.youtube.com/watch?v=xojrRDeBW2A&amp;list=PLbQFt1T_44DylOOLHiWCIpVGJsrXHhzbs&amp;index=5">ZKstudy Session 04 - 2- Represent R1CS and Plonkish; SuperSpartan’s polynomial IOP for CCS EN</a></p>
+<p><a href="https://www.youtube.com/watch?v=smOPs0bWen0&amp;list=PLbQFt1T_44DylOOLHiWCIpVGJsrXHhzbs&amp;index=4">Nova p1: Recursive Snarks and IVC EN</a></p>
+<p><a href="https://www.youtube.com/watch?v=ZPH1dC54t0k&amp;list=PLbQFt1T_44DylOOLHiWCIpVGJsrXHhzbs&amp;index=3">Nova p2 - folding schemes for r1cs EN</a></p>
+<p><a href="https://www.youtube.com/watch?v=xpgDdTqPnSg&amp;list=PLbQFt1T_44DylOOLHiWCIpVGJsrXHhzbs&amp;index=2">Nova: IVC from folding scheme - ZKstudy Session 07 EN</a>
+<a href="https://www.youtube.com/watch?v=oRhA3pLvsV0&amp;list=PLbQFt1T_44DylOOLHiWCIpVGJsrXHhzbs&amp;index=1">Hypernova - ZKstudy Session 08 EN</a></p>
+<p><a href="https://www.youtube.com/watch?v=aNvI-P9livQ&amp;list=PLbQFt1T_44DyVlo_E6o2TaK_nGdmEr2n-&amp;index=3">Scroll主题分享 zkrollup 线下 CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=ZmEnhbIxKyE&amp;list=PLbQFt1T_44DyVlo_E6o2TaK_nGdmEr2n-&amp;index=2">Scroll 分享 zkEVM  CN</a></p>
+<p><a href="https://www.youtube.com/watch?v=3whHesGCNcM&amp;list=PLbQFt1T_44DzJsnfxQDgO3PaO8-LowVgo&amp;index=2">Towards trustless cross-chain communication from MPC to Zero-knowledge EN</a></p>
+<p><a href="https://www.youtube.com/watch?v=JvAHd3t_4yc">Schnorr sequencer &amp; KZG RLN EN</a></p>
+<p><a href="https://www.youtube.com/watch?v=CZixqJ7Pv84">Autonomous world &amp; quick intro to tornado cash’s privacyEN</a></p>
+<p><a href="https://www.youtube.com/watch?v=7opMtn-3gjQ&amp;t=3955s">Chiquito and infinite garden ZKP Workshop EN</a></p>
+<p><a href="https://www.youtube.com/watch?v=QgAuzsSbcik">ZKML with EZKL sharing session EN</a></p>
+<hr />
+<h1 id="project-description"><a class="header" href="#project-description">Project Description:</a></h1>
+<p>zkp-co-learning is a Zero-Knowledge Proofs (ZKP) collaborative study and creation project that has been running for three terms. Since February 2023, we have studied https://zkiap.com/, zk-learning.org, plonkathon codes and more with over 300 participants. We are currently preparing advanced content for zk-learning.org.(like Nova、STARK…)</p>
+<p>zkp-co-learning offers bounties to incentivize learners for their technical sharing, actively becoming community maintainers (Maintainer), and for organizing knowledge in the ZKP field. Together, we aim to improve ZKP Public Goods.</p>
+<h2 id="problem-statement"><a class="header" href="#problem-statement">Problem Statement:</a></h2>
+<p>Currently, there are challenges related to high barriers to entry, difficulty in learning in the ZKP field, lack of learning communities, and the overwhelming and opaque nature of information. We intend to address these issues specifically through zkp-co-learning.</p>
+<h2 id="team-background"><a class="header" href="#team-background">Team Background:</a></h2>
+<ul>
+<li>Qi Zhou: Founder of ETHStorage</li>
+<li>郭宇@Secbit: Founder of Secbit, https://github.com/sec-bit, https://secbit.io/</li>
+<li>Kurt Pan: Ph.D. in Cryptography from Fudan University, https://github.com/kurtpan666 / https://cryptography.land/</li>
+<li>Harry L: co-Founder of Rebase Community.</li>
+<li>Shirlene 孝羽: director of Creators Co-learning Community</li>
+<li>Demian: zkp-co-learning community maintainer, former JD.com algorithm engineer, https://github.com/Demian101</li>
+<li>Our Maintainers: dream@Scroll, Po@EthStorage, 0xhhh@EthStorage, Frank Jz Liu, miles, 白菜, KEEP, CJ, 笃行, 阳小雪, 啊咪咪小熊, 饭卡里还有不少钱呢…</li>
+<li>sponsoring agency: [Antalpha Labs]</li>
+</ul>
+<h2 id="vision-and-mission"><a class="header" href="#vision-and-mission">Vision and Mission:</a></h2>
+<ol>
+<li>Continue to recruit Maintainers to collaboratively manage the community and answer questions.</li>
+<li>Operate technical media and Twitter to expand influence.</li>
+<li>Utilize zk technology to support a broader range of web3 applications. </li>
+</ol>
+<h2 id="roadmap"><a class="header" href="#roadmap">Roadmap:</a></h2>
+<p>We plan to accomplish the following tasks within 6 months:</p>
+<ol>
+<li>Launch the zkp-co-learning.xyz website and aim for:
+1.1 Comprehensive ZKP learning path sorting and a clear, seamless learning guide. 
+1.2. zk Hackthon information gathering, allowing everyone to showcase and discuss ideas, and team up for Hackthon. 
+1.3. Distribute bounties, allowing anyone interested to participate and contribute knowledge and content.</li>
+<li>Complete research on at least 5 open-source projects for EF PSE. (https://www.appliedzkp.org/projects)</li>
+<li>Host a Hackthon or Hackerhouse to put theory into project practice.</li>
+<li>Develop at least one zk application project with specific needs and use cases.</li>
+<li>Organize and open-source the vast amount of zk materials that have accumulated and scattered within the current co-learning GROUP.</li>
+<li>Attract at least 200 more people to participate in zkp technology learning and engage at least 20 developers in the development of zkp projects.</li>
+</ol>
+<hr />
+<h2 id="project-description-1"><a class="header" href="#project-description-1">Project Description：</a></h2>
+<p>zkp-co-learning 是一个已经持续了 3 期的 ZKP 共学共创项目，从 2023 年 2 月至今，我们与 300+ 学员共同研究了 https://zkiap.com/ ，zk-learning.org ，plonkathon 代码等，目前正在筹备 zk-learning.org 的进阶内容</p>
+<p>zkp-co-learning 针对学员的技术分享，积极成为社群维护者（Maintainer），ZKP 领域的知识整理，都会提供对应的 bounty 来激励他们，共同完善 ZKP Public Goods</p>
+<h2 id="problem-statement-1"><a class="header" href="#problem-statement-1">Problem Statement</a></h2>
+<p>目前，针对 ZKP 领域学习门槛高、难度大，学习社群缺乏，信息庞杂不透明的情况，我们意图通过 zkp-co-learning 来针对性地解决这些问题</p>
+<h2 id="team-background-1"><a class="header" href="#team-background-1">Team Background</a></h2>
+<p>as above.</p>
+<h2 id="愿景"><a class="header" href="#愿景">愿景</a></h2>
+<ol>
+<li>继续招募 Maintainer 来共同维护社区，解答大家的问题</li>
+<li>运营技术媒体与 Twitter，扩大影响力</li>
+<li>利用 zkp 技术支持更广泛场景的 web3 应用</li>
+</ol>
+<h2 id="roadmap-1"><a class="header" href="#roadmap-1">Roadmap</a></h2>
+<p>我们计划使用 5 个月的时间完成以下事务：</p>
+<ol>
+<li>上线 zkp-co-learning.xyz 网站，完成：1. ZKP 完整学习路径梳理，清晰无痛的学习指南  2. zkp Hackthon 信息收集，让大家展示交流 ideas，组队 Hackthon  3. bounty 放送，让每个感兴趣的人都能参与其中，进行学识和内容的贡献</li>
+<li>完成至少 5 个 EF PSE 的开源项目 Research</li>
+<li>举办一次 Hackthon 或 Hackerhouse 来将理论付诸项目实践</li>
+<li>完成至少 1 个具有需求和使用场景的 zkp 应用项目的研发</li>
+<li>整理与开源目前共学 GROUP 里面沉淀散落的大量 zkp 资料</li>
+<li>再吸引至少 200 人参与到 zkp 技术的学习中，让至少 20 名开发者参与到 zkp 项目的研发中</li>
+</ol>
+<hr />
+<h2 id="投稿"><a class="header" href="#投稿">投稿</a></h2>
+<p>欢迎大家把自己在写的内容放在这里， [zk-everything] 我们会同时排版到Antalpha Labs的公众号下.(最好留下联系方式，方便后续跟进）</p>
+<p>投稿流程：</p>
+<ol>
+<li>fork this repo and clone it to local machine (choose <code>for your own use</code>)</li>
+<li>copy directy <code>.md</code> file into <code>src</code> folder</li>
+<li>In <code>src/SUMMARY.md</code> (i.e the structure file of mdbook), add link to your newlly added posts</li>
+<li>commit and push</li>
+<li>to make a PR and wait to merge</li>
+</ol>
+<h2 id="themes-"><a class="header" href="#themes-">Themes ！</a></h2>
+<ul>
+<li>
+<p>自由选题，完成学习并分享可得 <strong>Bounty</strong> ，推荐 PSE 开源项目 ~</p>
+<ul>
+<li>[Meeting PSE Share]</li>
+</ul>
+</li>
+<li>
+<p>年底<a href="https://labs.antalpha.com/hackerhouse/istanbul/">土耳其 ZKP HackerHouse</a>等你来 ！！</p>
+</li>
+</ul>
+
+                        <hr>
+                        <div class="giscus"></div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+                            <a rel="next" href="zk-everything/zk-roadmap.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+                    <a rel="next" href="zk-everything/zk-roadmap.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="theme/mermaid.min.js"></script>
+        <script src="theme/mermaid-init.js"></script>
+
+
+    </div>
+
+    <script type="text/javascript">
+        var langs = [
+            'cn',
+            'en',
+        ];
+
+        (function initLangs() {
+            var html = document.querySelector('html');
+            var langToggleButton = document.getElementById('lang-toggle');
+            var langPopup = document.getElementById('lang-list');
+
+            function showLangs() {
+                langPopup.style.display = 'block';
+                langToggleButton.setAttribute('aria-expanded', true);
+            }
+
+            function hideLangs() {
+                langPopup.style.display = 'none';
+                langToggleButton.setAttribute('aria-expanded', false);
+                langToggleButton.focus();
+            }
+
+            langToggleButton.addEventListener('click', function () {
+                if (langPopup.style.display === 'block') {
+                    hideLangs();
+                } else {
+                    showLangs();
+                }
+            });
+
+            langPopup.addEventListener('focusout', function(e) {
+                // e.relatedTarget is null in Safari and Firefox on macOS (see workaround below)
+                if (!!e.relatedTarget && !langToggleButton.contains(e.relatedTarget) && !langPopup.contains(e.relatedTarget)) {
+                    hideLangs();
+                }
+            });
+
+            // Should not be needed, but it works around an issue on macOS & iOS: https://github.com/rust-lang-nursery/mdBook/issues/628
+            document.addEventListener('click', function(e) {
+                if (langPopup.style.display === 'block' && !langToggleButton.contains(e.target) && !langPopup.contains(e.target)) {
+                    hideLangs();
+                }
+            });
+
+            // For each language, update the link to point to the current page in that language
+            let linkParts = window.location.pathname.split('/');
+            let langIndex = linkParts.findIndex((s) => langs.includes(s));
+            langs.forEach(function (lang) {
+                var link = document.getElementById('lang-' + lang);
+                if (!link) {
+                    return;
+                }
+
+                let newLinkParts = linkParts.slice();
+
+                // If it is Chinese, remove the current language from the path
+                if (lang === "cn") {
+                    if (langIndex !== -1) {
+                        newLinkParts.splice(langIndex, 1);
+                    }
+                }
+                
+                // Otherwise, add the new language to the path
+                else {
+                    if (langIndex === -1) {
+                        newLinkParts.splice(newLinkParts.length - 1, 0, lang);
+                    } else {
+                        newLinkParts[langIndex] = lang;
+                    }
+                }
+
+                link.href = newLinkParts.join('/');
+            });
+
+        })();
+        </script>
+        <script src="https://giscus.app/client.js"
+                data-repo="r12f/sonic-book"
+                data-repo-id="R_kgDOJhBB1g"
+                data-category="Comments"
+                data-category-id="DIC_kwDOJhBB1s4CXctO"
+                data-mapping="og:title"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="dark_dimmed"
+                data-lang="en"
+                data-loading="lazy"
+                crossorigin="anonymous"
+                async>
+        </script>
+    </body>
+</html>
