@@ -4,7 +4,7 @@ language = "cn"
 multilingual = false
 src = "src"
 title = "Qiwihui's blog"
-description = "blog, crypto, Zero-knowledge proof"
+description = "blog, Crypto, 区块链"
 
 [build]
 # extra-watch-dirs = ["po"]
@@ -47,9 +47,9 @@ no-section-label = true
 theme = "theme"
 additional-js  = ["theme/mermaid.min.js", "theme/mermaid-init.js"]
 additional-css = ["./mdbook-admonish.css", "theme/css/mdbook-admonish.css", "theme/css/open-in.css"]
-git-repository-url = "https://github.com/zkp-co-learning/zkp-co-learning.github.io"
+git-repository-url = "https://github.com/qiwihui/blog"
 open-on-text = "Found a bug?! [Edit this page on GitHub.]"
-edit-url-template = "https://github.com/zkp-co-learning/zkp-co-learning.github.io/edit/main/{path}"
+edit-url-template = "https://github.com/qiwihui/blog/edit/main/{path}"
 curly-quotes = true   # replaces straight quotes with curly quotes
 
 
