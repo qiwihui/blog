@@ -1,15 +1,4 @@
----
-title: "Python 函数变量类型注释会导致用 Cython 编译后执行与直接执行结果不一致"
-description: "Python 函数变量类型注释会导致用 Cython 编译后执行与直接执行结果不一致"
-tags: 
-- 技术
-- Python
-top: 117
-date: 18/03/2021, 10:13:14
-author: qiwihui
-update: 18/03/2021, 10:13:28
-categories: 技术
----
+# Python 函数变量类型注释会导致用 Cython 编译后执行与直接执行结果不一致
 
 最近工作中遇到关于函数类型注释引起的错误，特此记录一下。
 
@@ -292,7 +281,4 @@ Cython 将 Python 转为 C 代码比较后类型注释与否代码比较：
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

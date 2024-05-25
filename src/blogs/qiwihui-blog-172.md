@@ -1,15 +1,4 @@
----
-title: "Sui 数据类型讲解"
-description: "Sui 数据类型讲解"
-tags: 
-- 技术
-- 区块链
-top: 172
-date: 14/02/2023, 00:27:55
-author: qiwihui
-update: 14/02/2023, 00:27:55
-categories: 技术
----
+# Sui 数据类型讲解
 
 这篇文章中，我们将介绍 Sui 中常见的数据结构，这些结构包含 Sui Move 和 Sui Framework 中提供的基础类型和数据结构，理解和熟悉这些数据结构对于 Sui Move 的理解和应用大有裨益。
 
@@ -1046,6 +1035,3 @@ sui client call \
 ```
 
 至此，我们介绍完了 Sui Move 中主要的数据类型及其使用方法，希望大家学习和理解 Sui Move 有一定的帮助。
-
-### Comments
-

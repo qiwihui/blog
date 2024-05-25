@@ -1,14 +1,3 @@
----
-title: "第一章：可靠性，可扩展性，可维护性"
-description: "Hello World!"
-tags: []
-top: 1
-date: 9/10/2018, 12:44:19 PM
-author: qiwihui
-update: 1/31/2019, 4:14:56 PM
-categories: 技术
----
-
 # 第一章：可靠性，可扩展性，可维护性
 
 数据密集型（data-intensive）而非计算密集型（compute-intensive）：

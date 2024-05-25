@@ -1,15 +1,4 @@
----
-title: "在iOS-Swift项目中集成CppJieba分词"
-description: "在iOS-Swift项目中集成CppJieba分词"
-tags: 
-- 技术
-- iOS
-top: 45
-date: 14/01/2019, 17:21:31
-author: qiwihui
-update: 31/01/2019, 15:12:18
-categories: 技术
----
+# 在iOS-Swift项目中集成CppJieba分词
 
 在垃圾短信过滤应用 `SMSFilters` 中，需要使用 `Jieba` 分词库来対短信进行分词，然后使用 `TF-IDF` 来进行处理` 分词库是 C++ 写的，这就意味着需要在Swift中集成 C++ 库。
 在官方文档 "[Using Swift with Cocoa and Objective-C](https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/BuildingCocoaApps/index.html)" 中，Apple只是介绍了怎么将 Swift 代码跟 Objective-C 代码做整合，但是没有提C++，后来在官方文档中看到了这样一段话：
@@ -321,6 +310,3 @@ class Classifier {
 ” 的[回答](https://stackoverflow.com/a/32546879/3218128)
 - [SwiftArchitect](https://stackoverflow.com/users/218152/swiftarchitect) 对问题 "Can I mix Swift with C++? Like the Objective - C .mm files" 的[回答](https://stackoverflow.com/a/32554229/3218128)
 - [在Swift代码中整合C++类库](https://blog.voidmain.guru/2014/07/01/integrating-swift-with-c-plus-plus/)
-
-### Comments
-

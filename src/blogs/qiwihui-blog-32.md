@@ -1,15 +1,4 @@
----
-title: "一个关于数学概率的问题"
-description: "一个关于数学概率的问题"
-tags: 
-- 技术
-- 数学
-top: 32
-date: 10/09/2018, 13:48:11
-author: qiwihui
-update: 31/01/2019, 16:09:41
-categories: 技术
----
+# 一个关于数学概率的问题
 
 ## 题目--百万英雄
 
@@ -131,6 +120,3 @@ print(avg2)
 
 三门问题（Monty Hall Problem）
 电影《决胜21点》
-
-### Comments
-

@@ -1,15 +1,4 @@
----
-title: "重命名本地和远程 Git 分支名称"
-description: "重命名本地和远程 Git 分支名称"
-tags: 
-- 技术
-- tips
-top: 54
-date: 12/02/2019, 14:12:50
-author: qiwihui
-update: 12/02/2019, 14:12:50
-categories: 技术
----
+# 重命名本地和远程 Git 分支名称
 
 如果不小心写错了分支名称又将分支推送到了远端，这时可以使用以下步骤进行修正：
 
@@ -38,6 +27,3 @@ categories: 技术
     ```shell
     git push origin -u new-name
     ```
-
-### Comments
-

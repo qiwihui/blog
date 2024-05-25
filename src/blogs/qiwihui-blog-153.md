@@ -1,14 +1,4 @@
----
-title: "SVG NFT 全面实践 ── scaffold-eth loogies-svg-nft 项目完整指南"
-description: "SVG NFT 全面实践 ── scaffold-eth loogies-svg-nft 项目完整指南"
-tags: 
-- 区块链
-top: 153
-date: 14/02/2022, 15:55:49
-author: qiwihui
-update: 15/02/2022, 11:38:41
-categories: 技术
----
+# SVG NFT 全面实践 ── scaffold-eth loogies-svg-nft 项目完整指南
 
 注：这篇文章是我投稿于“李大狗Leeduckgo”公众号的文章，原文地址：[SVG NFT 全面实践 | Web3.0 dApp 开发（六）](https://mp.weixin.qq.com/s/WvTFk3E6FjfHtXfp2uHkrw)。
 
@@ -888,7 +878,4 @@ export default Home;
 1. NFT 合约基本内容以及如何在 Opensea 等市场中展示 NFT；
 2. 前端如何连接诸如 MetaMask 等钱包；
 3. 前端如何调用合约函数。
-
-
-### Comments
 

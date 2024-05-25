@@ -1,15 +1,4 @@
----
-title: "06. collections — Python 进阶"
-description: "06. collections — Python 进阶"
-tags: 
-- 技术
-- Python
-top: 123
-date: 25/03/2021, 14:07:26
-author: qiwihui
-update: 29/03/2021, 15:19:28
-categories: 技术
----
+# 06. collections — Python 进阶
 
 Python 中的 `collections` 模块实现了专门的容器数据类型，提供了 Python 通用内置容器dict，list，set和tuple的替代方案。
 
@@ -224,7 +213,4 @@ print(d)
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

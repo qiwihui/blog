@@ -1,15 +1,4 @@
----
-title: "11. JSON — Python 进阶"
-description: "11. JSON — Python 进阶"
-tags: 
-- 技术
-- Python
-top: 138
-date: 14/04/2021, 16:44:10
-author: qiwihui
-update: 14/04/2021, 16:44:10
-categories: 技术
----
+# 11. JSON — Python 进阶
 
 JSON（JavaScript对象表示法）是一种轻量级数据格式，用于数据交换。 在Python中具有用于编码和解码JSON数据的内置 `json` 模块。 只需导入它，就可以使用JSON数据了：
 
@@ -321,7 +310,4 @@ print(type(player_decoded))
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

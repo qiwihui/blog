@@ -1,14 +1,4 @@
----
-title: "极路由+shadowsocks翻墙"
-description: "极路由+shadowsocks翻墙"
-tags: 
-- 技术
-top: 21
-date: 10/09/2018, 13:37:57
-author: qiwihui
-update: 28/10/2019, 15:43:41
-categories: 技术
----
+# 极路由+shadowsocks翻墙
 
 翻墙折腾无止境.
 使用路由器翻墙的一个好处在于，对于一些翻墙配置很繁琐的设备，只需要简单地连上路由wifi就可以实现翻墙，
@@ -92,24 +82,3 @@ cd /tmp && curl -k -o shadow.sh https://raw.githubusercontent.com/qiwihui/hiwifi
 翻墙在于不断折腾.
 
 
-
-### Comments
-
----
-> from: [**wanjunlengfeng**](https://github.com/qiwihui/blog/issues/21#issuecomment-452180352) on: **1/8/2019**
-
-我把你的启动方案修改了!!只开启61080端口,结束全局GFW, 让各自的电脑去链接61080
-vi /etc/init.d/gw-shadowsocks
-`#service_start /usr/bin/ss-redir -s $server -p $server_port -b 0.0.0.0 -l $rs_port -k $password -t $timeout -m $method $params
-# service_start /usr/bin/dns2socks 127.0.0.1:$local_port $dnsserver 127.0.0.1:53535 -d -q
-#/etc/init.d/gw-redsocks start`
-我把这3行代码注销了!!希望作者能增加http代理协议,并且在路由器后台可以自定义是否全局翻墙.这样就完美了
----
-> from: [**nonskim**](https://github.com/qiwihui/blog/issues/21#issuecomment-491642520) on: **5/13/2019**
-
-学校的网络，本来可以用外文文献库，用了这个，上不了怎么解决
-
----
-> from: [**stonelf**](https://github.com/qiwihui/blog/issues/21#issuecomment-546828319) on: **10/28/2019**
-
-支持哪几款极路由？

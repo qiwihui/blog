@@ -1,15 +1,4 @@
----
-title: "为什么python中索引从0开始"
-description: "为什么python中索引从0开始"
-tags: 
-- 技术
-- 翻译
-top: 14
-date: 10/09/2018, 13:29:28
-author: qiwihui
-update: 31/01/2019, 16:07:48
-categories: 技术
----
+# 为什么python中索引从0开始
 
 在Python中字符串索引从0开始而不是从1开始是合乎逻辑的选择，因为python是用C语言写的，做为C的主要数据结构，数组是从0开始索引的。这在C中
 是很基础的，以至于如果改变索引从1开始将会需要大量的工作。
@@ -92,7 +81,4 @@ Javascript和其它许多语言，[看这](http://en.wikipedia.org/wiki/List_of_
 从1开始索引，以及C开发者社区是怎样收到一本趋势读者也这样做的书。
 
 原文在[这儿](http://forums.udacity.com/questions/100086491/why-does-indexing-begin-at-0?page=1&focusedAnswerId=100086607#100086607)。
-
-
-### Comments
 

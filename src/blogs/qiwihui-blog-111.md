@@ -1,15 +1,4 @@
----
-title: "使用 Python 集成 GitHub App 和 GitHub Check API，构建持续集成服务"
-description: "使用 Python 集成 GitHub App 和 GitHub Check API，构建持续集成服务"
-tags: 
-- 技术
-- Python
-top: 111
-date: 15/12/2020, 11:42:45
-author: qiwihui
-update: 19/02/2021, 14:14:52
-categories: 技术
----
+# 使用 Python 集成 GitHub App 和 GitHub Check API，构建持续集成服务
 
 这篇博客的起因是在做项目的过程中要求使用 Python 完成相应功能，现在将这部份代码按教程的流程发布出来。
 
@@ -348,7 +337,4 @@ def take_requested_action():
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

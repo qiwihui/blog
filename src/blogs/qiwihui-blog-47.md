@@ -1,14 +1,4 @@
----
-title: "GitHub Pages 自定义域名实践整理"
-description: "GitHub Pages 自定义域名实践整理"
-tags: 
-- 技术
-top: 47
-date: 24/01/2019, 15:12:41
-author: qiwihui
-update: 31/01/2019, 15:12:02
-categories: 技术
----
+# GitHub Pages 自定义域名实践整理
 
 这篇博客将整理在配置博客以及项目 Pages 的自定义域名过程，遇到的问题以及解决方法。[Github 的文档](https://help.github.com/articles/using-a-custom-domain-with-github-pages/)对于如何配置自定义域名有详细的介绍，这里不会全部翻译，只重点记录实践的过程，内容涉及为用户网站，公司网站，以及项目网站添加 `Apex` 域名（qiwihui.com），二级域名（www.qiwihui.com）以及开启 HTTPS。最后，所有指向 `www.qiwihui.com` 的请求将会被重定向至 `https://qiwihui.com`。
 
@@ -136,6 +126,3 @@ Github 会自动保持 HTTPS 证书的有效。
 - [Custom domain redirects for GitHub Pages sites](https://help.github.com/articles/custom-domain-redirects-for-github-pages-sites/)
 - [Custom domain for GitHub project pages 的回答](https://stackoverflow.com/a/9123911/3218128)
 - [Custom subdomains in GitHub project pages](https://anmonteiro.com/2015/08/custom-subdomains-in-github-project-pages/)
-
-### Comments
-

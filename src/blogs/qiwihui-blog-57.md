@@ -1,14 +1,4 @@
----
-title: "使用 Sphinx 撰写技术文档并生成 PDF 总结"
-description: "使用 Sphinx 撰写技术文档并生成 PDF 总结"
-tags: 
-- 技术
-top: 57
-date: 24/02/2019, 09:33:05
-author: qiwihui
-update: 01/03/2019, 10:32:14
-categories: 
----
+# 使用 Sphinx 撰写技术文档并生成 PDF 总结
 
 这几天准备编排部分翻译的书籍和文档，找了好些工具，最终定格在 Sphinx 上，并基于 [ReadTheDocs](https://readthedocs.org) 提供的 SaaS 服务进行分发和分享。本篇博客是对整个过程的一次记录和总结。
 
@@ -394,15 +384,4 @@ $ fc-list :lang=zh
 ## 总结
 
 简单过了一下整个文档的流程，总体来说，Sphinx非常适合用来编写项目文档，reStructuredText 比起 Markdown 也有太多的优势，值得推荐。
-
-
-### Comments
-
----
-> from: [**qiwihui**](https://github.com/qiwihui/blog/issues/57#issuecomment-468518848) on: **3/1/2019**
-
-添加 gooogle analytics
-
-- http://www.milos.curuvija.com/miscellaneous/sphinx/sphinx_google_analytics_integration.html
-- https://www.ericholscher.com/blog/2009/apr/5/adding-google-analytics-sphinx-docs/
 

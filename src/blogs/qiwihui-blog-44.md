@@ -1,15 +1,4 @@
----
-title: "Cocoapods 和 Carthage 使用笔记"
-description: "Cocoapods 和 Carthage 使用笔记"
-tags: 
-- 技术
-- iOS
-top: 44
-date: 26/12/2018, 11:04:31
-author: qiwihui
-update: 31/01/2019, 15:12:27
-categories: 技术
----
+# Cocoapods 和 Carthage 使用笔记
 
 ## Carthage 和 CoaoaPods 的区别
 
@@ -240,6 +229,3 @@ brew install carthage
 
 - [解决Cocoapods贼慢问题](https://www.jianshu.com/p/f024ca2267e3)
 - [Carthage 包管理工具，另一种敏捷轻快的 iOS & MAC 开发体验](http://swiftcafe.io/2015/10/25/swift-daily-carthage-package)
-
-### Comments
-

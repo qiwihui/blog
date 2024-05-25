@@ -1,15 +1,4 @@
----
-title: "Hexo git deployer 删除了提交历史记录该怎么整？"
-description: "Hexo git deployer 删除了提交历史记录该怎么整？"
-tags: 
-- 技术
-- 翻译
-top: 50
-date: 25/01/2019, 15:36:47
-author: qiwihui
-update: 10/04/2019, 11:36:26
-categories: 技术
----
+# Hexo git deployer 删除了提交历史记录该怎么整？
 
 原文：[Hexo git deployer removes commits history? Let's do something about that!](https://e.printstacktrace.blog/hexo-git-deployer-removes-commits-history-lets-do-something-about-that/)
 
@@ -100,7 +89,4 @@ deploy:
 
 1. Documentation: https://hexo.io/docs/deployment
 2. https://github.com/wololock/wololock.github.io/blob/develop/_config.yml#L88-L93
-
-
-### Comments
 

@@ -1,14 +1,4 @@
----
-title: "CS251 - final 2021 - 问题 4"
-description: "CS251 - final 2021 - 问题 4"
-tags: 
-- 区块链
-top: 157
-date: 15/03/2022, 10:55:48
-author: qiwihui
-update: 21/03/2022, 11:16:33
-categories: 
----
+# CS251 - final 2021 - 问题 4
 
 **问题4. [16 分]: Hashmasks 重入缺陷**
 
@@ -128,6 +118,3 @@ contract Attacker is IERC721Receiver {
 验证交易： https://rinkeby.etherscan.io/tx/0xa5f70a226c5fd64132eee800f8902ddb9b4ff562ff7f37820d11746fbde52acb
 
 感谢 discord **yyczz#5837** 对于这个问题的指导。
-
-### Comments
-

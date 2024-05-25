@@ -1,17 +1,4 @@
----
-title: "项目：文章转博客 Podcastx"
-description: "项目：文章转博客 Podcastx"
-tags: 
-- 技术
-- Python
-- 机器学习
-- 深度学习
-top: 115
-date: 19/02/2021, 14:16:37
-author: qiwihui
-update: 19/02/2021, 14:42:08
-categories: 
----
+# 项目：文章转博客 Podcastx
 
 这个项目是对之前使用谷歌文章转语音（TTS）功能后的一个实验性产品，项目目前的功能是将博客文章转成语音进行收听。
 
@@ -45,7 +32,4 @@ categories:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

@@ -1,17 +1,4 @@
----
-title: "GitHub Actions 第8天：处理过时的 issue"
-description: "GitHub Actions 第8天：处理过时的 issue"
-tags: 
-- 技术
-- 翻译
-- tips
-- github actions
-top: 91
-date: 23/03/2020, 13:36:00
-author: qiwihui
-update: 26/03/2020, 00:14:54
-categories: 
----
+# GitHub Actions 第8天：处理过时的 issue
 
 存储库中存在过时的issue可能是一个很大的危害。如果你有数年不打算解决的issue，那么就很难找到要关注的重要问题。你永远不会合并的pull request使你看起来好像在忽略该项目。项目中的所有这些杂项都增加了无形的认知负担。
 
@@ -52,7 +39,4 @@ on:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

@@ -1,16 +1,4 @@
----
-title: "机器学习项目清单"
-description: "机器学习项目清单"
-tags: 
-- 技术
-- 翻译
-- 机器学习
-top: 56
-date: 18/02/2019, 10:10:49
-author: qiwihui
-update: 18/02/2019, 13:58:33
-categories: 
----
+# 机器学习项目清单
 
 [原文](http://www.ic.unicamp.br/~sandra/pdf/Hands_On_Machine_Learning_with_Scikit_Learn_and_TensorFlow-427-432.pdf)来自于《[Hands-On Machine Learning with Scikit-Learn and TensorFlow](https://book.douban.com/subject/26840215/)》，这是一本系统学习机器学习和深度学习非常不错的入门书籍，理论和实践兼而有之。
 
@@ -175,7 +163,4 @@ categories:
   - 同时监控输入数据的质量（例如，一个有故障的传感器发送随机数据，或者另外一个团队的输出变得陈旧），这对于在线学习系统尤其重要。
 
 3. 定期在新数据上重新训练模型（尽可能自动化）。
-
-
-### Comments
 

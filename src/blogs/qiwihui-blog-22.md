@@ -1,14 +1,4 @@
----
-title: "Nginx服务器设置HTTP/2"
-description: "Nginx服务器设置HTTP/2"
-tags: 
-- 技术
-top: 22
-date: 10/09/2018, 13:38:41
-author: qiwihui
-update: 31/01/2019, 16:05:50
-categories: 技术
----
+# Nginx服务器设置HTTP/2
 
 我的博客已经支持了 HTTP/2, 在此将介绍如何在 Nginx 上设置 HTTP/2 及相关注意事项(坑)。
 
@@ -235,7 +225,4 @@ server {
 [4]. [serverfault问题: Nginx configured with http2 doesn't deliver HTTP/2](http://serverfault.com/a/733556/296724)
 [5]. [TLS 1.2 Cipher Suite Black List](https://http2.github.io/http2-spec/#BadCipherSuites)
 [6]. [Optimizing Nginx for Best Performance](https://www.digitalocean.com/community/tutorials/how-to-set-up-nginx-with-http-2-support-on-ubuntu-16-04#step-10-—-optimizing-nginx-for-best-performance)
-
-
-### Comments
 

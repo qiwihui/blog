@@ -1,17 +1,4 @@
----
-title: "GitHub Actions 第5天：在容器中构建"
-description: "GitHub Actions 第5天：在容器中构建"
-tags: 
-- 技术
-- 翻译
-- tips
-- github actions
-top: 88
-date: 21/03/2020, 10:16:30
-author: qiwihui
-update: 21/03/2020, 10:19:35
-categories: 
----
+# GitHub Actions 第5天：在容器中构建
 
 昨天我讨论了如何 [在GitHub Actions虚拟环境上安装工具和依赖项](https://qiwihui.com/qiwihui-blog-87/)。 但是，如果你需要更多控制权怎么办？ 或者，如果你根本不想在 Ubuntu 上运行，该怎么办？ 这是容器发光的地方。
 
@@ -45,7 +32,4 @@ categories:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

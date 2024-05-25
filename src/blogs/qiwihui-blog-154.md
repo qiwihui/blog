@@ -1,14 +1,4 @@
----
-title: "解释 Crypto Coven 合约的两个 bug"
-description: "解释 Crypto Coven 合约的两个 bug"
-tags: 
-- 区块链
-top: 154
-date: 15/02/2022, 20:25:51
-author: qiwihui
-update: 15/02/2022, 20:25:51
-categories: 技术
----
+# 解释 Crypto Coven 合约的两个 bug
 
 Crypto Coven 合约作者在他的文章 [Crypto Coven Contract Bugs: An Arcanist’s Addendum](https://cryptocoven.mirror.xyz/0eZ0tjudMU0ByeXLlRtPzDqxGzMMZw6ldzf-HfYETW0) 中描述了合约中的两个 bug，这篇文章我们来看看这两个bug。这两个 bug 并不会影响女巫 NFT 的所有权。
 
@@ -111,6 +101,3 @@ receive() external payable {}
 ## 总结
 
 学习在 Solidity 中进行开发可能是一场考验——无论是小错误还是大错误，都会永远存在于区块链上，而且通常要付出巨大的代价。 但是，这僵化、无情的空间却有它自己的魅力，在约束中诞生的创造力，通过共同的不眠之夜形成的团结。 对于任何在荒野中闯出自己道路的初出茅庐的奥术师：我希望这里所提供的知识能够进一步照亮这条道路。
-
-### Comments
-

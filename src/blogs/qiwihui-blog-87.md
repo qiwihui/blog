@@ -1,17 +1,4 @@
----
-title: "GitHub Actions 第4天：安装工具"
-description: "GitHub Actions 第4天：安装工具"
-tags: 
-- 技术
-- 翻译
-- tips
-- github actions
-top: 87
-date: 20/03/2020, 23:01:05
-author: qiwihui
-update: 20/03/2020, 23:06:56
-categories: 
----
+# GitHub Actions 第4天：安装工具
 
 昨天我提到 GitHub Actions 提供了 [Linux，Windows 和 macOS 虚拟环境](https://qiwihui.com/qiwihui-blog-86/)，你可以在其中运行工作流。
 
@@ -61,7 +48,4 @@ run: brew install ninja
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

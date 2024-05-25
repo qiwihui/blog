@@ -1,15 +1,4 @@
----
-title: "Shadowsocks 和 V2ray 共用443端口"
-description: "Shadowsocks 和 V2ray 共用443端口"
-tags: 
-- 技术
-- GFW
-top: 104
-date: 14/10/2020, 17:13:12
-author: qiwihui
-update: 16/10/2020, 10:05:41
-categories: 技术
----
+# Shadowsocks 和 V2ray 共用443端口
 
 ## 配置过程
 
@@ -83,7 +72,4 @@ stream {
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

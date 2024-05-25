@@ -1,15 +1,4 @@
----
-title: "用 Rust Actix-web 写一个 Todo 应用（二）── 请求获取和日志记录"
-description: "用 Rust Actix-web 写一个 Todo 应用（二）── 请求获取和日志记录"
-tags: 
-- 技术
-- Rust
-top: 106
-date: 23/10/2020, 16:51:27
-author: qiwihui
-update: 26/10/2020, 15:27:29
-categories: 技术
----
+# 用 Rust Actix-web 写一个 Todo 应用（二）── 请求获取和日志记录
 
 ## 如何获取路径参数
 
@@ -308,7 +297,4 @@ pub async fn check_todo(
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

@@ -1,15 +1,4 @@
----
-title: "09. 异常和错误 — Python 进阶"
-description: "09. 异常和错误 — Python 进阶"
-tags: 
-- 技术
-- Python
-top: 126
-date: 25/03/2021, 18:19:49
-author: qiwihui
-update: 29/03/2021, 15:16:21
-categories: 技术
----
+# 09. 异常和错误 — Python 进阶
 
 Python程序在遇到错误后立即终止。在Python中，错误可以是语法错误或异常。 在本文中，我们将关注以下内容：
 
@@ -251,7 +240,4 @@ except ValueTooLowError as e:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

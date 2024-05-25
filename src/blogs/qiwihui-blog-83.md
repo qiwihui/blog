@@ -1,17 +1,4 @@
----
-title: "GitHub Actions Advent Calendar 系列文章 - Index"
-description: "GitHub Actions Advent Calendar 系列文章 - Index"
-tags: 
-- 技术
-- 翻译
-- tips
-- github actions
-top: 83
-date: 20/03/2020, 18:42:05
-author: qiwihui
-update: 20/03/2020, 22:08:21
-categories: 
----
+# GitHub Actions Advent Calendar 系列文章 - Index
 
 最近我在做项目 [codedays.app](https://codedays.app) 过程中，发现 Github 推出的 Github Actions 可以很方便地用来做CI/CD之类的工作，所以决定将 [GitHub Actions Advent Calendar](https://www.edwardthomson.com/blog/github_actions_advent_calendar.html) 这个系列的文章做个简单的翻译和整理。这篇文章是所有文章的索引。
 
@@ -55,7 +42,4 @@ categories:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

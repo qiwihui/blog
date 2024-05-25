@@ -1,17 +1,4 @@
----
-title: "GitHub Actions 第9天：部署到GitHub Packages"
-description: "GitHub Actions 第9天：部署到GitHub Packages"
-tags: 
-- 技术
-- 翻译
-- tips
-- github actions
-top: 92
-date: 25/03/2020, 23:46:23
-author: qiwihui
-update: 26/03/2020, 00:14:41
-categories: 
----
+# GitHub Actions 第9天：部署到GitHub Packages
 
 本月到目前为止，我们已经研究了许多执行构建并运行一些测试的方案。这些都是很棒的工作流程──它们确保进入你的项目的pull request是高质量的，并且你的主分支是健康的。
 
@@ -38,7 +25,4 @@ categories:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

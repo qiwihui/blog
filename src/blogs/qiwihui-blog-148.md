@@ -1,16 +1,4 @@
----
-title: "CPython Internals 笔记 ── 介绍、开发环境设置"
-description: "CPython Internals 笔记 ── 介绍、开发环境设置"
-tags: 
-- Python
-- 读书笔记
-- CPythonInternals
-top: 148
-date: 24/08/2021, 15:23:42
-author: qiwihui
-update: 25/08/2021, 17:37:31
-categories: 
----
+# CPython Internals 笔记 ── 介绍、开发环境设置
 
 # 介绍
 
@@ -99,7 +87,4 @@ VS Code 在工作区目录中创建一个文件夹 `.vscode`。 在此文件夹�
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

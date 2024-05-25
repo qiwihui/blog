@@ -1,17 +1,4 @@
----
-title: "GitHub Actions 第12天：有关工作流程的信息"
-description: "GitHub Actions 第12天：有关工作流程的信息"
-tags: 
-- 技术
-- 翻译
-- tips
-- github actions
-top: 95
-date: 27/03/2020, 16:30:15
-author: qiwihui
-update: 27/03/2020, 16:41:57
-categories: 
----
+# GitHub Actions 第12天：有关工作流程的信息
 
 昨天我们看到GitHub为GitHub Actions工作流运行提供了一些信息，即 `GITHUB_TOKEN`。但这还不是全部。GitHub Actions还为你提供什么其他信息？
 
@@ -50,7 +37,4 @@ GitHub Actions提供了大量有关存储库，触发运行的操作以及环境
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

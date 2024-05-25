@@ -1,14 +1,4 @@
----
-title: "使用 Git Hooks 实现项目自动部署"
-description: "使用 Git Hooks 实现项目自动部署"
-tags: 
-- 技术
-top: 18
-date: 10/09/2018, 13:32:54
-author: qiwihui
-update: 31/01/2019, 16:05:21
-categories: 技术
----
+# 使用 Git Hooks 实现项目自动部署
 
 自动化部署解放双手，发展生产力，更重要的是可以减少部署过程中的错误操作。
 <!--more-->
@@ -175,7 +165,4 @@ git reset --hard origin/master
 即`git reset`把HEAD 指向了新下载的未合并的节点，也就是在local machine上reset之后的。
 
 参考：[git 放弃本地修改 强制更新](http://blog.csdn.net/a06062125/article/details/11727273)
-
-
-### Comments
 

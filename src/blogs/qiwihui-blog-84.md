@@ -1,17 +1,4 @@
----
-title: "GitHub Actions 第1天：CI/CD 触发器"
-description: "GitHub Actions 第1天：CI/CD 触发器"
-tags: 
-- 技术
-- 翻译
-- tips
-- github actions
-top: 84
-date: 20/03/2020, 18:52:25
-author: qiwihui
-update: 20/03/2020, 21:48:23
-categories: 
----
+# GitHub Actions 第1天：CI/CD 触发器
 
 GitHub Actions是一个独立的系统：它提供了 CI/CD 构建功能──能够构建和测试 Pull Request 并合并到你的master分支中──但它不只限于构建系统。 它已经集成到GitHub中，并且 [只要你的项目库中发生任何事件](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows)（例如正在创建发行版或正在评论问题），都可以触发并运行工作流。
 
@@ -61,7 +48,4 @@ on:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

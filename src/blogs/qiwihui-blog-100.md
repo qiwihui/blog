@@ -1,17 +1,4 @@
----
-title: "GitHub Actions 第17天：依赖作业"
-description: "GitHub Actions 第17天：依赖作业"
-tags: 
-- 技术
-- 翻译
-- tips
-- github actions
-top: 100
-date: 11/04/2020, 15:02:59
-author: qiwihui
-update: 11/04/2020, 15:36:26
-categories: 
----
+# GitHub Actions 第17天：依赖作业
 
 如果你设置了包含多个作业的工作流程（无论是[基于矩阵的工作流程](https://qiwihui.com/qiwihui-blog-85/)还是只是单独定义了作业），这些作业将彼此独立地并行运行。通常，这是理想的。只要有可用的计算机即可执行你的作业。
 
@@ -44,7 +31,4 @@ categories:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

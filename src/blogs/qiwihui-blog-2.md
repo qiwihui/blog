@@ -1,14 +1,4 @@
----
-title: "One problem at Haidian Book City"
-description: "One problem at Haidian Book City"
-tags: 
-- 技术
-top: 2
-date: 10/09/2018, 13:07:20
-author: qiwihui
-update: 31/01/2019, 16:10:17
-categories: 技术
----
+# One problem at Haidian Book City
 
 Today, I just came by Haidian Book City as usual at Haidian dist in
     Beijing. and I found the problem hung on the wall nearby. It is very
@@ -675,7 +665,4 @@ Those 92 subsequence is so basic that is constructs every member in the look-and
 That is perfect from the begining to the end. Many thanks to the problem
     maker, and the screenwriters, also every
     excellent actors in Breaking Bad.
-
-
-### Comments
 

@@ -1,15 +1,4 @@
----
-title: "用 Rust Actix-web 写一个 Todo 应用（三）── migrations 和错误处理"
-description: "用 Rust Actix-web 写一个 Todo 应用（三）── migrations 和错误处理"
-tags: 
-- 技术
-- Rust
-top: 107
-date: 24/10/2020, 17:53:14
-author: qiwihui
-update: 26/10/2020, 15:31:11
-categories: 技术
----
+# 用 Rust Actix-web 写一个 Todo 应用（三）── migrations 和错误处理
 
 ## 使用 diesel 管理数据库变化
 
@@ -211,7 +200,4 @@ impl From<PoolError> for Error {
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

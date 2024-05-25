@@ -1,15 +1,4 @@
----
-title: "08. Lambda 函数 — Python 进阶"
-description: "08. Lambda 函数 — Python 进阶"
-tags: 
-- 技术
-- Python
-top: 125
-date: 25/03/2021, 16:50:27
-author: qiwihui
-update: 29/03/2021, 15:15:49
-categories: 技术
----
+# 08. Lambda 函数 — Python 进阶
 
 Lambda函数是一个小的（一行）匿名函数，没有函数名称。 Lambda函数可以接受任意数量的参数，但只能具有一个表达式。 虽然使用def关键字定义了普通函数，但在Python中，使用lambda关键字定义了匿名函数。
 
@@ -141,7 +130,4 @@ print(sum_a)
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

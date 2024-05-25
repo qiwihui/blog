@@ -1,15 +1,4 @@
----
-title: "17. 多进程 — Python 进阶"
-description: "17. 多进程 — Python 进阶"
-tags: 
-- 技术
-- Python
-top: 135
-date: 30/03/2021, 10:19:42
-author: qiwihui
-update: 30/03/2021, 10:19:42
-categories: 技术
----
+# 17. 多进程 — Python 进阶
 
 在本文中，我们讨论了如何在Python中使用 `multiprocessing` 模块。
 
@@ -360,7 +349,4 @@ if __name__ == "__main__":
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

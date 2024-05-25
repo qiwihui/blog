@@ -1,14 +1,4 @@
----
-title: "使用免费的let’s encrypt证书为网站开启https（已过时）"
-description: "使用免费的let’s encrypt证书为网站开启https（已过时）"
-tags: 
-- 技术
-top: 23
-date: 10/09/2018, 13:39:29
-author: qiwihui
-update: 31/01/2019, 16:05:58
-categories: 技术
----
+# 使用免费的let’s encrypt证书为网站开启https（已过时）
 
 这篇博客将介绍使用免费的let's encrypt证书, 为网站开启https。
 <!--more-->
@@ -144,7 +134,4 @@ Let’s Encrypt 的有效期只有90天，官方客户端不支持持续更新�
 
 Let's Encrypt TLS/SSL is free.
 
-
-
-### Comments
 

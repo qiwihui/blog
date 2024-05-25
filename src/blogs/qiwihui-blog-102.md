@@ -1,17 +1,4 @@
----
-title: "GitHub Actions 第19天：下载文件"
-description: "GitHub Actions 第19天：下载文件"
-tags: 
-- 技术
-- 翻译
-- tips
-- github actions
-top: 102
-date: 11/04/2020, 16:10:57
-author: qiwihui
-update: 11/04/2020, 16:18:08
-categories: 
----
+# GitHub Actions 第19天：下载文件
 
 昨天，我们研究了如何在工作流运行过程中[上传文件](https://qiwihui.com/qiwihui-blog-101/)，然后手动下载它们。这在许多情况下都非常有用，但是我认为使用文件的更强大的部分是使用工件在不同步骤之间传输文件。
 
@@ -38,7 +25,4 @@ categories:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

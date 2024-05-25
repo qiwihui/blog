@@ -1,15 +1,4 @@
----
-title: "年度总结 - 过去的2013年"
-description: "年度总结 - 过去的2013年"
-tags: 
-- 生活
-- 总结
-top: 3
-date: 10/09/2018, 13:15:15
-author: qiwihui
-update: 31/01/2019, 16:10:56
-categories: 生活
----
+# 年度总结 - 过去的2013年
 
 写在2013年到2014年还有不到一个月的时候, 对我第一年工作的状态有一个简单的描述, 每年都要给自己写一个年终总结。
 <!--more-->
@@ -37,7 +26,4 @@ categories: 生活
    - [Facebook](https://www.facebook.com/weihui.qiu), [Twitter](https://twitter.com/QiuWeihui1), [G+](https://plus.google.com/+WeihuiQiu/), QQ, Wechat...分散了我的精力，有社交依赖了。
    - 没能把Google Glass的购买码送出去，人品。
    - 我不想扯到关于买房买车的问题。
-
-
-### Comments
 

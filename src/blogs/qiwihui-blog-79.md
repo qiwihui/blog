@@ -1,15 +1,4 @@
----
-title: "《编写高质量Python代码的59个有效方法》笔记"
-description: "《编写高质量Python代码的59个有效方法》笔记"
-tags: 
-- Python
-- tips
-top: 79
-date: 09/01/2020, 11:42:26
-author: qiwihui
-update: 09/01/2020, 12:33:54
-categories: 
----
+# 《编写高质量Python代码的59个有效方法》笔记
 
 ### 1. Python版本
 
@@ -297,7 +286,4 @@ CPyhton：引用计数，gc
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

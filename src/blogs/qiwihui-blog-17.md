@@ -1,14 +1,4 @@
----
-title: "使用Nginx，supervisor在DigitalOcean中部署tornado项目"
-description: "使用Nginx，supervisor在DigitalOcean中部署tornado项目"
-tags: 
-- 技术
-top: 17
-date: 10/09/2018, 13:32:13
-author: qiwihui
-update: 31/01/2019, 16:05:12
-categories: 技术
----
+# 使用Nginx，supervisor在DigitalOcean中部署tornado项目
 
 一直在想把微信的公众号的文章导出为RSS阅读，方便阅读和减少对微信的依赖，后来看到 
 [zhu327/rss](https://github.com/zhu327/rss) 这个项目，这是一个用来生成微博，微信公众号，知乎日报 RSS 的Web APP。
@@ -299,7 +289,4 @@ Nginx很好很强大，我们用它来做为我们的HTTP服务器。
 这样，我们就完成了这个server的配置。在我部署这个server的过程中，微信对应的RSS生成的解析实效了，
 我觉得是因为sogou在其url中添加了一个序列，这个序列是有AES算法得出来的，并且一段时间会换一个key来
 生成这个序列，所以我暂时也不知道怎么处理这个，有待进一步研究。
-
-
-### Comments
 

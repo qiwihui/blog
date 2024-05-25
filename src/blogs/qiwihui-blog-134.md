@@ -1,15 +1,4 @@
----
-title: "16. 多线程 — Python 进阶"
-description: "16. 多线程 — Python 进阶"
-tags: 
-- 技术
-- Python
-top: 134
-date: 29/03/2021, 22:34:49
-author: qiwihui
-update: 29/03/2021, 22:34:49
-categories: 技术
----
+# 16. 多线程 — Python 进阶
 
 在本文中，我们讨论了如何在Python中使用 `threading` 模块。
 
@@ -311,7 +300,4 @@ if __name__ == '__main__':
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

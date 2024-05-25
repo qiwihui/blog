@@ -1,14 +1,4 @@
----
-title: "在 OS X 上使用 sed 命令的一些注意"
-description: "在 OS X 上使用 sed 命令的一些注意"
-tags: 
-- 技术
-top: 48
-date: 24/01/2019, 16:32:51
-author: qiwihui
-update: 31/01/2019, 15:11:44
-categories: 技术
----
+# 在 OS X 上使用 sed 命令的一些注意
 
 在 OS X 上使用 `sed` 会和 GNU 上不太一致，在此记录。
 
@@ -68,6 +58,3 @@ perl -i -pe's/foo/bar/g' target
 ### 参考
 
 - [sed command with -i option failing on Mac, but works on Linux](https://stackoverflow.com/a/4247319/3218128)
-
-### Comments
-

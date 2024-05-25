@@ -1,15 +1,4 @@
----
-title: "13. 装饰器 — Python 进阶"
-description: "13. 装饰器 — Python 进阶"
-tags: 
-- 技术
-- Python
-top: 127
-date: 26/03/2021, 14:39:08
-author: qiwihui
-update: 30/03/2021, 10:21:32
-categories: 技术
----
+# 13. 装饰器 — Python 进阶
 
 装饰器是一个函数，它接受另一个函数并扩展该函数的行为而无需显式修改它。 这是一个非常强大的工具，可以将新功能添加到现有函数中。
 
@@ -316,7 +305,4 @@ say_hello(5)
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

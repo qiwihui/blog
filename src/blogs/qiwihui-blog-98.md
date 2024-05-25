@@ -1,17 +1,4 @@
----
-title: "GitHub Actions 第15天：在步骤之间共享数据"
-description: "GitHub Actions 第15天：在步骤之间共享数据"
-tags: 
-- 技术
-- 翻译
-- tips
-- github actions
-top: 98
-date: 29/03/2020, 22:50:28
-author: qiwihui
-update: 29/03/2020, 22:50:28
-categories: 
----
+# GitHub Actions 第15天：在步骤之间共享数据
 
 在 GitHub Actions 的任务中，你可以有多个步骤 ，一个接一个地运行。每个步骤可能是调用一个操作（例如，[检出存储库中的代码](https://github.com/actions/checkout)或[安装特定版本的Node.js](https://github.com/actions/setup-node)），也可能是一个 `run`，仅运行你提供的脚本的步骤。
 
@@ -57,7 +44,4 @@ GitHub Actions将这些步骤作为单独的脚本运行──这意味着在单
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

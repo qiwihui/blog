@@ -1,15 +1,4 @@
----
-title: "用 Rust Actix-web 写一个 Todo 应用（一）── Hello world 和 REST 接口"
-description: "用 Rust Actix-web 写一个 Todo 应用（一）── Hello world 和 REST 接口"
-tags: 
-- 技术
-- Rust
-top: 105
-date: 20/10/2020, 13:46:39
-author: qiwihui
-update: 26/10/2020, 15:27:56
-categories: 技术
----
+# 用 Rust Actix-web 写一个 Todo 应用（一）── Hello world 和 REST 接口
 
 ## Actix
 
@@ -501,10 +490,3 @@ pub async fn get_todos(client: &Client) -> Result<Vec<TodoList>, Error> {
 >
 > Site: [QIWIHUI](https://qiwihui.com)
 
-
-### Comments
-
----
-> from: [**qiwihui**](https://github.com/qiwihui/blog/issues/105#issuecomment-712695653) on: **10/20/2020**
-
-cool

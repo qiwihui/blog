@@ -1,15 +1,4 @@
----
-title: "04. 集合 — Python 进阶"
-description: "04. 集合 — Python 进阶"
-tags: 
-- 技术
-- Python
-top: 121
-date: 22/03/2021, 10:48:28
-author: qiwihui
-update: 29/03/2021, 15:20:01
-categories: 技术
----
+# 04. 集合 — Python 进阶
 
 集合是无序的容器数据类型，它是无索引的，可变的并且没有重复的元素。 集合用大括号创建。
 
@@ -329,7 +318,4 @@ print(odds.difference(evens))
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

@@ -1,15 +1,4 @@
----
-title: "《数据密集型应用的设计》读书笔记──第一章：可靠性，可扩展性，可维护性"
-description: "《数据密集型应用的设计》读书笔记──第一章：可靠性，可扩展性，可维护性"
-tags: 
-- 技术
-- 读书笔记
-top: 143
-date: 13/07/2021, 18:04:53
-author: qiwihui
-update: 03/08/2021, 11:45:10
-categories: 技术
----
+# 《数据密集型应用的设计》读书笔记──第一章：可靠性，可扩展性，可维护性
 
 # 第一章：可靠性，可扩展性，可维护性
 
@@ -180,7 +169,4 @@ categories: 技术
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

@@ -1,14 +1,4 @@
----
-title: "One small story by Fan Zhang at GMIC 2014"
-description: "One small story by Fan Zhang at GMIC 2014"
-tags: 
-- 生活
-top: 8
-date: 10/09/2018, 13:23:57
-author: qiwihui
-update: 31/01/2019, 16:12:08
-categories: 生活
----
+# One small story by Fan Zhang at GMIC 2014
 
 I attended GMIC 2014 in Beijing at May 5<sup>th</sup> and May 6<sup>th</sup>.
 GMIC is short for Global Mobile Internet Conference, and it is a really huge conference.
@@ -37,7 +27,4 @@ I would like to go to Midi festival the next time in Beijing, and listen to this
 
 [Here](http://smileboxx.blogspot.com/2013/08/escape-plan-brightest-star-in-night-sky.html) is the song
 "The Brightest Star in the Sky" in English. Hope you like it.
-
-
-### Comments
 

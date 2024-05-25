@@ -1,14 +1,4 @@
----
-title: "HMM理解思路"
-description: "HMM理解思路"
-tags: 
-- 机器学习
-top: 74
-date: 03/06/2019, 17:39:05
-author: qiwihui
-update: 04/06/2019, 11:34:17
-categories: 
----
+# HMM理解思路
 
 HMM
 ====
@@ -79,7 +69,4 @@ HMM
 
 1. 《统计学习方法》，李航
 2. [隐马尔科夫模型（HMM）及其Python实现](https://applenob.github.io/hmm.html)
-
-
-### Comments
 

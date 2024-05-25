@@ -1,15 +1,4 @@
----
-title: "01. List — Python 进阶"
-description: "01. List — Python 进阶"
-tags: 
-- 技术
-- Python
-top: 118
-date: 19/03/2021, 15:45:12
-author: qiwihui
-update: 22/03/2021, 10:56:35
-categories: 技术
----
+# 01. List — Python 进阶
 
 列表（List）是一种有序且可变的容器数据类型。 与集合（Set）不同，列表允许重复的元素。 它方便保存数据序列并对其进行进一步迭代。 列表用方括号创建。
 
@@ -279,6 +268,3 @@ print(a[0])
     [[1, 2], [3, 4]]
     [1, 2]
 ```
-
-### Comments
-

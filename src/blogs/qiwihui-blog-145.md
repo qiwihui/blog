@@ -1,14 +1,4 @@
----
-title: "七月小结（2021.07）"
-description: "七月小结（2021.07）"
-tags: 
-- 总结
-top: 145
-date: 02/08/2021, 18:03:56
-author: qiwihui
-update: 02/08/2021, 18:03:56
-categories: 
----
+# 七月小结（2021.07）
 
 ### 七月发生了什么事情
 
@@ -45,7 +35,4 @@ categories:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

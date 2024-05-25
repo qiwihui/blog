@@ -1,17 +1,4 @@
----
-title: "GitHub Actions 第6天：快速失败的矩阵工作流"
-description: "GitHub Actions 第6天：快速失败的矩阵工作流"
-tags: 
-- 技术
-- 翻译
-- tips
-- github actions
-top: 89
-date: 21/03/2020, 10:34:16
-author: qiwihui
-update: 21/03/2020, 10:38:20
-categories: 
----
+# GitHub Actions 第6天：快速失败的矩阵工作流
 
 因此，关于 GitHub Actions 的这些帖子甚至还不到一周，我已经写了很多有关 [矩阵工作流](https://qiwihui.com/qiwihui-blog-85/) 的文章。如你还没猜到，我是忠实粉丝。 😍
 
@@ -57,7 +44,4 @@ strategy:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

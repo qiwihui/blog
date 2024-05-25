@@ -1,17 +1,4 @@
----
-title: "GitHub Actions 第3天：跨平台构建"
-description: "GitHub Actions 第3天：跨平台构建"
-tags: 
-- 技术
-- 翻译
-- tips
-- github actions
-top: 86
-date: 20/03/2020, 22:07:21
-author: qiwihui
-update: 20/03/2020, 22:08:05
-categories: 
----
+# GitHub Actions 第3天：跨平台构建
 
 GitHub Actions 的优点之一是它不仅支持在 Linux 主机上或在容器中运行构建。GitHub 当然提供了Linux虚拟机，但是它们也提供了[运行 Windows 和 macOS](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/virtual-environments-for-github-hosted-runners) 的虚拟机。
 
@@ -39,7 +26,4 @@ macOS 虚拟环境尤其重要，因为即使作为开发人员，也不能在�
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

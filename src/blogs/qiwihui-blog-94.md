@@ -1,17 +1,4 @@
----
-title: "GitHub Actions 第11天：密码（Secrets）"
-description: "GitHub Actions 第11天：密码（Secrets）"
-tags: 
-- 技术
-- 翻译
-- tips
-- github actions
-top: 94
-date: 27/03/2020, 16:13:17
-author: qiwihui
-update: 28/04/2021, 16:49:43
-categories: 
----
+# GitHub Actions 第11天：密码（Secrets）
 
 昨天我们建立了一个基于[改变路径](https://qiwihui.com/qiwihui-blog-93/)触发的工作流; 它的目标是发布文档。如果仔细看，在工作流程的底部，我们引用了一个变量。看起来有点像我们[引用矩阵变量](https://qiwihui.com/qiwihui-blog-85/)的方式 ，而这里引用了一个密码。
 
@@ -61,15 +48,3 @@ GitHub明确 **禁用** 了对来自fork的工作流提供密码的功能。这�
 >
 > Site: [QIWIHUI](https://qiwihui.com)
 
-
-### Comments
-
----
-> from: [**Volcano-Yang**](https://github.com/qiwihui/blog/issues/94#issuecomment-828274529) on: **4/28/2021**
-
-沙发🛋  感谢楼主的翻译
----
-> from: [**Volcano-Yang**](https://github.com/qiwihui/blog/issues/94#issuecomment-828275735) on: **4/28/2021**
-
-![image](https://user-images.githubusercontent.com/43328103/116375203-a173e600-a841-11eb-8535-4212b723be16.png)
-现在还支持设置环境secrets 限制不同分支对secret的读取权限

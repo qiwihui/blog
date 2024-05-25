@@ -1,15 +1,4 @@
----
-title: "CSS 基础──样式篇"
-description: "CSS 基础──样式篇"
-tags: 
-- 技术
-- 读书笔记
-top: 147
-date: 16/08/2021, 17:16:55
-author: qiwihui
-update: 16/08/2021, 17:18:56
-categories: 
----
+# CSS 基础──样式篇
 
 《[前端小课──用好HTML](https://lefex.github.io/books/html-book/introduction.html)》的读书笔记。
 
@@ -495,7 +484,4 @@ less，sass
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

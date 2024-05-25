@@ -1,14 +1,4 @@
----
-title: "Crypto Coven 加密女巫 NFT 合约解读"
-description: "Crypto Coven 加密女巫 NFT 合约解读"
-tags: 
-- 区块链
-top: 152
-date: 27/01/2022, 11:24:44
-author: qiwihui
-update: 27/01/2022, 11:28:13
-categories: 技术
----
+# Crypto Coven 加密女巫 NFT 合约解读
 
 本文主要是对 [@mannynotfound](https://twitter.com/mannynotfound) 的推文 [https://twitter.com/mannynotfound/status/1470535464922845187](https://twitter.com/mannynotfound/status/1470535464922845187) 的整理和补充。
 
@@ -560,6 +550,3 @@ NFT 市场和个人可通过检索版税支付信息 `royaltyInfo()` 来实施�
 ### 参考
 
 1. **[为什么说 EIP-2981 的生效对于 NFT 创作者来说至关重要？](https://mp.weixin.qq.com/s/DVUYmHLJE75GJ2ATdtYhEw)**
-
-### Comments
-

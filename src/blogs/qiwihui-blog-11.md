@@ -1,14 +1,4 @@
----
-title: "Seek, think then speak"
-description: "Seek, think then speak"
-tags: 
-- 观点
-top: 11
-date: 10/09/2018, 13:27:20
-author: qiwihui
-update: 31/01/2019, 16:14:27
-categories: 生活
----
+# Seek, think then speak
 
 “Seek, think then speak”，这是我在我的[Twitter](https://twitter.com/Weihui_Q)
 上的签名，也是我在日常生活和工作中一个做事的基本准则。当自己得到一个消息，或者开始一个
@@ -42,7 +32,4 @@ categories: 生活
 
 Speak, 在这个容易因为言获罪的时期，发言和行动变得愈加重要。沉默是金，那是因为真理，对于非正义，
 speak才是真理。
-
-
-### Comments
 

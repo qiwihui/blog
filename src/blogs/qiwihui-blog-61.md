@@ -1,15 +1,4 @@
----
-title: "解决33问题──将33写成3个整数的立方和"
-description: "解决33问题──将33写成3个整数的立方和"
-tags: 
-- 翻译
-- 数学
-top: 61
-date: 09/04/2019, 09:20:40
-author: qiwihui
-update: 11/04/2019, 16:02:24
-categories: 
----
+# 解决33问题──将33写成3个整数的立方和
 
 这篇文章内容翻译自论文 [Cracking the problem with 33](https://arxiv.org/abs/1903.04284)，论文研究了方程 $x^3+y^3+z^3=k$ 在一些小的 $k$ 值的解，并首次将33写成了3个整数的立方和。完成中文可以查看项目 [qiwihui/cracking-the-problem-with-33](https://github.com/qiwihui/cracking-the-problem-with-33)。截止到目前，100以内的自然数就剩下42还没有找到关于立方和的整数解了！
 
@@ -327,10 +316,3 @@ E-mail address: <andrew.booker@bristol.ac.uk>
 ## 博客参考：
 
 - [人类第一次将33写成了3个整数的立方和](http://www.duodaa.com/blog/index.php/archives/1857/)
-
-### Comments
-
----
-> from: [**qiwihui**](https://github.com/qiwihui/blog/issues/61#issuecomment-482011133) on: **4/11/2019**
-
-![](https://github.trello.services/images/mini-trello-icon.png) [cracking problem with 33](https://trello.com/c/QWCHZJvO/78-cracking-problem-with-33)

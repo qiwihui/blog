@@ -1,15 +1,4 @@
----
-title: "学习Django──我犯的初学者错误以及如何避免"
-description: "学习Django──我犯的初学者错误以及如何避免"
-tags: 
-- 翻译
-- Python
-top: 81
-date: 20/01/2020, 15:04:20
-author: qiwihui
-update: 20/01/2020, 15:39:22
-categories: 
----
+# 学习Django──我犯的初学者错误以及如何避免
 
 > 这篇文章是 reddit 上用户 [unknownguy0518](https://www.reddit.com/user/unknownguy0518/) 发表的他在学习Django是所犯的初学者错误，以及他的一些建议。更多具体的内容可以前往对应的 [话题](https://www.reddit.com/r/django/comments/eld87j/learning_django_beginner_mistakes_i_made_that_you/) 查看。
 
@@ -119,7 +108,4 @@ categories:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

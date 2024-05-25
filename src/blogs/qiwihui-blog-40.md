@@ -1,14 +1,4 @@
----
-title: "Making kernels for jupyter"
-description: "Making kernels for jupyter"
-tags: 
-- 技术
-top: 40
-date: 25/10/2018, 16:18:06
-author: qiwihui
-update: 31/01/2019, 15:12:57
-categories: 技术
----
+# Making kernels for jupyter
 
 一个内核是运行和解析用户代码的程序。IPython包含了一个运行和解析Python代码的内核，而且人们已经写了多种语言的内核。
 
@@ -270,6 +260,3 @@ $ jupyter kernelspec uninstall echo
  - [Making simple Python wrapper kernels](https://jupyter-client.readthedocs.io/en/stable/wrapperkernels.html)
  - [题 如何将python3内核添加到jupyter（IPython）](http://landcareweb.com/questions/879/ru-he-jiang-python3nei-he-tian-jia-dao-jupyter-ipython)
  - [翻译 - Making kernels for Jupyter](https://skyrover.me/2017/12/07/making_kernels_for_jupyter/)
-
-### Comments
-

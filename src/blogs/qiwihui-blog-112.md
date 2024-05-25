@@ -1,16 +1,4 @@
----
-title: "Google codelabs 模板"
-description: "Google codelabs 模板"
-tags: 
-- 技术
-- tips
-- github actions
-top: 112
-date: 28/12/2020, 15:52:40
-author: qiwihui
-update: 19/02/2021, 15:12:08
-categories: 
----
+# Google codelabs 模板
 
 项目地址：https://github.com/qiwihui/codelabs-site-template
 
@@ -28,7 +16,4 @@ categories:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

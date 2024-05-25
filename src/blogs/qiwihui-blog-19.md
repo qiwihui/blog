@@ -1,15 +1,4 @@
----
-title: "9个值得知道的cURL的用法"
-description: "9个值得知道的cURL的用法"
-tags: 
-- 技术
-- 翻译
-top: 19
-date: 10/09/2018, 13:33:38
-author: qiwihui
-update: 31/01/2019, 16:08:59
-categories: 技术
----
+# 9个值得知道的cURL的用法
 
 对于 HTTP 工程师和 API 设计师来说，使用命令行操作 HTTP 是非常有用的技能。[cURL](http://curl.haxx.se/)
 库和 `curl` 命令可以给你设计请求，放入管道并查看相应的能力。`curl` 能力的缺点在于它能覆盖多广的
@@ -329,7 +318,4 @@ X-Powered-By: http://httpkit.com
 ```
 
 原文：[9 uses for cURL worth knowing](http://httpkit.com/resources/HTTP-from-the-Command-Line/)
-
-
-### Comments
 

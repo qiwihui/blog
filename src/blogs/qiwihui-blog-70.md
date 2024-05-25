@@ -1,15 +1,4 @@
----
-title: "Git合并提交"
-description: "Git合并提交"
-tags: 
-- 技术
-- tips
-top: 70
-date: 09/05/2019, 14:40:55
-author: qiwihui
-update: 09/05/2019, 14:40:55
-categories: 
----
+# Git合并提交
 
 在日常开发中，我们的Git提交原则经常是小功能多次提交，但是有时需要在完成功能之后将多个连续的提交合并成一个，或者进行分支合并时，只保留一个提交，以保证分支简介，这时就需要进行squash操作，两种分别称为 Rebase Squash 和 Merge Squash。这篇tip主要记录如何处理这两种操作以及之间的区别，
 
@@ -187,7 +176,4 @@ $ git lg
 ## 参考
 
 - [Squash commits into one with Git](https://www.internalpointers.com/post/squash-commits-into-one-git)
-
-
-### Comments
 

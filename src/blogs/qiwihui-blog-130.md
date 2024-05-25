@@ -1,15 +1,4 @@
----
-title: "19. 星号操作符 — Python 进阶"
-description: "19. 星号操作符 — Python 进阶"
-tags: 
-- 技术
-- Python
-top: 130
-date: 29/03/2021, 15:01:17
-author: qiwihui
-update: 20/03/2024, 00:26:46
-categories: 技术
----
+# 19. 星号操作符 — Python 进阶
 
 星号（ `*` ）可用于Python中的不同情况：
 
@@ -224,7 +213,4 @@ print(dict_c)
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

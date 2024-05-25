@@ -1,15 +1,4 @@
----
-title: "Git 小结"
-description: "Git 小结"
-tags: 
-- 技术
-- tips
-top: 13
-date: 10/09/2018, 13:28:43
-author: qiwihui
-update: 12/02/2019, 14:14:52
-categories: 技术
----
+# Git 小结
 
 整理自[手把手教你用git](http://www.cnblogs.com/tugenhua0707/p/4050072.html).
 <!--more-->
@@ -51,7 +40,4 @@ categories: 技术
     + `git push origin —delete <branch_name>`
 10. get remote branch locally
     + `git branch --set-upstream dev origin/dev`
-
-
-### Comments
 

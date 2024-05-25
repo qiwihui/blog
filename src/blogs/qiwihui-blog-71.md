@@ -1,16 +1,4 @@
----
-title: "网络故障透露中国互联网接入现状"
-description: "网络故障透露中国互联网接入现状"
-tags: 
-- 技术
-- 翻译
-- GFW
-top: 71
-date: 18/05/2019, 20:08:57
-author: qiwihui
-update: 18/05/2019, 20:13:29
-categories: 
----
+# 网络故障透露中国互联网接入现状
 
 原文：[Internet Outage Reveals Reach of China’s Connectivity](https://blog.thousandeyes.com/internet-outage-reveals-reach-of-chinas-connectivity/)
 
@@ -79,6 +67,3 @@ categories:
 ## 立即获得可见性
 
 主要的互联网中断是企业团队关注企业所依赖的大量外部依赖关系的警钟。如果你无法深入了解四面墙以外的应用和网络层条件，那么当你的云和互联网生态系统发生不可预测的事情时，您将陷入困境。
-
-### Comments
-

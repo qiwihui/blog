@@ -1,15 +1,4 @@
----
-title: "用 Rust Actix-web 写一个 Todo 应用（四）── 测试"
-description: "用 Rust Actix-web 写一个 Todo 应用（四）── 测试"
-tags: 
-- 技术
-- Rust
-top: 108
-date: 26/10/2020, 15:21:59
-author: qiwihui
-update: 26/10/2020, 15:34:23
-categories: 技术
----
+# 用 Rust Actix-web 写一个 Todo 应用（四）── 测试
 
 对程序进行集成测试。
 
@@ -362,7 +351,4 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

@@ -1,15 +1,4 @@
----
-title: "05. 字符串 — Python 进阶"
-description: "05. 字符串 — Python 进阶"
-tags: 
-- 技术
-- Python
-top: 122
-date: 24/03/2021, 16:35:21
-author: qiwihui
-update: 29/03/2021, 15:14:38
-categories: 技术
----
+# 05. 字符串 — Python 进阶
 
 字符串是字符序列。 Python中的字符串用双引号或单引号引起来。
 
@@ -310,7 +299,4 @@ print(b)
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

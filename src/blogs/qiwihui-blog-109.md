@@ -1,17 +1,4 @@
----
-title: "编码面试学习手册（Coding Interview University）"
-description: "编码面试学习手册（Coding Interview University）"
-tags: 
-- 技术
-- 翻译
-- Python
-- 机器学习
-top: 109
-date: 31/10/2020, 12:50:52
-author: qiwihui
-update: 31/10/2020, 15:27:15
-categories: 技术
----
+# 编码面试学习手册（Coding Interview University）
 
 > 原文地址： https://github.com/jwasham/coding-interview-university
 > 基于2020年10月30日的原文版本翻译和校对
@@ -1902,7 +1889,4 @@ categories: 技术
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

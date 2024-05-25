@@ -1,16 +1,4 @@
----
-title: "CPython Internals 笔记 ── 编译 Python"
-description: "CPython Internals 笔记 ── 编译 Python"
-tags: 
-- Python
-- 读书笔记
-- CPythonInternals
-top: 149
-date: 24/08/2021, 15:25:22
-author: qiwihui
-update: 24/08/2021, 15:25:22
-categories: 
----
+# CPython Internals 笔记 ── 编译 Python
 
 现在你已经下载了 CPython 开发环境并对其进行了配置，你可以将 CPython 源代码编译成一个可执行的解释器。
 
@@ -153,7 +141,4 @@ PGO 可以插入一个有条件执行的对该函数的直接调用。然后可�
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

@@ -1,16 +1,4 @@
----
-title: "Uniswap v3 无常损失分析"
-description: "Uniswap v3 无常损失分析"
-tags: 
-- 区块链
-- 投研
-- DeFi
-top: 165
-date: 17/09/2022, 11:54:12
-author: qiwihui
-update: 17/09/2022, 12:13:52
-categories: 
----
+# Uniswap v3 无常损失分析
 
 # Uniswap v3 无常损失分析
 
@@ -428,6 +416,3 @@ v3 表现更好的是 100 基点费率或 1 基点费率的稳定币对。
 - [https://uniswapv3.flipsidecrypto.com/](https://uniswapv3.flipsidecrypto.com/)
 - [https://newsletter.banklesshq.com/p/how-to-automate-uniswap-v3-liquidity](https://newsletter.banklesshq.com/p/how-to-automate-uniswap-v3-liquidity)
 - [https://kydo.substack.com/p/palm-protocol-owned-active-liquidity](https://kydo.substack.com/p/palm-protocol-owned-active-liquidity)
-
-### Comments
-

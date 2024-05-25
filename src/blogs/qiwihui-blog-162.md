@@ -1,15 +1,4 @@
----
-title: "Sui 公链研究整理"
-description: "Sui 公链研究整理"
-tags: 
-- 区块链
-- 投研
-top: 162
-date: 30/07/2022, 11:13:18
-author: qiwihui
-update: 17/09/2022, 12:00:33
-categories: 
----
+# Sui 公链研究整理
 
 官网：[https://sui.io/](https://sui.io/)
 
@@ -141,6 +130,3 @@ SUI 持有者可以将自己的 SUI 委托给给验证者进行质押，在每�
 6. [https://twitter.com/tracecrypto1/status/1544332560389607424](https://twitter.com/tracecrypto1/status/1544332560389607424)
 7. [https://twitter.com/cryptoalvatar/status/1551878534926401537](https://twitter.com/cryptoalvatar/status/1551878534926401537)
 8. [https://twitter.com/state_xyz/status/1551878856151142401](https://twitter.com/state_xyz/status/1551878856151142401)
-
-### Comments
-

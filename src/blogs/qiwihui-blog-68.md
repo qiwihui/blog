@@ -1,15 +1,4 @@
----
-title: "Rust如何解决依赖地狱"
-description: "Rust如何解决依赖地狱"
-tags: 
-- 技术
-- 翻译
-top: 68
-date: 30/04/2019, 18:02:43
-author: qiwihui
-update: 30/04/2019, 18:06:41
-categories: 技术
----
+# Rust如何解决依赖地狱
 
 原文：[How Rust Solved Dependency Hell](https://stephencoakley.com/2019/04/24/how-rust-solved-dependency-hell)
 
@@ -149,7 +138,4 @@ Rust在编译和打包方面的精心设计以（主要）无痛依赖管理的�
 > 
 > Site: [QIWIHUI](https://qiwihui.com)
 
-
-
-### Comments
 

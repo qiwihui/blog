@@ -1,15 +1,4 @@
----
-title: "12. 随机数 — Python 进阶"
-description: "12. 随机数 — Python 进阶"
-tags: 
-- 技术
-- Python
-top: 139
-date: 14/04/2021, 16:45:03
-author: qiwihui
-update: 14/04/2021, 16:45:03
-categories: 技术
----
+# 12. 随机数 — Python 进阶
 
 Python定义了一组用于生成或操作随机数的函数。 本文介绍：
 
@@ -217,7 +206,4 @@ print(arr)
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

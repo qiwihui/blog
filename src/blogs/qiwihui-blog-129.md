@@ -1,15 +1,4 @@
----
-title: "18. 函数参数 — Python 进阶"
-description: "18. 函数参数 — Python 进阶"
-tags: 
-- 技术
-- Python
-top: 129
-date: 29/03/2021, 15:00:26
-author: qiwihui
-update: 29/03/2021, 15:00:26
-categories: 技术
----
+# 18. 函数参数 — Python 进阶
 
 在本文中，我们将详细讨论函数形参（parameters）和函数实参（arguments）。 我们将学习：
 
@@ -333,7 +322,4 @@ print('my_list after bar():', my_list)
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

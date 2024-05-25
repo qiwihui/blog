@@ -1,15 +1,4 @@
----
-title: "20. 浅拷贝和深拷贝 — Python 进阶"
-description: "20. 浅拷贝和深拷贝 — Python 进阶"
-tags: 
-- 技术
-- Python
-top: 131
-date: 29/03/2021, 15:02:01
-author: qiwihui
-update: 29/03/2021, 15:02:01
-categories: 技术
----
+# 20. 浅拷贝和深拷贝 — Python 进阶
 
 在Python中，赋值语句（`obj_b = obj_a`）不会创建真实副本。 它仅使用相同的引用创建一个新变量。 因此，当你想制作可变对象（列表，字典）的实际副本并且想要在不影响原始对象的情况下修改副本时，必须格外小心。
 
@@ -185,7 +174,4 @@ print(company_clone.boss.age)
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

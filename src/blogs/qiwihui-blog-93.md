@@ -1,17 +1,4 @@
----
-title: "GitHub Actions 第10天：路径触发器"
-description: "GitHub Actions 第10天：路径触发器"
-tags: 
-- 技术
-- 翻译
-- tips
-- github actions
-top: 93
-date: 26/03/2020, 00:03:46
-author: qiwihui
-update: 26/03/2020, 00:14:27
-categories: 
----
+# GitHub Actions 第10天：路径触发器
 
 前面我们看到可以限制[基于分支过滤器的](https://qiwihui.com/qiwihui-blog-84/)工作流运行。对于由 `push` 或 `pull_request` 触发的工作流，你可以对其进行限制，以使其仅在推送到特定分支或针对特定分支打开 pull request 时才触发。
 
@@ -34,7 +21,4 @@ categories:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-### Comments
 

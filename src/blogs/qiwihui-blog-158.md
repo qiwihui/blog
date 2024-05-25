@@ -1,14 +1,4 @@
----
-title: "Across 跨链桥合约解析"
-description: "Across 跨链桥合约解析"
-tags: 
-- 区块链
-top: 158
-date: 18/03/2022, 18:00:34
-author: qiwihui
-update: 17/09/2022, 11:59:27
-categories: 
----
+# Across 跨链桥合约解析
 
 ## 什么是 Across
 
@@ -888,6 +878,3 @@ deploy/
 Across 协议整体结构简单，流程清晰，支持了 Across 协议安全，快速的从 L2 向 L1 的资金转移。
 
 代码中调用了 Optimistic Oracle 的接口来出和解决争议，对应的逻辑有空之后详说。
-
-### Comments
-

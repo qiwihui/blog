@@ -1,14 +1,4 @@
----
-title: "Elasticsearch cheat sheet"
-description: "Elasticsearch cheat sheet"
-tags: 
-- 技术
-top: 39
-date: 15/10/2018, 10:25:20
-author: qiwihui
-update: 31/01/2019, 15:13:13
-categories: 技术
----
+# Elasticsearch cheat sheet
 
 ### 1
 
@@ -70,6 +60,3 @@ doc['my_field'].value和_source.my_field之间的不同:
 - [elasticsearch guide chinese](https://endymecy.gitbooks.io/elasticsearch-guide-chinese/)
 - https://gist.github.com/ruanbekker/e8a09604b14f37e8d2f743a87b930f93
 - https://gist.github.com/stephen-puiszis/212b8a8b37f67c670422
-
-### Comments
-

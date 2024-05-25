@@ -1,14 +1,4 @@
----
-title: "赴日单次旅行签证申请记录"
-description: "赴日单次旅行签证申请记录"
-tags: 
-- 生活
-top: 59
-date: 10/03/2019, 23:43:06
-author: qiwihui
-update: 16/04/2019, 11:41:47
-categories: 
----
+# 赴日单次旅行签证申请记录
 
 这次赴日旅行，计划大阪奈良和东京，简单记录行前准备。
 
@@ -53,14 +43,3 @@ categories:
 
 最后，最最重要的，就是开心就好，不用太拘泥于景点有没有都游览一遍。
 
-
-### Comments
-
----
-> from: [**qiwihui**](https://github.com/qiwihui/blog/issues/59#issuecomment-472294058) on: **3/13/2019**
-
-![](https://github.trello.services/images/mini-trello-icon.png) [签证申请](https://trello.com/c/m0Sl9Jrj/127-%E7%AD%BE%E8%AF%81%E7%94%B3%E8%AF%B7)
----
-> from: [**qiwihui**](https://github.com/qiwihui/blog/issues/59#issuecomment-482011539) on: **4/11/2019**
-
-![](https://github.trello.services/images/mini-trello-icon.png) [日本樱花之行](https://trello.com/c/rJvp34cd/134-%E6%97%A5%E6%9C%AC%E6%A8%B1%E8%8A%B1%E4%B9%8B%E8%A1%8C)
