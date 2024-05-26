@@ -49,9 +49,8 @@ additional-js  = ["theme/mermaid.min.js", "theme/mermaid-init.js"]
 additional-css = ["./mdbook-admonish.css", "theme/css/mdbook-admonish.css", "theme/css/open-in.css"]
 git-repository-url = "https://github.com/qiwihui/blog"
 open-on-text = "Found a bug?! [Edit this page on GitHub.]"
-edit-url-template = "https://github.com/qiwihui/blog/edit/main/{path}"
+edit-url-template = "https://github.com/qiwihui/blog/edit/master/{path}"
 curly-quotes = true   # replaces straight quotes with curly quotes
-
 
 [output.html.fold]
 enable = true   # whether or not to enable section folding
