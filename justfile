@@ -21,6 +21,7 @@ init:
     cargo install mdbook-open-on-gh
     cargo install mdbook-katex
     cargo install mdbook-toc
+    cargo install mdbook-rss
 
 init-builder:
     @just install-gh-bin https://github.com/rust-lang/mdBook/releases/download/v0.4.35/mdbook-v0.4.35-x86_64-unknown-linux-gnu.tar.gz mdbook

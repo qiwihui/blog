@@ -40,6 +40,9 @@ after = ["links"]
 [preprocessor.mermaid]
 command = "mdbook-mermaid"
 
+[preprocessor.rss]
+files-glob = "src/blogs/*.md"
+url-base = "https://qiwihui.com/"
 
 [output.html]
 mathjax-support = true
