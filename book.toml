@@ -40,9 +40,9 @@ after = ["links"]
 [preprocessor.mermaid]
 command = "mdbook-mermaid"
 
-[preprocessor.git-atom]
-base_url = "https://qiwihui.com/"
-article_preview_lines = -1
+# [preprocessor.git-atom]
+# base_url = "https://qiwihui.com/"
+# article_preview_lines = -1
 
 [output.html]
 mathjax-support = true

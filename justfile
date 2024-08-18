@@ -21,7 +21,6 @@ init:
     cargo install mdbook-open-on-gh
     cargo install mdbook-katex
     cargo install mdbook-toc
-    cargo install mdbook-git-atom
 
 init-builder:
     @just install-gh-bin https://github.com/rust-lang/mdBook/releases/download/v0.4.35/mdbook-v0.4.35-x86_64-unknown-linux-gnu.tar.gz mdbook
@@ -31,7 +30,6 @@ init-builder:
     @just install-gh-bin https://github.com/lzanini/mdbook-katex/releases/download/v0.5.8pub/mdbook-katex-v0.5.8-x86_64-unknown-linux-gnu.tar.gz mdbook-katex
     @just install-gh-bin https://github.com/badboy/mdbook-toc/releases/download/0.14.1/mdbook-toc-0.14.1-x86_64-unknown-linux-gnu.tar.gz mdbook-toc
     @just install-gh-bin https://github.com/tommilligan/mdbook-admonish/releases/download/v1.13.0/mdbook-admonish-v1.13.0-x86_64-unknown-linux-gnu.tar.gz mdbook-admonish
-    cargo install --git https://github.com/younata/mdbook-git-atom.git
 
 install-gh-bin GITHUB_PATH BIN_NAME:
     @just _log-head "Installing {{BIN_NAME}} from {{GITHUB_PATH}} ..."
