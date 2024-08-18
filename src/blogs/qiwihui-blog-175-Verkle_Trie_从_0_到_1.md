@@ -1,5 +1,6 @@
 # Verkle Trie 从 0 到 1
 
+
 video: <https://youtu.be/yfQ0CUU4zik>
 
 docs: <https://qiwihui.notion.site/Verkle-trie-8fa545dff5014191bfb6af2765b42e6e?pvs=4>
@@ -341,3 +342,8 @@ Summary:
 - Data is stored differentiated by the suffix of the tree key.
 - The tree key is encoded byte by byte along the path from the root to the leaf node.
 - Data is included in the commitment of the leaf node.
+
+
+[View on GitHub](https://github.com/qiwihui/blog/issues/175)
+
+
