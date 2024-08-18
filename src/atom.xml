@@ -1,0 +1,2706 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Qiwihui&apos;s blog</title><id></id><updated>2024-08-18T06:37:23+00:00</updated><entry><title>Verkle Trie 从 0 到 1</title><id>blogs/qiwihui-blog-175.md</id><updated>2024-08-18T06:37:23+00:00</updated><author><name>qiwihui</name><email>qwh005007@gmail.com</email></author><link href="https://qiwihui.com/blogs/qiwihui-blog-175.html" rel="self"/><published>2024-08-18T06:37:23+00:00</published><content type="html">&lt;h1&gt;Verkle Trie 从 0 到 1&lt;/h1&gt;
+&lt;p&gt;video: &lt;a href="https://youtu.be/yfQ0CUU4zik"&gt;https://youtu.be/yfQ0CUU4zik&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;docs: &lt;a href="https://qiwihui.notion.site/Verkle-trie-8fa545dff5014191bfb6af2765b42e6e?pvs=4"&gt;https://qiwihui.notion.site/Verkle-trie-8fa545dff5014191bfb6af2765b42e6e?pvs=4&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Problems&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;How to store multiple files remotely and know that those files haven’t been changed?&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Given a starting 𝑥, compute 𝑥↦𝑥^3+5, and repeat that 1 million times. How to prove to someone I computed this, and did so correctly - without he having to re-run the whole thing.&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;Suppose our starting number is 𝑥=2.
+- x^2 = 4
+- x^3 = x^2 * x = 4 * 2 = 8
+- X^3 + 5 = 13
+So our trace is {2, 4, 8, 13, ...}
+we will produce 3,000,001 numbers in computing the circuit.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;→ How can we verify integrity of a vector of elements?&lt;/p&gt;
+&lt;h2&gt;Solution 1: Single file hashing&lt;/h2&gt;
+&lt;p&gt;For single file, we can use secure hash functions:&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/hash.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;p&gt;So a simple scheme for verifying file integrity: hash each file and save the store the hash locally.&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/hash_files.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;p&gt;Problem: has to store n hashes → we need constant-sized digest&lt;/p&gt;
+&lt;h2&gt;Solution 2: Merkle Trees&lt;/h2&gt;
+&lt;p&gt;Merkle tree&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;the root is the digest, it is constant sized&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/merkle_tree.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;use merkle proof to verify if the files have been changed.&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/merkle_proof.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Performance&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/merkle_tree_perf.png" alt="Screenshot 2024-05-07 at 10.21.39.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Problem: Many small files ⇒ Merkle proofs too large&lt;/p&gt;
+&lt;h2&gt;Solution 3: q-ary Merkle Trees&lt;/h2&gt;
+&lt;p&gt;&lt;img src="imgs/175/q-ary_merkle_tree.png" alt="Screenshot 2024-05-07 at 11.20.51.png" /&gt;&lt;/p&gt;
+&lt;p&gt;problem: Proof size is even bigger&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/problem_of_q-ary_merkle_tree.png" alt="Screenshot 2024-05-07 at 11.22.31.png" /&gt;&lt;/p&gt;
+&lt;p&gt;proof size:  $qlog_q{n}$&lt;/p&gt;
+&lt;h2&gt;Solution 4: polynomial commitment&lt;/h2&gt;
+&lt;p&gt;&lt;img src="imgs/175/polynomial_commitment.png" alt="Screenshot 2024-05-07 at 11.41.06.png" /&gt;&lt;/p&gt;
+&lt;h3&gt;What is polynomial commitments?&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;将长度为 $n+1$ 的 vector 转换为多项式的点值 $(v_0, v_1, ..., v_n)$→$(0, v_0), (1, v_1), ...,(n, v_n)$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;将唯一对应的 $Degree=n$ 的多项式$f(x)$ ，生成为Commitment→ 拉格朗日插值&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Lagrange Interpolation&lt;/p&gt;
+&lt;h2&gt;Polynomial&lt;/h2&gt;
+&lt;p&gt;$$
+f(x) = \sum_{i = 0}^{n} a_i x^i=a_0 + a_1x + ...+a_nx^n
+$$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Degree $deg(f(x))=n$&lt;/li&gt;
+&lt;li&gt;$a_n\neq0$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Encoding data into Polynomial using Lagrange Interpolation&lt;/h2&gt;
+&lt;p&gt;Given $(x_i, y_i), x_i \neq x_j, \forall i\neq j$, build a polynomial such that $f(x_i) = y_i$ and degree is $n-1$&lt;/p&gt;
+&lt;p&gt;$$
+f(x)=\sum_{i=0}^{n-1}y_i \prod_{j=0, j \neq i}^{n-1} \frac{x - x_j}{x_i - x_j}
+$$&lt;/p&gt;
+&lt;p&gt;$n = 2$&lt;/p&gt;
+&lt;p&gt;$$
+f(x)=y_0  \frac{x - x_1}{x_0 - x_1} + y_1 \frac{x - x_0}{x_1 - x_0}
+$$&lt;/p&gt;
+&lt;p&gt;$n = 3$&lt;/p&gt;
+&lt;p&gt;$$
+f(x)=y_0  \frac{(x - x_1)(x-x_2)}{(x_0 - x_1)(x_0-x_2)} + y_1 \frac{(x - x_0)(x-x_2)}{(x_1 - x_0)(x_1-x_2)} ...
+$$&lt;/p&gt;
+&lt;p&gt;Example&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Given (0, 3), (1, 6), we have&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$$
+f(x) = 3(x-1)/(0-1) + 6(x-0)/(1-0) = -3x+3+6=3x+3
+$$&lt;/p&gt;
+&lt;p&gt;(2, 9), (3, 12), (4, 15).  Suppose, given (1,6) and (3,12)&lt;/p&gt;
+&lt;p&gt;$$
+f(x)= 6(x-3)/(1-3)+12(x-1)/(3-1)=-3x+9+6x-6=3x+3
+$$&lt;/p&gt;
+&lt;p&gt;n encode to m (m &amp;gt; n), n-of-m data can recover the polynomial &lt;strong&gt;exactly&lt;/strong&gt;!&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Open 其中的一个点，提供一个 Proof 证明点值$(k,v_k)$符合多项式$f(k)=v_k$&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src="https://inevitableeth.com/polynomial-commitments-3.jpeg" alt="https://inevitableeth.com/polynomial-commitments-3.jpeg" /&gt;&lt;/p&gt;
+&lt;p&gt;STUART → (1, 83), (2, 84), …, (6, 84) → f(x) → choose (4.5, 69.5) as commitment&lt;/p&gt;
+&lt;h3&gt;KZG polynomial commitment&lt;/h3&gt;
+&lt;pre&gt;&lt;code class="language-jsx"&gt;Knowledge -&amp;gt; Point-Values -&amp;gt; Coefficients -&amp;gt; Commitment -&amp;gt; Open&amp;amp;Prove&amp;amp;Verify
+                         FFT             MSM
+                                          ^
+                                          |
+                                    Trusted Setup
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;FFT: Fast Furious Transform&lt;/p&gt;
+&lt;p&gt;MSM: multi-scalar multiplication&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;KZG Commitment 是 Polynomial Commitment 的一种算法实现&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Elliptic curves + discrete logarithm problem&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Encoding Polynomial in a finite field $\mathbb{F}_q$,  q is prime:&lt;/p&gt;
+&lt;p&gt;Polynomial on an elliptic curve $\mathbb{G}_1$&lt;/p&gt;
+&lt;p&gt;$\mathbb{G}_1 = [0, G_1, G_1 + G_1 = [2] G_1, [3]G_1, ..., [q]G_1]$ where $[q+1] G_1 = 0$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$[n]G_1 =[n]_1$ can be computed very fast&lt;/li&gt;
+&lt;li&gt;$[n] X = Y$, given $X$ and $Y$, it is very hard to find $n$ (it is called discrete logarithm algorithm)&lt;/li&gt;
+&lt;li&gt;mod 7:
+&lt;ul&gt;
+&lt;li&gt;1 mod 7, 8 mod 7, 15 mod 7,….&lt;/li&gt;
+&lt;li&gt;[n] mod 7 = 1 mod 7?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$$
+[f(x)]G_1 = [\sum_{i=0}^{n}a_i x^i] G_1 = \sum_{i=0}^{n} [a_i] ([x^i] G_1) = \sum_{i=0}^{n} [a_i] [x^i]_1
+$$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Trusted setup&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://inevitableeth.com/pcs-trusted-setup-1.jpeg" alt="https://inevitableeth.com/pcs-trusted-setup-1.jpeg" /&gt;&lt;/p&gt;
+&lt;p&gt;Now we have secret $s \in \mathbb{F}_q$ such that&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Nobody knows $s$ (private key of the “god”)&lt;/li&gt;
+&lt;li&gt;$[s^i] G_1 = [s^i]_1$, $i = 1, …$ is known to everybody (”god”’s public key)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Then, we have the commitment as&lt;/p&gt;
+&lt;p&gt;$$
+C = [f(s)]&lt;em&gt;1=\sum&lt;/em&gt;{i=0}^n [a_i] [s^i]_1
+$$&lt;/p&gt;
+&lt;p&gt;Finding another $g(x)$ such that $g(s) = f(s)$ is almost impossible&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Elliptic curves pairings&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Find two elliptic curves, such that&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://inevitableeth.com/elliptic-curve-pairings-1.jpeg" alt="https://inevitableeth.com/elliptic-curve-pairings-1.jpeg" /&gt;&lt;/p&gt;
+&lt;p&gt;Given $x_i, y_i$, want to prove $f(x_i) = y_i$, &lt;/p&gt;
+&lt;p&gt;$$
+f(x) - y_i = g(x) = (x - x_i)q(x)
+$$&lt;/p&gt;
+&lt;p&gt;3x+3 given data points( 1, 6), (4,2)&lt;/p&gt;
+&lt;p&gt;$3x+3 - 6 = 3x-3 = 3(x-1)= q(x)(x-1)$&lt;/p&gt;
+&lt;p&gt;$$
+\begin{aligned}[f(s) - y_i] G_1 &amp;amp;= [(s - x_i)q(s)] G_1 \ C - [y_i]_1 \end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;$e: \mathbb{G}_1 \times \mathbb{G}_2 \rightarrow \mathbb{G}_T$&lt;/p&gt;
+&lt;p&gt;$$
+e(C - [y_i] G_1, G_2) = e([q(s)]_1, [(s - x_i)]_2)
+$$&lt;/p&gt;
+&lt;p&gt;where $[q(s)]_1$ is the proof (48 bytes as a point on an elliptic curve)&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/kzg_proof_verification.png" alt="Screenshot 2024-05-07 at 13.51.25.png" /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Polynomial Commitment 的其他实现&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;KZG：PLONK、Marlin&lt;/li&gt;
+&lt;li&gt;FRI：zkSTARK&lt;/li&gt;
+&lt;li&gt;IPA：Bulletproof&lt;/li&gt;
+&lt;li&gt;IPA + Halo-style aggregation：Halo 2&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src="imgs/175/polynomial_commitment_perf.png" alt="https://vitalik.ca/general/2021/11/05/halo.html" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://vitalik.ca/general/2021/11/05/halo.html"&gt;https://vitalik.ca/general/2021/11/05/halo.html&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;KZG Commitment的优缺点&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;缺点：需要Trusted Setup&lt;/li&gt;
+&lt;li&gt;优点：proof 长度短且恒定&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Solution 5: Verkle trie&lt;/h2&gt;
+&lt;p&gt;Replace Hash Functions in q-ary Merkle tree with Vector commitment Schemes → Verkle Trie&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/verkle_trie.png" alt="Screenshot 2024-05-07 at 13.08.29.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Performance comparison:&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/performance_comparison.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;p&gt;Verkle Trees let us trade off proof-size vs. construction time.&lt;/p&gt;
+&lt;h2&gt;Verkle tree structure in Ethereum&lt;/h2&gt;
+&lt;h3&gt;MPT(Merkle Patricia Trie) problem&lt;/h3&gt;
+&lt;p&gt;Ethereum has a total of four trees:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;the World State Trie&lt;/li&gt;
+&lt;li&gt;Receipts Trie&lt;/li&gt;
+&lt;li&gt;Transaction Trie&lt;/li&gt;
+&lt;li&gt;Account Storage Trie&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="imgs/175/ethereum_tries.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/state_trie.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;MPT is 2-layer structure (Tree-inside-a-tree)&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Complexity&lt;/li&gt;
+&lt;li&gt;Imbalance&lt;/li&gt;
+&lt;li&gt;Difficulty in understanding interactions between mechanisms such as state expiration&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Vitalik has proposed a &lt;strong&gt;single-layer structure&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/single_layer_structure.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;p&gt;maps data to a 32-byte single key at all locations within the state:&lt;/p&gt;
+&lt;p&gt;eg. &lt;code&gt;(address, storage_slot)&lt;/code&gt;, &lt;code&gt;(address, NONCE)&lt;/code&gt;, &lt;code&gt;(address, balance)&lt;/code&gt;,…&lt;/p&gt;
+&lt;p&gt;values sharing the first 31 bytes of the key are included in the same bottom-layer commitment.&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/values_sharing.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;h3&gt;Tree key&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;32 bytes&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;consisting of a 31-byte stem and a 1-byte suffix. The suffix allows for distinguishing the state information (account header data, code, storage) stored by the Tree Key.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;31-byte stem: pedersen_hash&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-jsx"&gt;def get_tree_key(address: Address32, tree_index: int, sub_index: int):
+    # Asssumes VERKLE_NODE_WIDTH = 256
+    return (
+        pedersen_hash(address + tree_index.to_bytes(32, 'little'))[:31] +
+        bytes([sub_index])
+    )
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="imgs/175/tree_key.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;p&gt;verkle tree structure:&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/verkle_tree_structure.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;h3&gt;&lt;strong&gt;Inner Node &amp;amp; Suffix Node(extension node)&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Suffix Node&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;suffix node structure:&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/suffix_node.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;1:&lt;/strong&gt; A marker for the suffix node, which is 1 on the elliptic curve but does not literally mean the number 1.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Stem:&lt;/strong&gt; The stem refers to the stem in the tree key.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;C1, C2:&lt;/strong&gt; Are Pedersen Commitments.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class="language-jsx"&gt;C = Commit(1, C1, Stem, C2)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;C1 and C2 commitment take the data form:&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/C1_C2.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The reason for this division is that the creation of Pedersen Commitment is limited to committing up to 256 values of maximum 253-bit size, and for 256-bit values, data loss occurs.&lt;/li&gt;
+&lt;li&gt;Process of storing 32-byte data under a tree key:
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Depending on the suffix, the data become v0, v1… v255&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;v0~v127 are included in C1, and v128~v255 are included in C2 to calculate the leaf node’s commitment&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;For C1, each 32-byte value of v0~v127 is divided into the upper 16 bytes (v1,0) and the lower 16 bytes (v1, 1) to serve as coefficients in a polynomial. &lt;/p&gt;
+&lt;p&gt;→ each coefficient’s data being 16 bytes (128-bit)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;256-degree polynomial is committed:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;C1 = commit([(v0,0), (v0,1), (v1,0), (v1,1)…(v127,0),(v127,1)])&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C2 = commit([(v128,0), (v128,1), (v129,0), (v129,1) … (v255,0),(v255,1)])&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;C = Commit(1, C1, Stem, C2)&lt;/code&gt; → commitment for the leaf node&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Inner Node&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="imgs/175/inner_node.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;holds the stem value of the tree key and stores 256 pointers to sub-nodes&lt;/li&gt;
+&lt;li&gt;C0, C1 … C255 represent the commitments of sub-nodes, and the inner node contains these commitments.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;An example of verkle tree containing 4 tree keys:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;0x00..20&lt;/li&gt;
+&lt;li&gt;0xdefe…64&lt;/li&gt;
+&lt;li&gt;0xde03a8..02&lt;/li&gt;
+&lt;li&gt;0xde03a8..ff&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="imgs/175/verkle_trie_example.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;p&gt;Summary:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The Verkle Trie consists of two types of nodes: leaf nodes and inner nodes.&lt;/li&gt;
+&lt;li&gt;A tree key contains a stem and a suffix.&lt;/li&gt;
+&lt;li&gt;The same stem corresponds to the same leaf node.&lt;/li&gt;
+&lt;li&gt;Data is stored differentiated by the suffix of the tree key.&lt;/li&gt;
+&lt;li&gt;The tree key is encoded byte by byte along the path from the root to the leaf node.&lt;/li&gt;
+&lt;li&gt;Data is included in the commitment of the leaf node.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a href="https://github.com/qiwihui/blog/issues/175"&gt;View on GitHub&lt;/a&gt;&lt;/p&gt;
+</content></entry><entry><title>Tornado Cash 代码实践系列 | Tornado Cash in practice</title><id>blogs/qiwihui-blog-178.md</id><updated>2024-08-18T04:02:53+00:00</updated><author><name>qiwihui</name><email>qwh005007@gmail.com</email></author><link href="https://qiwihui.com/blogs/qiwihui-blog-178.html" rel="self"/><published>2024-08-18T04:02:53+00:00</published><content type="html">&lt;h1&gt;Tornado Cash 代码实践系列 | Tornado Cash in practice&lt;/h1&gt;
+&lt;p&gt;这个系列的视频将从零到一实现 Tornado Cash 的功能，包括零知识证明电路，智能合约以及证明验证。希望你能从中学习到 Tornado Cash 的所用到的技术，并知道如何构建一个零知识证明应用。&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://tornadoeth.cash/"&gt;Tornado Cash&lt;/a&gt; 是一个以太坊上的混币器，通过使用零知识证明（Zero Knowledge Proof），Tornado Cash 可以打破区块链上源地址和目标地址之间的关联，解决隐私泄露的问题。Tornado Cash 使用了 Merkle 树和零知识证明电路，并在智能合约验证零知识证明。&lt;/p&gt;
+&lt;p&gt;系列视频：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="https://www.youtube.com/watch?v=Cg1ydjxBz-E"&gt;Tornado Cash 代码实践（1）: Tornado Cash 介绍&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.youtube.com/watch?v=y1y_N-9VQdM"&gt;Tornado Cash 代码实践（2）：零知识证明电路&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.youtube.com/watch?v=22Cpina52YE"&gt;Tornado Cash 代码实践（3）：存款和取款合约&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://youtu.be/CBjdLpT22hI"&gt;Tornado Cash 代码实践（4）：默克尔树&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://youtu.be/DPJ4ko_kvmk"&gt;Tornado Cash 代码实践（5）：证明生成和验证&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://youtu.be/RKJ7C5jAtgY"&gt;Tornado Cash 代码实践（6）：用 chatGPT 帮我生成交互页面&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Tornado Cash 代码实践（7）：测试网部署（TODO）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;视频中的文档： https://qiwihui.notion.site/Tornado-cash-92055ce981ea46668aa72d836085fd35&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/qiwihui/blog/issues/178"&gt;View on GitHub&lt;/a&gt;&lt;/p&gt;
+</content></entry><entry><title>写一个 pump.fun 智能合约，创建以太坊上的Meme发售平台</title><id>blogs/qiwihui-blog-177.md</id><updated>2024-08-18T04:02:53+00:00</updated><author><name>qiwihui</name><email>qwh005007@gmail.com</email></author><link href="https://qiwihui.com/blogs/qiwihui-blog-177.html" rel="self"/><published>2024-08-18T04:02:53+00:00</published><content type="html">&lt;h1&gt;写一个 pump.fun 智能合约，创建以太坊上的Meme发售平台&lt;/h1&gt;
+&lt;p&gt;Pump.fun 是 Solana 上的代币发售平台。在这个视频中我们创建了一个 ETH 上 Punp.fun 的智能合约。&lt;/p&gt;
+&lt;p&gt;代码仓库： https://github.com/qiwihui/pumpeth&lt;/p&gt;
+&lt;h2&gt;第一部分&lt;/h2&gt;
+&lt;p&gt;视频链接： &lt;a href="https://youtu.be/k-LTUa9g1sU"&gt;https://youtu.be/k-LTUa9g1sU&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;主要包含如下功能：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;创建代币&lt;/li&gt;
+&lt;li&gt;购买代币&lt;/li&gt;
+&lt;li&gt;卖出代币&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;第二部分&lt;/h2&gt;
+&lt;p&gt;视频链接： &lt;a href="https://youtu.be/1zdCAg2d3nk"&gt;https://youtu.be/1zdCAg2d3nk&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;主要包含如下功能：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;检查 token 状态&lt;/li&gt;
+&lt;li&gt;Fork mainnet 然后测试&lt;/li&gt;
+&lt;li&gt;minimal proxy 模式&lt;/li&gt;
+&lt;li&gt;Bonding Curve 曲线&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;a href="https://github.com/qiwihui/blog/issues/177"&gt;View on GitHub&lt;/a&gt;&lt;/p&gt;
+</content></entry><entry><title>Babylon 协议脚本模拟 | Babylon script simulation</title><id>blogs/qiwihui-blog-176.md</id><updated>2024-08-18T04:02:53+00:00</updated><author><name>qiwihui</name><email>qwh005007@gmail.com</email></author><link href="https://qiwihui.com/blogs/qiwihui-blog-176.html" rel="self"/><published>2024-08-18T04:02:53+00:00</published><content type="html">&lt;h1&gt;Babylon 协议脚本模拟 | Babylon script simulation&lt;/h1&gt;
+&lt;p&gt;视频链接： &lt;a href="https://youtu.be/LoVpMH8-CiQ"&gt;https://youtu.be/LoVpMH8-CiQ&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Babylon 是一个比特币链上的质押协议，可实现在比特币主网锁定比特币来为其他 PoS 消费链提供安全性，同时在 Babylon 主网或 PoS 消费链获得质押收益。
+用 Python 脚本模拟了 Babylon 协议的质押，timelock，unbonding 和 slashing 的过程。&lt;/p&gt;
+&lt;p&gt;Jupyter notebook: https://github.com/qiwihui/taproot-workshop/blob/master/babylon.ipynb&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/qiwihui/blog/issues/176"&gt;View on GitHub&lt;/a&gt;&lt;/p&gt;
+</content></entry><entry><title>Babylon 质押协议</title><id>blogs/qiwihui-blog-174.md</id><updated>2024-08-18T03:45:14+00:00</updated><author><name>qiwihui</name><email>qwh005007@gmail.com</email></author><link href="https://qiwihui.com/blogs/qiwihui-blog-174.html" rel="self"/><published>2024-05-25T09:37:50+00:00</published><content type="html">&lt;h1&gt;Babylon 质押协议&lt;/h1&gt;
+&lt;p&gt;video: https://youtu.be/LoVpMH8-CiQ&lt;/p&gt;
+&lt;p&gt;Babylon 是一个比特币链上的质押协议，可实现在比特币主网锁定比特币来为其他 PoS 消费链提供安全性，同时在 Babylon 主网或 PoS 消费链获得质押收益。这个视频主要分享 Babylon 质押协议的原理，包括比特币时间戳协议和质押流程。&lt;/p&gt;
+&lt;p&gt;分享文档链接： https://qiwihui.notion.site/Babylon-bitcoin-staking-protocol-b07554e575424f13b3ddf240bbbf2657&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/qiwihui/blog/issues/174"&gt;View on GitHub&lt;/a&gt;&lt;/p&gt;
+</content></entry><entry><title>Bitcoin 铭文原理</title><id>blogs/qiwihui-blog-173.md</id><updated>2024-08-18T03:45:14+00:00</updated><author><name>qiwihui</name><email>qwh005007@gmail.com</email></author><link href="https://qiwihui.com/blogs/qiwihui-blog-173.html" rel="self"/><published>2024-05-25T09:37:50+00:00</published><content type="html">&lt;h1&gt;Bitcoin 铭文原理&lt;/h1&gt;
+&lt;p&gt;video: https://youtu.be/ADaKhkkQa_E&lt;/p&gt;
+&lt;p&gt;docs: https://qiwihui.notion.site/Bitcoin-08d37baeabce47fcb72f6195bb38a25c?pvs=4&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/qiwihui/blog/issues/173"&gt;View on GitHub&lt;/a&gt;&lt;/p&gt;
+</content></entry><entry><title>Sui 数据类型讲解</title><id>blogs/qiwihui-blog-172.md</id><updated>2024-08-18T03:45:14+00:00</updated><author><name>qiwihui</name><email>qwh005007@gmail.com</email></author><link href="https://qiwihui.com/blogs/qiwihui-blog-172.html" rel="self"/><published>2024-05-25T09:37:50+00:00</published><content type="html">&lt;h1&gt;Sui 数据类型讲解&lt;/h1&gt;
+&lt;p&gt;这篇文章中，我们将介绍 Sui 中常见的数据结构，这些结构包含 Sui Move 和 Sui Framework 中提供的基础类型和数据结构，理解和熟悉这些数据结构对于 Sui Move 的理解和应用大有裨益。&lt;/p&gt;
+&lt;p&gt;首先，我们先快速复习一下 Sui Move 中使用到的基础类型。&lt;/p&gt;
+&lt;h3&gt;无符号整型（Integer）&lt;/h3&gt;
+&lt;p&gt;Move 包含六种无符号整型：&lt;code&gt;u8&lt;/code&gt;，&lt;code&gt;u16&lt;/code&gt; &lt;code&gt;u32&lt;/code&gt;，&lt;code&gt;u64&lt;/code&gt;，&lt;code&gt;u128&lt;/code&gt;和 &lt;code&gt;u256&lt;/code&gt;。值的范围从 0 到 与类型大小相关的最大值。&lt;/p&gt;
+&lt;p&gt;这些类型的字面值为数字序列（例如 112）或十六进制文字，例如 &lt;code&gt;0xFF&lt;/code&gt;。 字面值的类型可以选择添加为后缀，例如 &lt;code&gt;112u8&lt;/code&gt;。 如果未指定类型，编译器将尝试从使用文字的上下文中推断类型。 如果无法推断类型，则假定为 &lt;code&gt;u64&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;对无符号整型支持的运算包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;算数运算： &lt;code&gt;+&lt;/code&gt; &lt;code&gt;-&lt;/code&gt;  &lt;code&gt;*&lt;/code&gt;  &lt;code&gt;%&lt;/code&gt; &lt;code&gt;/&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;位运算： &lt;code&gt;&amp;amp;&lt;/code&gt; &lt;code&gt;|&lt;/code&gt; &lt;code&gt;^&lt;/code&gt;  &lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt; &lt;code&gt;&amp;lt;&amp;lt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;比较运算： &lt;code&gt;&amp;gt;&lt;/code&gt; &lt;code&gt;&amp;lt;&lt;/code&gt; &lt;code&gt;&amp;gt;=&lt;/code&gt; &lt;code&gt;&amp;lt;=&lt;/code&gt;  &lt;code&gt;==&lt;/code&gt; &lt;code&gt;!=&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;类型转换： &lt;code&gt;as&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;注意，类型转换不会截断，因此如果结果对于指定类型而言太大，转换将中止。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;简单示例：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;let a: u64 = 4;
+let b = 2u64;
+let hex_u64: u64 = 0xCAFE;
+
+assert!(a+b==6, 0);
+assert!(a-b==2, 0);
+assert!(a*b==8, 0);
+assert!(a/b==2, 0);
+
+let complex_u8 = 1;
+let _unused = 10 &amp;lt;&amp;lt; complex_u8;
+
+(b as u128)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;布尔类型（Bool）&lt;/h3&gt;
+&lt;p&gt;Move 布尔值包含两种，&lt;code&gt;true&lt;/code&gt; 和 &lt;code&gt;false&lt;/code&gt; 。支持与 &lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;，或&lt;code&gt;||&lt;/code&gt;  和非 &lt;code&gt;!&lt;/code&gt; 运算。可以用于 Move 的控制流和 &lt;code&gt;assert!&lt;/code&gt; 中。 &lt;code&gt;assert!&lt;/code&gt; 是 Move 提供的用于断言，当判断的值是 &lt;code&gt;false&lt;/code&gt; 时，程序会抛出错误并停止。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;if (bool) { ... }
+while (bool) { .. }
+assert!(bool, u64)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;地址（Address）&lt;/h3&gt;
+&lt;p&gt;address 也是 Move 的原生类型，可以在地址下保存模块和资源。Sui 中地址的长度为 20 字节。&lt;/p&gt;
+&lt;p&gt;在表达式中，地址需要使用前缀 &lt;code&gt;@&lt;/code&gt; ，例如：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;let a1: address = @0xDEADBEEF; // shorthand for 0x00000000000000000000000000000000DEADBEEF
+let a2: address = @0x0000000000000000000000000000000000000002;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Tuples 和 Unit&lt;/h3&gt;
+&lt;p&gt;Tuples 和 Unit &lt;code&gt;()&lt;/code&gt; 在 Move 中主要用作函数返回值。只支持解构（destructuring）运算。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;module ds::tuples {
+    // all 3 of these functions are equivalent
+    fun returns_unit() {}
+    fun returns_2_values(): (bool, bool) { (true, false) }
+    fun returns_4_values(x: &amp;amp;u64): (&amp;amp;u64, u8, u128, vector&amp;lt;u8&amp;gt;) { (x, 0, 1, b&amp;quot;foobar&amp;quot;) }
+
+    fun examples(cond: bool) {
+        let () = ();
+        let (x, y): (u8, u64) = (0, 1);
+        let (a, b, c, d) = (@0x0, 0, false, b&amp;quot;&amp;quot;);
+
+        () = ();
+        (x, y) = if (cond) (1, 2) else (3, 4);
+        (a, b, c, d) = (@0x1, 1, true, b&amp;quot;1&amp;quot;);
+    }
+
+    fun examples_with_function_calls() {
+        let () = returns_unit();
+        let (x, y): (bool, bool) = returns_2_values();
+        let (a, b, c, d) = returns_4_values(&amp;amp;0);
+
+        () = returns_unit();
+        (x, y) = returns_2_values();
+        (a, b, c, d) = returns_4_values(&amp;amp;1);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;接下来，我们从 Vector 开始，介绍 Sui 和 Sui Framework 中支持的集合类型。&lt;/p&gt;
+&lt;h3&gt;数组（Vector）&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;vector&amp;lt;T&amp;gt;&lt;/code&gt; 是 Move 提供的唯一的原生集合类型。&lt;code&gt;vector&amp;lt;T&amp;gt;&lt;/code&gt; 是由一组相同类型的值组成的数组，比如 &lt;code&gt;vector&amp;lt;u64&amp;gt;&lt;/code&gt;， &lt;code&gt;vector&amp;lt;address&amp;gt;&lt;/code&gt; 等。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;vector&lt;/code&gt; 支持的主要操作有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;末尾添加元素：&lt;code&gt;push_back&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;末尾删除元素： &lt;code&gt;pop_back&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;读取或者修改： &lt;code&gt;borrow&lt;/code&gt; ，&lt;code&gt;borrow_mut&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;判断是否包含： &lt;code&gt;contains&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;交换元素： &lt;code&gt;swap&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;读取元素索引： &lt;code&gt;index_of&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;module ds::vectors {
+    use std::vector;
+
+    public entry fun example() {
+        let v = vector::empty&amp;lt;u64&amp;gt;();
+        vector::push_back(&amp;amp;mut v, 5);
+        vector::push_back(&amp;amp;mut v, 6);
+
+        assert!(vector::contains(&amp;amp;mut v, &amp;amp;5), 42);
+        
+        let (exists, index) = vector::index_of(&amp;amp;mut v, &amp;amp;5);
+        assert!(exists, 42);
+        assert!(index == 0, 42);
+
+        assert!(*vector::borrow(&amp;amp;v, 0) == 5, 42);
+        assert!(*vector::borrow(&amp;amp;v, 1) == 6, 42);
+
+        vector::swap(&amp;amp;mut v, 0, 1);
+
+        assert!(vector::pop_back(&amp;amp;mut v) == 5, 42);
+        assert!(vector::pop_back(&amp;amp;mut v) == 6, 42);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;编译并运行示例：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;# 编译并发布
+sui client publish . --gas-budget 300000
+
+# 获取上一步编译得到的包的ID
+export package_id=0xee2961ee26916285ebef57c68caaa5f67a3d8dbd
+
+sui client call \
+  --function example \
+  --module vectors \
+  --package ${package_id} \
+  --gas-budget 30000
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;下面我们介绍几种基于 &lt;code&gt;vector&lt;/code&gt;  的数据类型。&lt;/p&gt;
+&lt;h3&gt;字符串（String）&lt;/h3&gt;
+&lt;p&gt;Move 没有字符串的原生类型，但它使用 &lt;code&gt;vector&amp;lt;u8&amp;gt;&lt;/code&gt; 表示字节数组。目前， &lt;code&gt;vector&amp;lt;u8&amp;gt;&lt;/code&gt; 字面量有两种：字节字符串（byte strings）和十六进制字符串（hex strings）。&lt;/p&gt;
+&lt;p&gt;字节字符串是以 &lt;code&gt;b&lt;/code&gt; 为前缀的字符串文字，例如 &lt;code&gt;b&amp;quot;Hello!\n&amp;quot;&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;十六进制字符串是以 &lt;code&gt;x&lt;/code&gt; 为前缀的字符串文字，例如 &lt;code&gt;x&amp;quot;48656C6C6F210A&amp;quot;&lt;/code&gt; 。每一对字节的范围从 &lt;code&gt;00&lt;/code&gt; 到 &lt;code&gt;FF&lt;/code&gt;，表示一个十六进制的 &lt;code&gt;u8&lt;/code&gt;。因此我们可以知道： &lt;code&gt;b&amp;quot;Hello&amp;quot; == x&amp;quot;48656C6C6F&amp;quot;&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;vector&amp;lt;u8&amp;gt;&lt;/code&gt; 的基础上，Move 提供了 &lt;code&gt;string&lt;/code&gt; 包处理 UTF8 字符串的操作。&lt;/p&gt;
+&lt;p&gt;我们以创建 Name NFT 的为例：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;module ds::strings {
+    use sui::object::{Self, UID};
+    use sui::tx_context::{sender, TxContext};
+    use sui::transfer;
+
+    // 使用 std::string 作为 UTF-8 字符串
+    use std::string::{Self, String};
+
+    /// 保存 String 类型
+    struct Name has key, store {
+        id: UID,
+
+        /// String 类型
+        name: String
+    }
+
+    fun create_name(
+        name_bytes: vector&amp;lt;u8&amp;gt;, ctx: &amp;amp;mut TxContext
+    ): Name {
+        Name {
+            id: object::new(ctx),
+            name: string::utf8(name_bytes)
+        }
+    }
+
+    /// 传入原始字节（raw bytes）来创建
+    public entry fun issue_name_nft(
+        name_bytes: vector&amp;lt;u8&amp;gt;, ctx: &amp;amp;mut TxContext
+    ) {
+        transfer::transfer(
+            create_name(name_bytes, ctx),
+            sender(ctx)
+        );
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;编译后命令行中调用：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;$ sui client call \
+  --function issue_name_nft \
+  --module strings \
+  --package ${package_id} \
+  --args &amp;quot;my_nft&amp;quot; --gas-budget 30000
+
+# 部分输出结果
+
+----- Transaction Effects ----
+Status : Success
+Created Objects:
+  - ID: 0xf53891c8d200125bcfdba69557b158395bdf9390 , Owner: Account Address ( 0xf28e73e59f2305edf4df88756f78fa1f5d7e78b0 )
+Mutated Objects:
+  - ID: 0xd1de857a7a5452a73c9c176cd7c9db1b06671723 , Owner: Account Address ( 0xf28e73e59f2305edf4df88756f78fa1f5d7e78b0 )
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;可以在 Transaction Effects 中看到新创建的对象，ID 为 &lt;code&gt;0xf53891c8d200125bcfdba69557b158395bdf9390&lt;/code&gt;，通过 Sui 提供的 RPC-API 接口 &lt;code&gt;sui_getObject&lt;/code&gt; 可以看到其中保存的内容：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-json"&gt;curl -H 'Content-Type: application/json' https://fullnode.devnet.sui.io:443 -d '{
+  &amp;quot;jsonrpc&amp;quot;: &amp;quot;2.0&amp;quot;,
+  &amp;quot;id&amp;quot;: 1,
+  &amp;quot;method&amp;quot;: &amp;quot;sui_getObject&amp;quot;,
+  &amp;quot;params&amp;quot;:[
+      &amp;quot;0xf53891c8d200125bcfdba69557b158395bdf9390&amp;quot;
+  ]
+}'
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;输出结果&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-json"&gt;{
+    &amp;quot;jsonrpc&amp;quot;: &amp;quot;2.0&amp;quot;,
+    &amp;quot;result&amp;quot;: {
+        &amp;quot;status&amp;quot;: &amp;quot;Exists&amp;quot;,
+        &amp;quot;details&amp;quot;: {
+            &amp;quot;data&amp;quot;: {
+                &amp;quot;dataType&amp;quot;: &amp;quot;moveObject&amp;quot;,
+                &amp;quot;type&amp;quot;: &amp;quot;0xee2961ee26916285ebef57c68caaa5f67a3d8dbd::strings::Name&amp;quot;,
+                &amp;quot;has_public_transfer&amp;quot;: true,
+                &amp;quot;fields&amp;quot;: {
+                    &amp;quot;id&amp;quot;: {
+                        &amp;quot;id&amp;quot;: &amp;quot;0xf53891c8d200125bcfdba69557b158395bdf9390&amp;quot;
+                    },
+                    &amp;quot;name&amp;quot;: &amp;quot;my_nft&amp;quot;
+                }
+            },
+            &amp;quot;owner&amp;quot;: {
+                &amp;quot;AddressOwner&amp;quot;: &amp;quot;0xf28e73e59f2305edf4df88756f78fa1f5d7e78b0&amp;quot;
+            },
+            &amp;quot;previousTransaction&amp;quot;: &amp;quot;7AfcBmJCioSbdZD6ZdYU2iUuGiSc62AuhZn7Yi3TfLDa&amp;quot;,
+            &amp;quot;storageRebate&amp;quot;: 13,
+            &amp;quot;reference&amp;quot;: {
+                &amp;quot;objectId&amp;quot;: &amp;quot;0xf53891c8d200125bcfdba69557b158395bdf9390&amp;quot;,
+                &amp;quot;version&amp;quot;: 1614,
+                &amp;quot;digest&amp;quot;: &amp;quot;/SEDlnh4xXq//ZGOCZVQM5QfyR2fPzJWaYWELhrSn2o=&amp;quot;
+            }
+        }
+    },
+    &amp;quot;id&amp;quot;: 1
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;VecMap 和 VecSet&lt;/h3&gt;
+&lt;p&gt;Sui 在 &lt;code&gt;vector&lt;/code&gt; 的基础上实现了两种数据结构，映射 &lt;code&gt;vec_map&lt;/code&gt; 和集合 &lt;code&gt;vec_set&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;vec_map&lt;/code&gt; 是一种映射结构，保证不包含重复的键，但是条目按照插入顺序排列，而不是按键的顺序。所有的操作时间复杂度为 &lt;code&gt;0(N)&lt;/code&gt;，N 为映射的大小。&lt;code&gt;vec_map&lt;/code&gt; 只是为了提供方便的操作映射的接口，如果需要保存大型的映射，或者是需要按键的顺序排序的映射都需要另外处理。可以考虑使用之后介绍的 &lt;code&gt;table&lt;/code&gt; 数据结构。&lt;/p&gt;
+&lt;p&gt;主要操作包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;创建空映射: &lt;code&gt;empty&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;插入键值对： &lt;code&gt;insert&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;获取键对应的值： &lt;code&gt;get&lt;/code&gt;， &lt;code&gt;get_mut&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;删除键： &lt;code&gt;remove&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;判断是否包含键： &lt;code&gt;contains&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;映射大小： &lt;code&gt;size&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;将映射转为键值对的数组： &lt;code&gt;into_keys_values&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;获取映射键的数组： &lt;code&gt;keys&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;删除空映射： &lt;code&gt;destroy_empty&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;通过插入的顺序索引键值对： &lt;code&gt;get_entry_by_idx&lt;/code&gt;，&lt;code&gt;get_entry_by_idx_mut&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;module ds::v_map {
+    use sui::vec_map;
+    use std::vector;
+
+    public entry fun example() {
+        let m = vec_map::empty();
+        let i = 0;
+        while (i &amp;lt; 10) {
+            let k = i + 2;
+            let v = i + 5;
+            vec_map::insert(&amp;amp;mut m, k, v);
+            i = i + 1;
+        };
+        assert!(!vec_map::is_empty(&amp;amp;m), 0);
+        assert!(vec_map::size(&amp;amp;m) == 10, 1);
+        let i = 0;
+        // make sure the elements are as expected in all of the getter APIs we expose
+        while (i &amp;lt; 10) {
+            let k = i + 2;
+            assert!(vec_map::contains(&amp;amp;m, &amp;amp;k), 2);
+            let v = *vec_map::get(&amp;amp;m, &amp;amp;k);
+            assert!(v == i + 5, 3);
+            assert!(vec_map::get_idx(&amp;amp;m, &amp;amp;k) == i, 4);
+            let (other_k, other_v) = vec_map::get_entry_by_idx(&amp;amp;m, i);
+            assert!(*other_k == k, 5);
+            assert!(*other_v == v, 6);
+            i = i + 1;
+        };
+        // 移出所有元素
+        let (keys, values) = vec_map::into_keys_values(copy m);
+        let i = 0;
+        while (i &amp;lt; 10) {
+            let k = i + 2;
+            let (other_k, v) = vec_map::remove(&amp;amp;mut m, &amp;amp;k);
+            assert!(k == other_k, 7);
+            assert!(v == i + 5, 8);
+            assert!(*vector::borrow(&amp;amp;keys, i) == k, 9);
+            assert!(*vector::borrow(&amp;amp;values, i) == v, 10);
+
+            i = i + 1;
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;vec_set&lt;/code&gt; 结构保证其中不包含重复的键。所有的操作时间复杂度为 &lt;code&gt;O(N)&lt;/code&gt;，N 为映射的大小。同样， &lt;code&gt;vec_set&lt;/code&gt; 提供了方便的集合操作接口，按插入顺序进行排序，如果需要使用按键进行排序的集合，也需要另外处理。&lt;/p&gt;
+&lt;p&gt;主要操作包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;创建空集合: &lt;code&gt;empty&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;插入元素： &lt;code&gt;insert&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;删除元素： &lt;code&gt;remove&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;判断是否包含元素： &lt;code&gt;contains&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;集合大小： &lt;code&gt;size&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;将集合转为元素的数组： &lt;code&gt;into_keys&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;module ds::v_set {
+    use sui::vec_set;
+    use std::vector;
+
+    public entry fun example() {
+        let m = vec_set::empty();
+        let i = 0;
+        while (i &amp;lt; 10) {
+            let k = i + 2;
+            vec_set::insert(&amp;amp;mut m, k);
+            i = i + 1;
+        };
+        assert!(!vec_set::is_empty(&amp;amp;m), 0);
+        assert!(vec_set::size(&amp;amp;m) == 10, 1);
+        let i = 0;
+        // make sure the elements are as expected in all of the getter APIs we expose
+        while (i &amp;lt; 10) {
+            let k = i + 2;
+            assert!(vec_set::contains(&amp;amp;m, &amp;amp;k), 2);
+            i = i + 1;
+        };
+        // 移出所有元素
+        let keys = vec_set::into_keys(copy m);
+        let i = 0;
+        while (i &amp;lt; 10) {
+            let k = i + 2;
+            vec_set::remove(&amp;amp;mut m, &amp;amp;k);
+            assert!(*vector::borrow(&amp;amp;keys, i) == k, 9);
+            i = i + 1;
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;优先队列（PriorityQueue）&lt;/h3&gt;
+&lt;p&gt;还有一种基于 &lt;code&gt;vector&lt;/code&gt; 构建的数据结构：优先队列，他使用基于 &lt;code&gt;vector&lt;/code&gt; 实现的大顶堆（max heap）来实现。&lt;/p&gt;
+&lt;p&gt;大顶堆是一种二叉树结构，每个节点的值都大于或等于其左右孩子节点的值，这样，这个二叉树的根节点始终都是所有节点中值最大的节点。&lt;/p&gt;
+&lt;p&gt;在优先队列中，我们为每一个节点赋予一个权重，我们基于权重构建一个大顶堆，从大顶堆顶部弹出根节点则为权重最大的节点。这样就形成过了一个按优先级弹出的队列。&lt;/p&gt;
+&lt;p&gt;优先队列主要包含的操作为：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;创建条目列表： &lt;code&gt;create_entries&lt;/code&gt; ，结果作为 &lt;code&gt;new&lt;/code&gt; 方法参数&lt;/li&gt;
+&lt;li&gt;创建： &lt;code&gt;new&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;插入： &lt;code&gt;insert&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;弹出最大： &lt;code&gt;pop_max&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;示例：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;module ds::pq {
+    use sui::priority_queue::{PriorityQueue, pop_max, create_entries, new, insert};
+
+    /// 检查弹出的最大值及其权重
+    fun check_pop_max(h: &amp;amp;mut PriorityQueue&amp;lt;u64&amp;gt;, expected_priority: u64, expected_value: u64) {
+        let (priority, value) = pop_max(h);
+        assert!(priority == expected_priority, 0);
+        assert!(value == expected_value, 0);
+    }
+
+    public entry fun example() {
+        let h = new(create_entries(vector[3, 1, 4, 2, 5, 2], vector[10, 20, 30, 40, 50, 60]));
+        check_pop_max(&amp;amp;mut h, 5, 50);
+        check_pop_max(&amp;amp;mut h, 4, 30);
+        check_pop_max(&amp;amp;mut h, 3, 10);
+        insert(&amp;amp;mut h, 7, 70);
+        check_pop_max(&amp;amp;mut h, 7, 70);
+        check_pop_max(&amp;amp;mut h, 2, 40);
+        insert(&amp;amp;mut h, 0, 80);
+        check_pop_max(&amp;amp;mut h, 2, 60);
+        check_pop_max(&amp;amp;mut h, 1, 20);
+        check_pop_max(&amp;amp;mut h, 0, 80);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;结构体（Struct）&lt;/h3&gt;
+&lt;p&gt;Move语言中，结构体是包含类型化字段的用户定义数据结构。 结构可以存储任何非引用类型，包括其他结构。示例：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;module ds::structs {
+    // 二维平面点
+    struct Point has copy, drop, store {
+        x: u64,
+        y: u64,
+    }
+    // 圆
+    struct Circle has copy, drop, store {
+        center: Point,
+        radius: u64,
+    }
+    // 创建结构体
+    public fun new_point(x: u64, y: u64): Point {
+        Point {
+            x, y
+        }
+    }
+    // 访问结构体数据
+    public fun point_x(p: &amp;amp;Point): u64 {
+        p.x
+    }
+
+    public fun point_y(p: &amp;amp;Point): u64 {
+        p.y
+    }
+
+    fun abs_sub(a: u64, b: u64): u64 {
+        if (a &amp;lt; b) {
+            b - a
+        }
+        else {
+            a - b
+        }
+    }
+    // 计算点之间的距离
+    public fun dist_squared(p1: &amp;amp;Point, p2: &amp;amp;Point): u64 {
+        let dx = abs_sub(p1.x, p2.x);
+        let dy = abs_sub(p1.y, p2.y);
+        dx * dx + dy * dy
+    }
+
+    public fun new_circle(center: Point, radius: u64): Circle {
+        Circle { center, radius }
+    }
+    // 计算两个圆之间是否相交
+    public fun overlaps(c1: &amp;amp;Circle, c2: &amp;amp;Circle): bool {
+        let d = dist_squared(&amp;amp;c1.center, &amp;amp;c2.center);
+        let r1 = c1.radius;
+        let r2 = c2.radius;
+        d * d &amp;lt;= r1 * r1 + 2 * r1 * r2 + r2 * r2
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;对象（Object）&lt;/h3&gt;
+&lt;p&gt;对象是 Sui Move 中新引入的概念，也是 Sui 安全和高并发等众多特性的基础。定义一个对象，需要为结构体添加 &lt;code&gt;key&lt;/code&gt; 能力，同时结构体的第一个字段必须是 &lt;code&gt;UID&lt;/code&gt; 类型的 id。&lt;/p&gt;
+&lt;p&gt;对象结构中除了可以使用基础数据结构外，也可以包含另一个对象，即对象可以进行包装，在一个对象中使用另一个对象。&lt;/p&gt;
+&lt;p&gt;对象有不同的所有权形式，可以存放在一个地址下面，也可以设置成不可变对象或者全局对象。不可变对象永远不能被修改，转移或者删除，因此它不属于任何人，但也可以被任何人访问。比如合约包对象，Coin Metadata 对象。&lt;/p&gt;
+&lt;p&gt;我们可以通过 &lt;code&gt;transfer&lt;/code&gt; 包中的方法对对象进行处理：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;transfer&lt;/code&gt;：将对象放到某个地址下&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;freeze_object&lt;/code&gt;：创建不可变对象&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;share_object&lt;/code&gt;：创建共享对象&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;module ds::objects {
+    use sui::object::{Self, UID};
+    use sui::transfer;
+    use sui::tx_context::{Self, TxContext};
+
+    struct ColorObject has key {
+        id: UID,
+        red: u8,
+        green: u8,
+        blue: u8,
+    }
+
+    fun new(red: u8, green: u8, blue: u8, ctx: &amp;amp;mut TxContext): ColorObject {
+        ColorObject {
+            id: object::new(ctx),
+            red,
+            green,
+            blue,
+        }
+    }
+
+    public entry fun create(red: u8, green: u8, blue: u8, ctx: &amp;amp;mut TxContext) {
+        let color_object = new(red, green, blue, ctx);
+        transfer::transfer(color_object, tx_context::sender(ctx))
+    }
+
+    public fun get_color(self: &amp;amp;ColorObject): (u8, u8, u8) {
+        (self.red, self.green, self.blue)
+    }
+
+    /// Copies the values of `from_object` into `into_object`.
+    public entry fun copy_into(from_object: &amp;amp;ColorObject, into_object: &amp;amp;mut ColorObject) {
+        into_object.red = from_object.red;
+        into_object.green = from_object.green;
+        into_object.blue = from_object.blue;
+    }
+
+    public entry fun delete(object: ColorObject) {
+        let ColorObject { id, red: _, green: _, blue: _ } = object;
+        object::delete(id);
+    }
+
+    public entry fun transfer(object: ColorObject, recipient: address) {
+        transfer::transfer(object, recipient)
+    }
+
+    public entry fun freeze_object(object: ColorObject) {
+        transfer::freeze_object(object)
+    }
+
+    public entry fun create_shareable(red: u8, green: u8, blue: u8, ctx: &amp;amp;mut TxContext) {
+        let color_object = new(red, green, blue, ctx);
+        transfer::share_object(color_object)
+    }
+
+    public entry fun create_immutable(red: u8, green: u8, blue: u8, ctx: &amp;amp;mut TxContext) {
+        let color_object = new(red, green, blue, ctx);
+        transfer::freeze_object(color_object)
+    }
+
+    public entry fun update(
+        object: &amp;amp;mut ColorObject,
+        red: u8, green: u8, blue: u8,
+    ) {
+        object.red = red;
+        object.green = green;
+        object.blue = blue;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;编译后调用：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;创建共享对象&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;sui client call \
+  --function create_shareable \
+  --module objects \
+  --package ${package_id} \
+  --args 1 2 3 --gas-budget 30000
+
+# 结果输出
+----- Transaction Effects ----
+Status : Success
+Created Objects:
+  - ID: 0x3b25eba3bf836088b56bdfd36e39ec440db8bf59 , Owner: Shared
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;创建不可变对象&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;sui client call \
+  --function create_immutable \
+  --module objects \
+  --package ${package_id} \
+  --args 1 2 3 --gas-budget 30000
+
+# 结果输出
+----- Transaction Effects ----
+Status : Success
+Created Objects:
+  - ID: 0x88f8f210635af6503a8a07835ef12e147fa60aa3 , Owner: Immutable
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;将对象放入某个地址下&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;sui client call \
+  --function create \
+  --module objects \
+  --package ${package_id} \
+  --args 1 2 3 --gas-budget 30000
+
+# 结果输出
+----- Transaction Effects ----
+Status : Success
+Created Objects:
+  - ID: 0xf36144c71cde87c1e00f1bf00ee44653bc05228c , Owner: Account Address ( 0xf28e73e59f2305edf4df88756f78fa1f5d7e78b0 )
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;可以看到，不同所有权类型的对象会在创建时显示不同的类型结果。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;修改共享对象或者是地址所拥有的对象：传入对象 ID 作为参数&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;sui client call \
+  --function update \
+  --module objects \
+  --package ${package_id} \
+  --args 0x3b25eba3bf836088b56bdfd36e39ec440db8bf59 4 5 6 --gas-budget 30000
+
+# 结果输出
+----- Transaction Effects ----
+Status : Success
+Mutated Objects:
+  - ID: 0x3b25eba3bf836088b56bdfd36e39ec440db8bf59 , Owner: Shared
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;可以在结果中看到 &lt;code&gt;Mutated Objects&lt;/code&gt; 中对象已经发生了变化。&lt;/p&gt;
+&lt;h3&gt;Dynamic field 和 Dynamic object field&lt;/h3&gt;
+&lt;p&gt;对象虽然可以进行包装，但是也有一些局限，一是对象中的字段是有限的，在结构体定义是已经确定；二是包含其他对象的对象可能非常大，可能会导致交易 gas 很高，Sui 默认结构体大小限制为 2MB；再者，当遇到要储存不一样类型的对象集合时，问题就会比较棘手，Move 中的 &lt;code&gt;vector&lt;/code&gt; 只能存储相同的类型的数据。&lt;/p&gt;
+&lt;p&gt;因此，Sui 提供了 dynamic field，可以使用任意名字做字段，也可以动态添加和删除。唯一影响的是 gas 的消耗。&lt;/p&gt;
+&lt;p&gt;dynamic field 包含两种类型，field 和 Object field，区别在于，field 可以存储任何有 &lt;code&gt;store&lt;/code&gt; 能力的值，但是如果是对象的话，对象会被认为是被包装而不能通过 ID 被外部工具（浏览器，钱包等）访问；而 Object field 的值必须是对象（有 &lt;code&gt;key&lt;/code&gt; 能力且第一个字段是 &lt;code&gt;id: UID&lt;/code&gt;），对象仍然能从外部工具通过 ID 访问。&lt;/p&gt;
+&lt;p&gt;dynamic filed 的名称可以是任何拥有 &lt;code&gt;copy&lt;/code&gt;，&lt;code&gt;drop&lt;/code&gt; 和 &lt;code&gt;store&lt;/code&gt; 能力的值，这些值包括 Move 中的基本类型（整数，布尔值，字节串），以及拥有 &lt;code&gt;copy&lt;/code&gt;，&lt;code&gt;drop&lt;/code&gt; 和 &lt;code&gt;store&lt;/code&gt; 能力的结构体。&lt;/p&gt;
+&lt;p&gt;下面我们通过例子来看看具体的操作：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;添加字段： &lt;code&gt;add&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;访问和修改字段： &lt;code&gt;borrow&lt;/code&gt;， &lt;code&gt;borow_mut&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;删除字段&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;module ds::fields {
+    use sui::object::{Self, UID};
+    use sui::dynamic_object_field as dof;
+    use sui::transfer;
+    use sui::tx_context::{Self, TxContext};
+
+    struct Parent has key {
+        id: UID,
+    }
+
+    struct Child has key, store {
+        id: UID,
+        count: u64,
+    }
+
+    public entry fun initialize(ctx: &amp;amp;mut TxContext) {
+        transfer::transfer(Parent { id: object::new(ctx) }, tx_context::sender(ctx));
+        transfer::transfer(Child { id: object::new(ctx), count: 0 }, tx_context::sender(ctx));
+    }
+
+    public entry fun add_child(parent: &amp;amp;mut Parent, child: Child) {
+        dof::add(&amp;amp;mut parent.id, b&amp;quot;child&amp;quot;, child);
+    }
+
+    public entry fun mutate_child(child: &amp;amp;mut Child) {
+        child.count = child.count + 1;
+    }
+
+    public entry fun mutate_child_via_parent(parent: &amp;amp;mut Parent) {
+        mutate_child(dof::borrow_mut&amp;lt;vector&amp;lt;u8&amp;gt;, Child&amp;gt;(
+            &amp;amp;mut parent.id,
+            b&amp;quot;child&amp;quot;,
+        ));
+    }
+
+    public entry fun delete_child(parent: &amp;amp;mut Parent) {
+        let Child { id, count: _ } = dof::remove&amp;lt;vector&amp;lt;u8&amp;gt;, Child&amp;gt;(
+            &amp;amp;mut parent.id,
+            b&amp;quot;child&amp;quot;,
+        );
+        object::delete(id);
+    }
+
+    public entry fun reclaim_child(parent: &amp;amp;mut Parent, ctx: &amp;amp;mut TxContext) {
+        let child = dof::remove&amp;lt;vector&amp;lt;u8&amp;gt;, Child&amp;gt;(
+            &amp;amp;mut parent.id,
+            b&amp;quot;child&amp;quot;,
+        );
+        transfer::transfer(child, tx_context::sender(ctx));
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;编译并调用 &lt;code&gt;initialize&lt;/code&gt; 和 &lt;code&gt;add_child&lt;/code&gt; 方法：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;sui client call \
+  --function initialize \
+  --module fields \
+  --package ${package_id} \
+  --gas-budget 30000
+
+# 输出结果
+----- Transaction Effects ----
+Status : Success
+Created Objects:
+  - ID: 0x55536ca8123ffb606398da9f7d2472888ca5bfd1 , Owner: Account Address ( 0xf28e73e59f2305edf4df88756f78fa1f5d7e78b0 )
+  - ID: 0xf1206f0f7d97908aae907c23d69a4cd97120dc82 , Owner: Account Address ( 0xf28e73e59f2305edf4df88756f78fa1f5d7e78b0 )
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;sui client call \
+  --function add_child \
+  --module fields \
+  --package ${package_id} \
+  --args 0xf1206f0f7d97908aae907c23d69a4cd97120dc82 0x55536ca8123ffb606398da9f7d2472888ca5bfd1 --gas-budget 30000
+
+# 输出结果
+----- Transaction Effects ----
+Status : Success
+Created Objects:
+  - ID: 0xdf694f282f739f328325bc922b3083bd45f31cae , Owner: Object ID: ( 0xf1206f0f7d97908aae907c23d69a4cd97120dc82 )
+Mutated Objects:
+  - ID: 0x55536ca8123ffb606398da9f7d2472888ca5bfd1 , Owner: Object ID: ( 0xdf694f282f739f328325bc922b3083bd45f31cae )
+  - ID: 0xf1206f0f7d97908aae907c23d69a4cd97120dc82 , Owner: Account Address ( 0xf28e73e59f2305edf4df88756f78fa1f5d7e78b0 )
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;可以通过 &lt;code&gt;sui_getDynamicFields&lt;/code&gt; 方法查看添加的字段：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;curl -H 'Content-Type: application/json' https://fullnode.devnet.sui.io:443 -d '{
+  &amp;quot;jsonrpc&amp;quot;: &amp;quot;2.0&amp;quot;,
+  &amp;quot;id&amp;quot;: 1,
+  &amp;quot;method&amp;quot;: &amp;quot;sui_getDynamicFields&amp;quot;,
+  &amp;quot;params&amp;quot;:[
+      &amp;quot;0xf1206f0f7d97908aae907c23d69a4cd97120dc82&amp;quot;
+  ]
+}'
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-json"&gt;{
+    &amp;quot;jsonrpc&amp;quot;: &amp;quot;2.0&amp;quot;,
+    &amp;quot;result&amp;quot;: {
+        &amp;quot;data&amp;quot;: [
+            {
+                &amp;quot;name&amp;quot;: &amp;quot;vector[99u8, 104u8, 105u8, 108u8, 100u8]&amp;quot;,
+                &amp;quot;type&amp;quot;: &amp;quot;DynamicObject&amp;quot;,
+                &amp;quot;objectType&amp;quot;: &amp;quot;0xee2961ee26916285ebef57c68caaa5f67a3d8dbd::fields::Child&amp;quot;,
+                &amp;quot;objectId&amp;quot;: &amp;quot;0x55536ca8123ffb606398da9f7d2472888ca5bfd1&amp;quot;,
+                &amp;quot;version&amp;quot;: 1621,
+                &amp;quot;digest&amp;quot;: &amp;quot;GNSaPghN+tRBkxKiVhQCn9jVBkjYV4RU4oF+c4CUGJM=&amp;quot;
+            }
+        ],
+        &amp;quot;nextCursor&amp;quot;: null
+    },
+    &amp;quot;id&amp;quot;: 1
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其中 &lt;code&gt;name&lt;/code&gt; 为 &lt;code&gt;“child”&lt;/code&gt; 。同时，对于对象 ID &lt;code&gt;0x55536ca8123ffb606398da9f7d2472888ca5bfd1&lt;/code&gt;，我们仍然能从链上追踪对应信息。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;curl -H 'Content-Type: application/json' https://fullnode.devnet.sui.io:443 -d '{
+  &amp;quot;jsonrpc&amp;quot;: &amp;quot;2.0&amp;quot;,
+  &amp;quot;id&amp;quot;: 1,
+  &amp;quot;method&amp;quot;: &amp;quot;sui_getObject&amp;quot;,
+  &amp;quot;params&amp;quot;:[
+      &amp;quot;0x55536ca8123ffb606398da9f7d2472888ca5bfd1&amp;quot;
+  ]
+}'
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;集合数据类型&lt;/h3&gt;
+&lt;p&gt;接下来，我们介绍几种基于 dynamic field 的集合数据类型。&lt;/p&gt;
+&lt;p&gt;前面介绍过，带有 dynamic field 的对象可以被删除，但是这对于链上集合类型来说这是不希望发生的，因为链上集合类型可能将无限多的键值对作为 dynamic field 保存。因此，在 Sui 提供了两种集合类型： &lt;code&gt;Table&lt;/code&gt; 和 &lt;code&gt;Bag&lt;/code&gt;，两者都基于 dynamic field 构建的映射类型的数据结构，但是额外支持计算它们包含的条目数，并防止在非空时意外删除。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Table&lt;/code&gt; 和 &lt;code&gt;Bag&lt;/code&gt; 的区别在于，Table 是同质（*homogeneous）*映射，所以的键必须是同一个类型，所以的值也必须是同一个类型，而 Bag 是异质（&lt;em&gt;heterogeneous&lt;/em&gt;）映射，可以存储任意类型的键值对。&lt;/p&gt;
+&lt;p&gt;同时，Sui 标准库中还包含对象版本的 &lt;code&gt;Table&lt;/code&gt; 和 &lt;code&gt;Bag&lt;/code&gt;： &lt;code&gt;ObjectTable&lt;/code&gt; 和 &lt;code&gt;ObjectBag&lt;/code&gt;，区别在于前者可以将任何 &lt;code&gt;store&lt;/code&gt; 能力的值保存，但从外部存储查看时，作为值存储的对象将被隐藏，后者只能将对象作为值存储，但可以从外部存储中通过 ID 访问这些对象。&lt;/p&gt;
+&lt;p&gt;与之前介绍过的 &lt;code&gt;vec_map&lt;/code&gt; 相比，&lt;code&gt;table&lt;/code&gt; 更适合用来处理包含大量映射的情况。&lt;/p&gt;
+&lt;h3&gt;Table&lt;/h3&gt;
+&lt;p&gt;下面我们通过示例来展示对 table 的基本操作：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;添加元素： &lt;code&gt;add&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;读取和修改元素： &lt;code&gt;borrow&lt;/code&gt;，&lt;code&gt;borrow_mut&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;删除元素： &lt;code&gt;delete&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;元素长度： &lt;code&gt;length&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;判断存在性：&lt;code&gt;contains&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Object table 的操作与 table 类似。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;module ds::tables {
+    use sui::object::{Self, UID};
+    use sui::transfer;
+    use sui::tx_context::{Self, TxContext};
+    use sui::table::{Self, Table};
+
+    const EChildAlreadyExists: u64 = 0;
+    const EChildNotExists: u64 = 1;
+
+    struct Parent has key {
+        id: UID,
+        children: Table&amp;lt;u64, Child&amp;gt;,
+    }
+
+    struct Child has key, store {
+        id: UID,
+        age: u64
+    }
+    // 创建 Parent 对象
+    public entry fun initialize(ctx: &amp;amp;mut TxContext) {
+        transfer::transfer(
+            Parent { id: object::new(ctx), children: table::new(ctx) },
+            tx_context::sender(ctx)
+        );
+    }
+
+    public fun child_age(child: &amp;amp;Child): u64 {
+        child.age
+    }
+    // 查看
+    public fun child_age_via_parent(parent: &amp;amp;Parent, index: u64): u64 {
+        assert!(!table::contains(&amp;amp;parent.children, index), EChildNotExists);
+        table::borrow(&amp;amp;parent.children, index).age
+    }
+    // 获取长度
+    public fun child_size_via_parent(parent: &amp;amp;Parent): u64 {
+        table::length(&amp;amp;parent.children)
+    }
+    // 添加
+    public entry fun add_child(parent: &amp;amp;mut Parent, index: u64, ctx: &amp;amp;mut TxContext) {
+        assert!(table::contains(&amp;amp;parent.children, index), EChildAlreadyExists);
+        table::add(&amp;amp;mut parent.children, index, Child { id: object::new(ctx), value: 0 });
+    }
+    // 修改
+    public fun mutate_child(child: &amp;amp;mut Child) {
+        child.age = child.age + 1;
+    }
+
+    public entry fun mutate_child_via_parent(parent: &amp;amp;mut Parent, index: u64) {
+        mutate_child(table::borrow_mut(&amp;amp;mut parent.children, index));
+    }
+    // 删除
+    public entry fun delete_child(parent: &amp;amp;mut Parent, index: u64) {
+        assert!(!table::contains(&amp;amp;parent.children, index), EChildNotExists);
+        let Child { id, age: _ } = table::remove(
+            &amp;amp;mut parent.children,
+            index
+        );
+        object::delete(id);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Bag&lt;/h3&gt;
+&lt;p&gt;Bag 的操作与 table 的操作接口类似：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;添加元素： &lt;code&gt;add&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;读取和修改元素： &lt;code&gt;borrow&lt;/code&gt;，&lt;code&gt;borrow_mut&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;删除元素： &lt;code&gt;delete&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;元素长度： &lt;code&gt;length&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;判断存在性：&lt;code&gt;contains&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这里我们仅展示添加不同类型的键值对。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Object_bag&lt;/code&gt; 的操作与 &lt;code&gt;bag&lt;/code&gt; 类似。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;module ds::bags {
+    use sui::object::{Self, UID};
+    use sui::transfer;
+    use sui::tx_context::{Self, TxContext};
+    use sui::bag::{Self, Bag};
+
+    const EChildAlreadyExists: u64 = 0;
+    const EChildNotExists: u64 = 1;
+
+    struct Parent has key {
+        id: UID,
+        children: Bag,
+    }
+
+    struct Child1 has key, store {
+        id: UID,
+        value: u64
+    }
+
+    struct Child2 has key, store {
+        id: UID,
+        value: u64
+    }
+
+    public entry fun initialize(ctx: &amp;amp;mut TxContext) {
+        transfer::transfer(
+            Parent { id: object::new(ctx), children: bag::new(ctx) },
+            tx_context::sender(ctx)
+        );
+    }
+    // 添加第一种类型
+    public entry fun add_child1(parent: &amp;amp;mut Parent, index: u64, ctx: &amp;amp;mut TxContext) {
+        assert!(bag::contains(&amp;amp;parent.children, index), EChildAlreadyExists);
+        bag::add(&amp;amp;mut parent.children, index, Child1 { id: object::new(ctx), value: 0 });
+    }
+    // 添加第二种类型
+    public entry fun add_child2(parent: &amp;amp;mut Parent, index: u64, ctx: &amp;amp;mut TxContext) {
+        assert!(bag::contains(&amp;amp;parent.children, index), EChildAlreadyExists);
+        bag::add(&amp;amp;mut parent.children, index, Child2 { id: object::new(ctx), value: 0 });
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;LinkedTable&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;linked_table&lt;/code&gt; 是另一种使用 dynamic field 实现的数据结构，它与 &lt;code&gt;table&lt;/code&gt; 类似，除此之外，它还支持值的有序插入和删除。因此，除了 table  类似的基础操作方法，还包含 &lt;code&gt;front&lt;/code&gt;，&lt;code&gt;back&lt;/code&gt;，&lt;code&gt;push_front&lt;/code&gt;，&lt;code&gt;push_back&lt;/code&gt;，&lt;code&gt;pop_front&lt;/code&gt;，&lt;code&gt;pop_back&lt;/code&gt;等操作，对于每一个键，也可以通过 &lt;code&gt;prev&lt;/code&gt; 和 &lt;code&gt;next&lt;/code&gt; 获取前一个和后一个插入的键。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;module ds::linked_tables {
+    use sui::linked_table::{
+        Self,
+        push_front,
+        push_back,
+        borrow,
+        borrow_mut,
+        remove,
+        pop_front,
+        pop_back,
+        contains,
+        is_empty,
+        destroy_empty
+    };
+    use sui::tx_context::TxContext;
+
+    public entry fun simple_all_functions(ctx: &amp;amp;mut TxContext) {
+        let table = linked_table::new(ctx);
+        // 添加字段
+        push_back(&amp;amp;mut table, b&amp;quot;hello&amp;quot;, 0);
+        push_back(&amp;amp;mut table, b&amp;quot;goodbye&amp;quot;, 1);
+        // [b&amp;quot;hello&amp;quot;, b&amp;quot;goodbye&amp;quot;]
+        // 检查是否存在
+        assert!(contains(&amp;amp;table, b&amp;quot;hello&amp;quot;), 0);
+        assert!(contains(&amp;amp;table, b&amp;quot;goodbye&amp;quot;), 0);
+        assert!(!is_empty(&amp;amp;table), 0);
+        // 修改
+        *borrow_mut(&amp;amp;mut table, b&amp;quot;hello&amp;quot;) = *borrow(&amp;amp;table, b&amp;quot;hello&amp;quot;) * 2;
+        *borrow_mut(&amp;amp;mut table, b&amp;quot;goodbye&amp;quot;) = *borrow(&amp;amp;table, b&amp;quot;goodbye&amp;quot;) * 2;
+        // 检查修改之后的值
+        assert!(*borrow(&amp;amp;table, b&amp;quot;hello&amp;quot;) == 0, 0);
+        assert!(*borrow(&amp;amp;table, b&amp;quot;goodbye&amp;quot;) == 2, 0);
+        // 插入头部
+        push_front(&amp;amp;mut table, b&amp;quot;!!!&amp;quot;, 2);
+        // b&amp;quot;!!!&amp;quot;, b&amp;quot;hello&amp;quot;, b&amp;quot;goodbye&amp;quot;]
+        // 在末尾添加
+        push_back(&amp;amp;mut table, b&amp;quot;?&amp;quot;, 3);
+        // [b&amp;quot;!!!&amp;quot;, b&amp;quot;hello&amp;quot;, b&amp;quot;goodbye&amp;quot;, b&amp;quot;?&amp;quot;]
+        // 从头部弹出
+        let (front_k, front_v) = pop_front(&amp;amp;mut table);
+        assert!(front_k == b&amp;quot;!!!&amp;quot;, 0);
+        assert!(front_v == 2, 0);
+        // 从中间删除
+        assert!(remove(&amp;amp;mut table, b&amp;quot;goodbye&amp;quot;) == 2, 0);
+        // [b&amp;quot;hello&amp;quot;, b&amp;quot;?&amp;quot;]
+        // 从末尾删除
+        let (back_k, back_v) = pop_back(&amp;amp;mut table);
+        assert!(back_k == b&amp;quot;?&amp;quot;, 0);
+        assert!(back_v == 3, 0);
+        // 移出值并检查
+        assert!(remove(&amp;amp;mut table, b&amp;quot;hello&amp;quot;) == 0, 0);
+        // 检查不存在
+        assert!(is_empty(&amp;amp;table), 0);
+        destroy_empty(table);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;TableVec&lt;/h3&gt;
+&lt;p&gt;最后，我们介绍一种基于 &lt;code&gt;table&lt;/code&gt; 的数据结构 &lt;code&gt;table_vec&lt;/code&gt;。从名字就可以看出，&lt;code&gt;table_vec&lt;/code&gt; 是使用 &lt;code&gt;table&lt;/code&gt; 实现的可扩展 &lt;code&gt;vector&lt;/code&gt;，它使用元素在 &lt;code&gt;vector&lt;/code&gt; 的索引作为 &lt;code&gt;table&lt;/code&gt; 中的键进行存储。&lt;code&gt;table_vec&lt;/code&gt; 提供了与 &lt;code&gt;vector&lt;/code&gt; 类似的操作方法。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;module ds::table_vecs {
+    use sui::table_vec;
+    use sui::tx_context::TxContext;
+
+    public entry fun example(ctx: &amp;amp;mut TxContext) {
+        let vec = table_vec::singleton&amp;lt;u64&amp;gt;(1, ctx);
+
+        table_vec::push_back(&amp;amp;mut vec, 2);
+        assert!(table_vec::length(&amp;amp;vec) == 2, 0);
+
+        let v = table_vec::borrow_mut(&amp;amp;mut vec, 1);
+        *v = 3;
+
+        assert!(table_vec::pop_back(&amp;amp;mut vec) == 3, 1);
+        assert!(table_vec::pop_back(&amp;amp;mut vec) == 1, 1);
+
+        assert!(table_vec::is_empty(&amp;amp;vec), 2);
+        table_vec::destroy_empty(vec);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;编译并运行示例：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;sui client call \
+  --function example \
+  --module table_vecs \
+  --package ${package_id} \
+  --gas-budget 30000
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;至此，我们介绍完了 Sui Move 中主要的数据类型及其使用方法，希望大家学习和理解 Sui Move 有一定的帮助。&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/qiwihui/blog/issues/172"&gt;View on GitHub&lt;/a&gt;&lt;/p&gt;
+</content></entry><entry><title>Sui 类狼羊游戏项目开发实践</title><id>blogs/qiwihui-blog-171.md</id><updated>2024-08-18T03:45:14+00:00</updated><author><name>qiwihui</name><email>qwh005007@gmail.com</email></author><link href="https://qiwihui.com/blogs/qiwihui-blog-171.html" rel="self"/><published>2024-05-25T09:37:50+00:00</published><content type="html">&lt;h1&gt;Sui 类狼羊游戏项目开发实践&lt;/h1&gt;
+&lt;p&gt;这篇文章将向你介绍 Sui Move 版本的类狼羊游戏的合约和前端编写过程。阅读前，建议先熟悉以下内容：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Sui 命令行的基本操作；&lt;/li&gt;
+&lt;li&gt;Move 语法（&lt;a href="https://mp.weixin.qq.com/s/epwJmR6oXCgtKtSbBqJyAw"&gt;基础&lt;/a&gt;和&lt;a href="https://mp.weixin.qq.com/s/OXLyiUKzpFzAzc-PVxLvTA"&gt;高级&lt;/a&gt;）和 Sui Move 的对象语法；&lt;/li&gt;
+&lt;li&gt;React 基本语法。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;项目代码：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;合约：&lt;a href="https://github.com/AptosWolfGame/fox_game_contract"&gt;https://github.com/AptosWolfGame/fox_game_contract&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;前端： &lt;a href="https://github.com/AptosWolfGame/fox_game_interface"&gt;https://github.com/AptosWolfGame/fox_game_interface&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在线 Demo： &lt;a href="https://fox-game-interface.vercel.app/"&gt;https://fox-game-interface.vercel.app/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/215304366-1aeb3308-5859-4613-a61a-f353d0b48877.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;h2&gt;0x1 狼羊游戏的规则&lt;/h2&gt;
+&lt;p&gt;狼羊游戏是以太坊上的 NFT 游戏，玩家通过购买NFT，然后将 NFT 质押来获取游戏代币 $WOOL，游戏代币 $WOOL 可用于之后的 NFT 铸造。有趣的是，狼羊游戏在这个过程中引入了随机性，让单纯的质押过程增加了不确定性，因而吸引了大量玩家参与到游戏中，狼羊游戏的可玩性也是建立在这个基础之上。具体的游戏规则为：&lt;/p&gt;
+&lt;h3&gt;1.1 &lt;strong&gt;羊&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;你有90%的概率铸造一只羊，每只羊都有独特的特征。以下是他们可以采取的行动：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;进入谷仓（Stake）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;每天累积 10,000 羊毛 $WOOL&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;剪羊毛 $WOOL (Claim)&lt;/p&gt;
+&lt;p&gt;收到的羊毛80%累积在羊的身上，狼对剪下的羊毛收取20%的税，作为不攻击谷仓的回报。征税的 $WOOL 分配给目前在谷仓中质押的所有狼，数量与他们的 Alpha 分数成正比。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;离开谷仓（Unstake）&lt;/p&gt;
+&lt;p&gt;羊被从谷仓中移除，所有 $WOOL 都被剪掉了。只有当羊积累了2天价值的 $WOOL 时才能离开谷仓，离开谷仓时你所有累积的 $WOOL 有50%的几率被狼全部偷走。被盗 $WOOL 分配给当前在谷仓中质押的所有狼，数量与他们的 Alpha 分数成正比。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用 $WOOL 铸造一个新羊&lt;/p&gt;
+&lt;p&gt;铸造的 NFT 有10%的可能性实际上是狼！新的羊或狼有10%的几率被质押的狼偷走。每只狼的成功机会与他们的 Alpha 分数成正比。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;1.2 &lt;strong&gt;狼&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;你有 10% 的机会铸造一只狼，每只狼都有独特的特征，包括 5~8 的 Alpha 值。Alpha值越高，狼从税收中赚取的 $WOOL 部分越高，偷一只新铸造的羊或狼的概率也越高。只有被质押的狼才能偷羊或赚取 $WOOL 税。&lt;/p&gt;
+&lt;p&gt;例子：狼A的 Alpha 为8，狼B的 Alpha 为6，并且他们都被质押。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果累计 70,000 羊毛作为税款，狼A将能够获得 40,000 羊毛，狼B将能够获得 30,000 羊毛；&lt;/li&gt;
+&lt;li&gt;如果新铸造的羊或狼被盗，狼A有57%概率获得，狼B有43%的概率获得。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;本次项目实践，我们将在 Sui 区块链上通过 Move 智能合约语言来实现游戏铸造，质押和获取 NFT 过程，并使用新的游戏元素：狐狸，鸡和鸡蛋，其中狐狸对应狼，鸡对应羊，鸡蛋对应羊毛，其他过程不变，我们将这个游戏命名为&lt;strong&gt;狐狸游戏&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2&gt;0x2 合约开发&lt;/h2&gt;
+&lt;p&gt;我们首先进行智能合约的编写，大致分为以下几个部分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;创建 NFT&lt;/li&gt;
+&lt;li&gt;铸造 NFT（Mint）&lt;/li&gt;
+&lt;li&gt;质押 NFT （Stake）&lt;/li&gt;
+&lt;li&gt;鸡蛋（EGG）代币和收集鸡蛋（Collect/Claim）&lt;/li&gt;
+&lt;li&gt;提取 NFT（Unstake）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;2.1 NFT 结构&lt;/h3&gt;
+&lt;p&gt;首先我们定义狐狸和鸡的 NFT 的结构，我们使用一个结构体 &lt;code&gt;FoxOrChicken&lt;/code&gt; 来表示这个 NFT， 通过 &lt;code&gt;is_chicken&lt;/code&gt; 来进行区分：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt; // 文件：token_helper.move
+    /// Defines a Fox or Chicken attribute. Eg: `pattern: 'panda'`
+    struct Attribute has store, copy, drop {
+        name: vector&amp;lt;u8&amp;gt;,
+        value: vector&amp;lt;u8&amp;gt;,
+    }
+
+    struct FoxOrChicken has key, store {
+        id: UID,
+        index: u64, // 索引
+        is_chicken: bool, // 是否是鸡
+        alpha: u8, // 狐狸的 alpha
+        url: Url, // 图片
+        link: Url, // NFT 链接
+        item_count: u8, // 当前 NFT 的数量
+        attributes: vector&amp;lt;Attribute&amp;gt;, // 属性
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其中， &lt;code&gt;url&lt;/code&gt; 既可以是指向 NFT 图片的链接，也可以是 base64 编码的字符串，比如 &lt;code&gt;data:image/svg+xml;base64,PHN2Zy......&lt;/code&gt;。&lt;code&gt;link&lt;/code&gt; 是一个指向 NFT 的页面。&lt;/p&gt;
+&lt;h3&gt;2.2 创建 NFT 对象&lt;/h3&gt;
+&lt;p&gt;整个创建 NFT 的逻辑大致就是根据随机种子生成对应属性索引，根据属性索引构建对应的属性列表和图片，从而创建 NFT。&lt;/p&gt;
+&lt;p&gt;创建 NFT 使用到 &lt;code&gt;FoCRegistry&lt;/code&gt; 结构体，这个数据结构用于记录关于 NFT 的一些数据，比如 &lt;code&gt;foc_born&lt;/code&gt; 记录生产的 NFT 总数，&lt;code&gt;foc_hash&lt;/code&gt; 用于在生产 NFT 时产生随机数，该随机数用于生成 NFT 的属性，&lt;code&gt;foc_hash&lt;/code&gt; 可以看作是 NFT 的基因。具体的属性值记录如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;// 文件：token_helper.move
+
+        struct FoCRegistry has key, store {
+        id: UID,
+        foc_born: u64, // NFT supply
+        foc_hash: vector&amp;lt;u8&amp;gt;, // NFT gene
+        rarities: vector&amp;lt;vector&amp;lt;u8&amp;gt;&amp;gt;, // 属性值概率
+        aliases: vector&amp;lt;vector&amp;lt;u8&amp;gt;&amp;gt;, // 属性值索引
+        types: Table&amp;lt;ID, bool&amp;gt;, // NFT 对象 ID 与类型（是否为鸡）的对应
+        alphas: Table&amp;lt;ID, u8&amp;gt;, // 狐狸的 Alpha 值
+        trait_data: Table&amp;lt;u8, Table&amp;lt;u8, Trait&amp;gt;&amp;gt;, // 属性值，第一个u8是类型编号，第二个u8是属性索引
+        trait_types: vector&amp;lt;vector&amp;lt;u8&amp;gt;&amp;gt;, // 属性类型名称
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;创建 NFT 方法 &lt;code&gt;create_foc&lt;/code&gt; 如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;// 文件：token_helper.move
+        public(friend) fun create_foc(
+        reg: &amp;amp;mut FoCRegistry, ctx: &amp;amp;mut TxContext
+    ): FoxOrChicken {
+        let id = object::new(ctx);
+        reg.foc_born = reg.foc_born + 1;
+        // 根据 UID 与旧 foc_hash 生产新的 foc_hash
+        vec::append(&amp;amp;mut reg.foc_hash, object::uid_to_bytes(&amp;amp;id));
+        reg.foc_hash = hash(reg.foc_hash);
+        // 随机产生 trait，并生成属性对 attributes
+        let fc = generate_traits(reg);
+        let attributes = get_attributes(reg, &amp;amp;fc);
+
+        let alpha = *vec::borrow(&amp;amp;ALPHAS, (fc.alpha_index as u64));
+        // 记录ID对应类型
+        table::add(&amp;amp;mut reg.types, object::uid_to_inner(&amp;amp;id), fc.is_chicken);
+        if (!fc.is_chicken) {
+            table::add(&amp;amp;mut reg.alphas, object::uid_to_inner(&amp;amp;id), alpha);
+        };
+        // 生成事件
+        emit(FoCBorn {
+            id: object::uid_to_inner(&amp;amp;id),
+            index: reg.foc_born,
+            attributes: *&amp;amp;attributes,
+            created_by: tx_context::sender(ctx),
+        });
+        // 返回生成的 FoxOrChicken
+        FoxOrChicken {
+            id,
+            index: reg.foc_born,
+            is_chicken: fc.is_chicken,
+            alpha: alpha,
+            url: img_url(reg, &amp;amp;fc),
+            link: link_url(reg.foc_born, fc.is_chicken),
+            attributes,
+            item_count: 0,
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其中 &lt;code&gt;genetate_traits&lt;/code&gt; 用于根据 &lt;code&gt;foc_hash&lt;/code&gt; 生成 NFT 的属性值，此处属性为对应属性值的索引，&lt;code&gt;select_trait&lt;/code&gt; 根据 A.J. Walker's Alias 算法根据预先设置好的每一个属性的随机概率（&lt;code&gt;rarities&lt;/code&gt;）来快速生成对应的属性索引。详情可以参考文章 &lt;a href="https://zhuanlan.zhihu.com/p/436785581"&gt;https://zhuanlan.zhihu.com/p/436785581&lt;/a&gt; 中 A.J. Walker's Alias 算法一节****。****&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;// 文件： token_helper.move
+        // generates traits for a specific token, checking to make sure it's unique
+    public fun generate_traits(
+        reg: &amp;amp;FoCRegistry,
+        // seed: &amp;amp;vector&amp;lt;u8&amp;gt;
+    ): Traits {
+        let seed = reg.foc_hash;
+        let is_chicken = *vec::borrow(&amp;amp;seed, 0) &amp;gt;= 26; // 90% 0f 255
+        let shift = if (is_chicken) 0 else 9;
+        // 根据随机种子生成属性
+                Traits {
+            is_chicken,
+            fur: select_trait(reg, *vec::borrow(&amp;amp;seed, 1), *vec::borrow(&amp;amp;seed, 10), 0 + shift),
+            head: select_trait(reg, *vec::borrow(&amp;amp;seed, 2), *vec::borrow(&amp;amp;seed, 11), 1 + shift),
+            ears: select_trait(reg, *vec::borrow(&amp;amp;seed, 3), *vec::borrow(&amp;amp;seed, 12), 2 + shift),
+            eyes: select_trait(reg, *vec::borrow(&amp;amp;seed, 4), *vec::borrow(&amp;amp;seed, 13), 3 + shift),
+            nose: select_trait(reg, *vec::borrow(&amp;amp;seed, 5), *vec::borrow(&amp;amp;seed, 14), 4 + shift),
+            mouth: select_trait(reg, *vec::borrow(&amp;amp;seed, 6), *vec::borrow(&amp;amp;seed, 15), 5 + shift),
+            neck: select_trait(reg, *vec::borrow(&amp;amp;seed, 7), *vec::borrow(&amp;amp;seed, 16), 6 + shift),
+            feet: select_trait(reg, *vec::borrow(&amp;amp;seed, 8), *vec::borrow(&amp;amp;seed, 17), 7 + shift),
+            alpha_index: select_trait(reg, *vec::borrow(&amp;amp;seed, 9), *vec::borrow(&amp;amp;seed, 18), 8 + shift),
+        }
+    }
+    // 根据 A.J. Walker's Alias 算法计算属性值
+        fun select_trait(reg: &amp;amp;FoCRegistry, seed1: u8, seed2: u8, trait_type: u64): u8 {
+        let trait = (seed1 as u64) % vec::length(vec::borrow(&amp;amp;reg.rarities, trait_type));
+        if (seed2 &amp;lt; *vec::borrow(vec::borrow(&amp;amp;reg.rarities, trait_type), trait)) {
+            return (trait as u8)
+        };
+        *vec::borrow(vec::borrow(&amp;amp;reg.aliases, trait_type), trait)
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;而 &lt;code&gt;get_attributes&lt;/code&gt; 则是根据属性索引值对应从 &lt;code&gt;trait_types&lt;/code&gt; 和 &lt;code&gt;trait_data&lt;/code&gt; 中将属性的真实值取出并构建成属性数组。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;fun get_attributes(reg: &amp;amp;mut FoCRegistry, fc: &amp;amp;Traits): vector&amp;lt;Attribute&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;而 &lt;code&gt;img_url&lt;/code&gt; 则通过上述生成的特征构建出对应的 base64 编码的 svg 图片。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;        /// Construct an image URL for the NFT.
+    fun img_url(reg:&amp;amp;mut FoCRegistry, fc: &amp;amp;Traits): Url {
+        url::new_unsafe_from_bytes(token_uri(reg, fc))
+    }
+        fun token_uri(reg: &amp;amp;mut FoCRegistry, foc: &amp;amp;Traits): vector&amp;lt;u8&amp;gt; {
+        let uri = b&amp;quot;data:image/svg+xml;base64,&amp;quot;;
+        vec::append(&amp;amp;mut uri, base64::encode(&amp;amp;draw_svg(reg, foc)));
+        uri
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;至此，我们可以通过 &lt;code&gt;create_foc&lt;/code&gt; 方法创建一个 FoxOrChicken NFT。&lt;/p&gt;
+&lt;h3&gt;2.3 铸造 NFT&lt;/h3&gt;
+&lt;p&gt;接下来我们看到铸造 NFT 过程，大致过程为：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;判断总供给量是否满足条件；&lt;/li&gt;
+&lt;li&gt;如果在 SUI 代币购买阶段，则转移 SUI 代币，否则，需要支付 EGG 代币进行铸造，EGG 的铸造和销毁在之后的章节中介绍；&lt;/li&gt;
+&lt;li&gt;铸造 NFT 并根据50%概率判断是否被质押的狐狸盗走；&lt;/li&gt;
+&lt;li&gt;如果选择质押则将 NFT 转入质押，否则转入铸造者的账户中。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;// 文件： fox.move
+    /// mint a fox or chicken
+    public entry fun mint(
+        global: &amp;amp;mut Global,
+        treasury_cap: &amp;amp;mut TreasuryCap&amp;lt;EGG&amp;gt;,
+        amount: u64,
+        stake: bool,
+        pay_sui: vector&amp;lt;Coin&amp;lt;SUI&amp;gt;&amp;gt;,
+        pay_egg: vector&amp;lt;Coin&amp;lt;EGG&amp;gt;&amp;gt;,
+        ctx: &amp;amp;mut TxContext,
+    ) {
+        assert_enabled(global);
+        // 检查供应量是否超出总供应量
+        assert!(amount &amp;gt; 0 &amp;amp;&amp;amp; amount &amp;lt;= config::max_single_mint(), EINVALID_MINTING);
+        let token_supply = token_helper::total_supply(&amp;amp;global.foc_registry);
+        assert!(token_supply + amount &amp;lt;= config::target_max_tokens(), EALL_MINTED);
+
+        let receiver_addr = sender(ctx);
+        // 处理 SUI 代币付款
+        if (token_supply &amp;lt; config::paid_tokens()) {
+            assert!(vec::length(&amp;amp;pay_sui) &amp;gt; 0, EINSUFFICIENT_SUI_BALANCE);
+            assert!(token_supply + amount &amp;lt;= config::paid_tokens(), EALL_MINTED);
+            let price = config::mint_price() * amount;
+            let (paid, remainder) = merge_and_split(pay_sui, price, ctx);
+            coin::put(&amp;amp;mut global.balance, paid);
+            transfer(remainder, sender(ctx));
+        } else {
+            // EGG 代币付款阶段返还 SUI 代币
+            if (vec::length(&amp;amp;pay_sui) &amp;gt; 0) {
+                transfer(merge(pay_sui, ctx), sender(ctx));
+            } else {
+                vec::destroy_empty(pay_sui);
+            };
+        };
+        let id = object::new(ctx);
+        let seed = hash(object::uid_to_bytes(&amp;amp;id));
+        let total_egg_cost: u64 = 0;
+        let tokens: vector&amp;lt;FoxOrChicken&amp;gt; = vec::empty&amp;lt;FoxOrChicken&amp;gt;();
+        let i = 0;
+        while (i &amp;lt; amount) {
+            let token_index = token_supply + i + 1;
+            // 判断是否被狐狸盗走
+            let recipient: address = select_recipient(&amp;amp;mut global.pack, receiver_addr, seed, token_index);
+            let token = token_helper::create_foc(&amp;amp;mut global.foc_registry, ctx);
+            if (!stake || recipient != receiver_addr) {
+                transfer(token, receiver_addr);
+            } else {
+                vec::push_back(&amp;amp;mut tokens, token);
+            };
+            // 计算 EGG 代币花费
+            total_egg_cost = total_egg_cost + mint_cost(token_index);
+            i = i + 1;
+        };
+        // 如果需要 EGG 代币花费，则转移并销毁 EGG 代币
+        if (total_egg_cost &amp;gt; 0) {
+            assert!(vec::length(&amp;amp;pay_egg) &amp;gt; 0, EINSUFFICIENT_EGG_BALANCE);
+            // burn EGG
+            let total_egg = merge(pay_egg, ctx);
+            assert!(coin::value(&amp;amp;total_egg) &amp;gt;= total_egg_cost, EINSUFFICIENT_EGG_BALANCE);
+            let paid = coin::split(&amp;amp;mut total_egg, total_egg_cost, ctx);
+            egg::burn(treasury_cap, paid);
+            transfer(total_egg, sender(ctx));
+        } else {
+            if (vec::length(&amp;amp;pay_egg) &amp;gt; 0) {
+                transfer(merge(pay_egg, ctx), sender(ctx));
+            } else {
+                vec::destroy_empty(pay_egg);
+            };
+        };
+        // 铸造的同时质押，则将 NFT 转入重要中
+        if (stake) {
+            barn::stake_many_to_barn_and_pack(
+                &amp;amp;mut global.barn_registry,
+                &amp;amp;mut global.barn,
+                &amp;amp;mut global.pack,
+                tokens,
+                ctx
+            );
+        } else {
+            vec::destroy_empty(tokens);
+        };
+        object::delete(id);
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;2.4 质押 NFT&lt;/h3&gt;
+&lt;p&gt;质押 NFT 时，我们通过 NFT 的属性值 &lt;code&gt;is_chicken&lt;/code&gt; 来将不同的NFT放置到不同的容器中。其中，狐狸放置在 Pack 中，鸡放置在 Barn 中。每一个 NFT 在放置的同时记录对应的 owner 地址和用于计算质押收益的时间戳。&lt;/p&gt;
+&lt;p&gt;对于 &lt;code&gt;Barn&lt;/code&gt;，除了记录 NFT 对象 &lt;code&gt;ID&lt;/code&gt; 与 &lt;code&gt;Stake&lt;/code&gt; 之间对应关系的 &lt;code&gt;items&lt;/code&gt;，还增加了一个 &lt;code&gt;dynamic_field&lt;/code&gt;，用于记录 owner 地址所有质押的 NFT 的数组： &lt;code&gt;dynamic_field: &amp;lt;address, vector&amp;lt;ID&amp;gt;&amp;gt;&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;同理，&lt;code&gt;Pack&lt;/code&gt; 也用 &lt;code&gt;items&lt;/code&gt; 记录了质押的所有 NFT，用 Alpha 进行了分类存储，在 &lt;code&gt;ObjectTable&amp;lt;u8, ObjectTable&amp;lt;u64, Stake&amp;gt;&amp;gt;&lt;/code&gt; 的结构中，第一个 &lt;code&gt;u8&lt;/code&gt; 对应于 Alpha 值，第二个 &lt;code&gt;ObjectTable&amp;lt;u64, Stake&amp;gt;&lt;/code&gt; 则是用 &lt;code&gt;ObjectTable&lt;/code&gt; 实现了 &lt;code&gt;vector&lt;/code&gt; 的功能，&lt;code&gt;u64&lt;/code&gt; 对应 &lt;code&gt;Stake&lt;/code&gt; 的索引，因此，item_size 这个属性记录了每个 Alpha 值对应 &lt;code&gt;ObjectTable&lt;/code&gt; 的大小。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;pack_indices&lt;/code&gt; 用于记录每个 NFT 所在数组中的索引，最后还有一个 &lt;code&gt;dynamic_field&lt;/code&gt; 记录了 owner 地址的所有质押的 NFT 的数组。&lt;/p&gt;
+&lt;p&gt;以上关于 Barn 和 Pack 的设计目的在于：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;当 &lt;code&gt;FoxOrChicken&lt;/code&gt; 成为 &lt;code&gt;Stake&lt;/code&gt; 的一个属性时，在区块链上无法追踪，因此，只能通过 &lt;code&gt;Stake&lt;/code&gt; 的 Object ID 进行追踪，items 都是为了保证能直接通过 NFT 的 Object ID 来对应到 Stake；&lt;/li&gt;
+&lt;li&gt;记录 owner 地址的所有质押的 NFT ID 的数组是为了方便在业务中查询某个地址的质押的 NFT，&lt;code&gt;dynamic_field&lt;/code&gt; 可以方便查询。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;        // struct to store a stake's token, owner, and earning values
+    struct Stake has key, store {
+        id: UID,
+        item: FoxOrChicken,
+        value: u64, // 用于质押收益计算的时间戳
+        owner: address,
+    }
+
+    struct Barn has key, store {
+        id: UID,
+        items: ObjectTable&amp;lt;ID, Stake&amp;gt;,
+        // staked: Table&amp;lt;address, vector&amp;lt;ID&amp;gt;&amp;gt;, // address -&amp;gt; stake_id
+    }
+
+    struct Pack has key, store {
+        id: UID,
+        items: ObjectTable&amp;lt;u8, ObjectTable&amp;lt;u64, Stake&amp;gt;&amp;gt;,
+        // alpha -&amp;gt; index -&amp;gt; Stake
+        item_size: vector&amp;lt;u64&amp;gt;,
+        // size for each alpha
+        pack_indices: Table&amp;lt;ID, u64&amp;gt;,
+        // staked: Table&amp;lt;address, vector&amp;lt;ID&amp;gt;&amp;gt;, // address -&amp;gt; stake_id
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;我们接下来看到如何质押一个 Chicken 的 NFT，方法调用层级为 &lt;code&gt;stake_many_to_barn_and_pack -&amp;gt; stake_chicken_to_barn -&amp;gt; add_chicken_to_barn, record_staked&lt;/code&gt; ：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;// 文件： Token_helper.move
+        // 质押多个 NFT
+        public fun stake_many_to_barn_and_pack(
+        reg: &amp;amp;mut BarnRegistry,
+        barn: &amp;amp;mut Barn,
+        pack: &amp;amp;mut Pack,
+        tokens: vector&amp;lt;FoxOrChicken&amp;gt;,
+        ctx: &amp;amp;mut TxContext,
+    ) {
+        let i = vec::length&amp;lt;FoxOrChicken&amp;gt;(&amp;amp;tokens);
+        while (i &amp;gt; 0) {
+            let token = vec::pop_back(&amp;amp;mut tokens);
+            // 通过属性 is_chicken 判断质押方向
+            if (token_helper::is_chicken(&amp;amp;token)) {
+                // 更新收益
+                update_earnings(reg, ctx);
+                stake_chicken_to_barn(reg, barn, token, ctx);
+            } else {
+                stake_fox_to_pack(reg, pack, token, ctx);
+            };
+            i = i - 1;
+        };
+        vec::destroy_empty(tokens)
+    }
+
+        fun stake_chicken_to_barn(reg: &amp;amp;mut BarnRegistry, barn: &amp;amp;mut Barn, item: FoxOrChicken, ctx: &amp;amp;mut TxContext) {
+        reg.total_chicken_staked = reg.total_chicken_staked + 1;
+        let stake_id = add_chicken_to_barn(reg, barn, item, ctx);
+                // 记录 owner 地址的所有质押的 NFT
+        record_staked(&amp;amp;mut barn.id, sender(ctx), stake_id);
+    }
+
+        fun add_chicken_to_barn(reg: &amp;amp;mut BarnRegistry, barn: &amp;amp;mut Barn, item: FoxOrChicken, ctx: &amp;amp;mut TxContext): ID {
+        let foc_id = object::id(&amp;amp;item);
+        // 获取当前时间戳
+        let value = timestamp_now(reg, ctx);
+        let stake = Stake {
+            id: object::new(ctx),
+            item,
+            value,
+            owner: sender(ctx),
+        };
+        // 生成并添加质押
+        let stake_id = object::id(&amp;amp;stake);
+        emit(FoCStaked { id: foc_id, owner: sender(ctx), value });
+        object_table::add(&amp;amp;mut barn.items, foc_id, stake);
+        stake_id
+    }
+
+        fun record_staked(staked: &amp;amp;mut UID, account: address, stake_id: ID) {
+        if (dof::exists_(staked, account)) {
+            vec::push_back(dof::borrow_mut(staked, account), stake_id);
+        } else {
+            dof::add(staked, account, vec::singleton(stake_id));
+        };
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;同理，质押 Fox 进入 Pack 中的过程也是类似的，这里就不再赘述，方法调用层级为 &lt;code&gt;stake_many_to_barn_and_pack -&amp;gt;&lt;/code&gt; &lt;code&gt;stake_fox_to_pack -&amp;gt;``add_fox_to_pack, record_staked&lt;/code&gt; 。&lt;/p&gt;
+&lt;h3&gt;2.5 提取 NFT&lt;/h3&gt;
+&lt;p&gt;提取 Chicken NFT 时，方法调用层级为 &lt;code&gt;claim_many_from_barn_and_pack -&amp;gt; claim_chicken_from_barn -&amp;gt; remove_chicken_from_barn, remove_staked&lt;/code&gt; &lt;/p&gt;
+&lt;p&gt;主要的过程为：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;判断 NFT 类型，根据类型从不同的容器中提取 NFT；&lt;/li&gt;
+&lt;li&gt;判断 NFT 是否存在，是否超过最小质押时间；&lt;/li&gt;
+&lt;li&gt;计算质押收益；&lt;/li&gt;
+&lt;li&gt;如果选择提取 NFT，则收益50%概率被狐狸全部拿走；&lt;/li&gt;
+&lt;li&gt;如果只收集鸡蛋，则需要交 20% 作为保护费。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;// 文件： token_helper.move
+    // 提取多个 NFT
+        public fun claim_many_from_barn_and_pack(
+        foc_reg: &amp;amp;mut FoCRegistry,
+        reg: &amp;amp;mut BarnRegistry,
+        barn: &amp;amp;mut Barn,
+        pack: &amp;amp;mut Pack,
+        treasury_cap: &amp;amp;mut TreasuryCap&amp;lt;EGG&amp;gt;,
+        tokens: vector&amp;lt;ID&amp;gt;,
+        unstake: bool,
+        ctx: &amp;amp;mut TxContext,
+    ) {
+        // 更新收益
+        update_earnings(reg, ctx);
+        let i = vec::length&amp;lt;ID&amp;gt;(&amp;amp;tokens);
+        let owed: u64 = 0;
+        while (i &amp;gt; 0) {
+            let token_id = vec::pop_back(&amp;amp;mut tokens);
+            // 通过 ID 判断是否为 chickena
+            // 计算提取收益 owed
+            if (token_helper::is_chicken_from_id(foc_reg, token_id)) {
+                owed = owed + claim_chicken_from_barn(reg, barn, token_id, unstake, ctx);
+            } else {
+                owed = owed + claim_fox_from_pack(foc_reg, reg, pack, token_id, unstake, ctx);
+            };
+            i = i - 1;
+        };
+        // 根据 owed 的数量为地址铸造 EGG 代币
+        if (owed == 0) { return };
+        egg::mint(treasury_cap, owed, sender(ctx), ctx);
+        vec::destroy_empty(tokens)
+    }
+
+        fun claim_chicken_from_barn(
+        reg: &amp;amp;mut BarnRegistry,
+        barn: &amp;amp;mut Barn,
+        foc_id: ID,
+        unstake: bool,
+        ctx: &amp;amp;mut TxContext
+    ): u64 {
+        // 判断需要提取的 NFT 是否存在
+        assert!(object_table::contains(&amp;amp;barn.items, foc_id), ENOT_IN_PACK_OR_BARN);
+        let stake_time = get_chicken_stake_value(barn, foc_id);
+        let timenow = timestamp_now(reg, ctx);
+        // 判断是否超过了 48 小时的最小质押时间
+        assert!(!(unstake &amp;amp;&amp;amp; timenow - stake_time &amp;lt; MINIMUM_TO_EXIT), ESTILL_COLD);
+        let owed: u64;
+        // 判断是否超过了最大 EGG 铸造量，并计算质押所得
+        if (reg.total_egg_earned &amp;lt; MAXIMUM_GLOBAL_EGG) {
+            owed = (timenow - stake_time) * DAILY_EGG_RATE / ONE_DAY_IN_SECOND;
+        } else if (stake_time &amp;gt; reg.last_claim_timestamp) {
+            owed = 0; // $WOOL production stopped already
+        } else {
+            // stop earning additional $EGG if it's all been earned
+            owed = (reg.last_claim_timestamp - stake_time) * DAILY_EGG_RATE / ONE_DAY_IN_SECOND;
+        };
+                
+        if (unstake) {
+            // 如果进行提取，则有50%的概率 EGG 全部被盗走
+            let id = object::new(ctx);
+            // FIXME
+            if (random::rand_u64_range_with_seed(hash(object::uid_to_bytes(&amp;amp;id)), 0, 2) == 0) {
+                // 50% chance of all $EGG stolen
+                pay_fox_tax(reg, owed);
+                owed = 0;
+            };
+            object::delete(id);
+            // 更新质押数据，并移除质押，转移 NFT 给 owner 地址
+            reg.total_chicken_staked = reg.total_chicken_staked - 1;
+            let (item, stake_id) = remove_chicken_from_barn(barn, foc_id, ctx);
+            remove_staked(&amp;amp;mut barn.id, sender(ctx), stake_id);
+            transfer::transfer(item, sender(ctx));
+        } else {
+             // 如果只是收集 EGG，则 20% 作为保护费交给狐狸
+            // percentage tax to staked foxes
+            pay_fox_tax(reg, owed * EGG_CLAIM_TAX_PERCENTAGE / 100);
+            // remainder goes to Chicken owner
+            owed = owed * (100 - EGG_CLAIM_TAX_PERCENTAGE) / 100;
+            // 重设质押状态
+            set_chicken_stake_value(barn, foc_id, timenow);
+        };
+        emit(FoCClaimed { id: foc_id, earned: owed, unstake });
+        owed
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;同理，从 Pack 中提取 Fox  中的过程也是类似的，这里就不再赘述。&lt;/p&gt;
+&lt;h3&gt;2.6 创建 EGG 代币和收集 EGG 代币&lt;/h3&gt;
+&lt;p&gt;EGG 代币创建过程使用了 one-time-witness 模式，具体可以参考：&lt;a href="https://mp.weixin.qq.com/s/OXLyiUKzpFzAzc-PVxLvTA"&gt;Move 高阶语法 | 共学课优秀笔记&lt;/a&gt; 中的 Witness 模式一节。&lt;/p&gt;
+&lt;p&gt;代币的铸造能力 &lt;code&gt;treasury_cap: TreasuryCap&amp;lt;EGG&amp;gt;&lt;/code&gt; 保存为共享对象，但是 &lt;code&gt;mint&lt;/code&gt; 和 &lt;code&gt;burn&lt;/code&gt; 方法t通过 &lt;code&gt;friend&lt;/code&gt; 关键字限制了只能在 &lt;code&gt;fox&lt;/code&gt; 和 &lt;code&gt;barn&lt;/code&gt; 模块中调用，因此控制了代币的产生和销毁的权限。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;// 文件： egg.move
+module fox_game::egg {
+    use std::option;
+    use sui::coin::{Self, Coin, TreasuryCap};
+    use sui::transfer;
+    use sui::tx_context::TxContext;
+
+    friend fox_game::fox;
+    friend fox_game::barn;
+
+    struct EGG has drop {}
+
+    fun init(witness: EGG, ctx: &amp;amp;mut TxContext) {
+        let (treasury_cap, metadata) = coin::create_currency&amp;lt;EGG&amp;gt;(
+            witness,
+            9,
+            b&amp;quot;EGG&amp;quot;,
+            b&amp;quot;Fox Game Egg&amp;quot;,
+            b&amp;quot;Fox game egg coin&amp;quot;,
+            option::none(),
+            ctx
+        );
+        transfer::freeze_object(metadata);
+        transfer::share_object(treasury_cap)
+    }
+
+    /// Manager can mint new coins
+    public(friend) fun mint(
+        treasury_cap: &amp;amp;mut TreasuryCap&amp;lt;EGG&amp;gt;, amount: u64, recipient: address, ctx: &amp;amp;mut TxContext
+    ) {
+        coin::mint_and_transfer(treasury_cap, amount, recipient, ctx)
+    }
+
+    /// Manager can burn coins
+    public(friend) fun burn(treasury_cap: &amp;amp;mut TreasuryCap&amp;lt;EGG&amp;gt;, coin: Coin&amp;lt;EGG&amp;gt;) {
+        coin::burn(treasury_cap, coin);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;2.7 初始化方法和 entry 方法&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;fox&lt;/code&gt; 模块作为整个包的入口模块，将对所有模块进行初始化，并提供 entry 方法。&lt;/p&gt;
+&lt;p&gt;我们在 fox 模块中设置了 &lt;code&gt;Global&lt;/code&gt; 作为全局参数的结构体，用来保存不同模块需要用到的不同对象，一来方便我们看到系统需要处理的对象信息，二来减少了方法调用时需要传入的参数个数，通过Global对象将不同模块的对象进行分发，可以有效减少代码复杂度。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;// 文件: fox.move
+        struct Global has key {
+        id: UID,
+        minting_enabled: bool,
+        balance: Balance&amp;lt;SUI&amp;gt;,
+        pack: Pack,
+        barn: Barn,
+        barn_registry: BarnRegistry,
+        foc_registry: FoCRegistry,
+    }
+
+    fun init(ctx: &amp;amp;mut TxContext) {
+        // 初始化 FoC 管理权限
+        transfer(token_helper::init_foc_manage_cap(ctx), sender(ctx));
+        // 初始化全局设置
+        share_object(Global {
+            id: object::new(ctx),
+            minting_enabled: true,
+            balance: balance::zero(),
+            barn_registry: barn::init_barn_registry(ctx),
+            pack: barn::init_pack(ctx),
+            barn: barn::init_barn(ctx),
+            foc_registry: token_helper::init_foc_registry(ctx),
+        });
+        // 初始化时间设置权限
+        transfer(config::init_time_manager_cap(ctx), @0xa3e46ec682bb5082849c240d2f2d20b0f6e054aa);
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;除了之前介绍过的 mint 方法，我们还提供用于质押和提取 NFT 的 entry 方法：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;// 文件： fox.move
+        public entry fun add_many_to_barn_and_pack(
+        global: &amp;amp;mut Global,
+        tokens: vector&amp;lt;FoxOrChicken&amp;gt;,
+        ctx: &amp;amp;mut TxContext,
+    ) {
+        barn::stake_many_to_barn_and_pack(&amp;amp;mut global.barn_registry, &amp;amp;mut global.barn, &amp;amp;mut global.pack, tokens, ctx);
+    }
+
+    public entry fun claim_many_from_barn_and_pack(
+        global: &amp;amp;mut Global,
+        treasury_cap: &amp;amp;mut TreasuryCap&amp;lt;EGG&amp;gt;,
+        tokens: vector&amp;lt;ID&amp;gt;,
+        unstake: bool,
+        ctx: &amp;amp;mut TxContext,
+    ) {
+        barn::claim_many_from_barn_and_pack(
+            &amp;amp;mut global.foc_registry,
+            &amp;amp;mut global.barn_registry,
+            &amp;amp;mut global.barn,
+            &amp;amp;mut global.pack,
+            treasury_cap,
+            tokens,
+            unstake,
+            ctx
+        );
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;2.8 时间戳问题&lt;/h3&gt;
+&lt;p&gt;目前 Sui 区块链还没有完全实现区块时间，而目前提供的 &lt;code&gt;tx_context::epoch()&lt;/code&gt; 的精度为24小时，无法满足游戏需求。因此在游戏中，我们通过手动设置时间戳来模拟时间增加，以确保游戏顺利进行。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;// 文件: barn.move
+
+        struct BarnRegistry has key, store {
+        id: UID,
+        // 其他属性省略
+        // fake_timestamp
+        timestamp: u64,
+    }
+        public(friend) fun set_timestamp(reg: &amp;amp;mut BarnRegistry, current: u64, _ctx: &amp;amp;mut TxContext) {
+        reg.timestamp = current;
+    }
+        // 当前时间戳
+    fun timestamp_now(reg: &amp;amp;mut BarnRegistry, _ctx: &amp;amp;mut TxContext): u64 {
+        reg.timestamp
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在初始化时，将设置时间的能力给到了一个预先生成的专门用于设置时间戳的地址 &lt;code&gt;0xa3e46ec682bb5082849c240d2f2d20b0f6e054aa&lt;/code&gt;。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-rust"&gt;// 文件: config.move
+        // Manager cap to set time
+    struct TimeManagerCap has key, store { id: UID }
+
+    public(friend) fun init_time_manager_cap(ctx: &amp;amp;mut TxContext): TimeManagerCap {
+        TimeManagerCap { id: object::new(ctx) }
+    }
+
+// 文件: fox.move
+        fun init(ctx: &amp;amp;mut TxContext) {
+        transfer(config::init_time_manager_cap(ctx), @0xa3e46ec682bb5082849c240d2f2d20b0f6e054aa);
+    }
+
+        public entry fun set_timestamp(_: &amp;amp;TimeManagerCap, global: &amp;amp;mut Global, current: u64, ctx: &amp;amp;mut TxContext) {
+        barn::set_timestamp(&amp;amp;mut global.barn_registry, current, ctx)
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;之后，我们可以设置定时任务进行时间戳更新，通过调用设置时间的命令进行，详细结果可以查看 3.2 节合约命令行调用：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;sui client call --function set_timestamp --module fox --package ${fox_game} --args ${time_cap} ${global} \&amp;quot;$(date +%s)\&amp;quot; --gas-budget 30000
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;至此，我们介绍了合约部分的主要功能，详细的代码可以阅读项目仓库。&lt;/p&gt;
+&lt;h2&gt;0x3 合约部署和调用&lt;/h2&gt;
+&lt;p&gt;下面，我们首先将部署合约，并通过命令行进行方法的调用。&lt;/p&gt;
+&lt;h3&gt;3.1 合约部署&lt;/h3&gt;
+&lt;p&gt;通过以下命令可以编译和部署合约：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;sui move build
+sui client publish . --gas-budget 300000
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;输出结果为：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;$ sui client publish . --gas-budget 300000
+UPDATING GIT DEPENDENCY https://github.com/MystenLabs/sui.git
+INCLUDING DEPENDENCY MoveStdlib
+INCLUDING DEPENDENCY Sui
+BUILDING fox_game
+----- Certificate ----
+Transaction Hash: 5FZi4YxiiBJsCj67JSSzkVZvHdJjKKPtMMMrfGbmPXvH
+Transaction Signature: AA==@G9yAoybgfIEi7Wj8HFYeEFwG5WPtJ4FlJ+/jaMXFPyjWg4pUun3WQpB4VH5gim/FzqspMY7QAJcd0iTyJ910Dw==@htyihgkhXVia7MCmWeGtDeU96b7w1ivXPKBAV37DZoo=
+Signed Authorities Bitmap: RoaringBitmap&amp;lt;[0, 1, 2]&amp;gt;
+Transaction Kind : Publish
+Sender: 0xefbb0d3f2dc566f1f4fa844621bee76b43c9579a
+Gas Payment: Object ID: 0x0942e72397f46a831ce61003601cbb05697e7a83, version: 0x20f, digest: 0xc318f23ac2772738efe1b958be0b51e3c49d9c772d5aede9f41e1dc69edeb2ea
+Gas Price: 1
+Gas Budget: 300000
+----- Transaction Effects ----
+Status : Success
+Created Objects:
+    - 省略了其他的创建的对象
+  - ID: 0x17db4feb4652b8b5ce9ebf6dc7d29463b08e234e , Owner: Shared
+  - ID: 0x1d525318e381f93dd2b2f043d2ed96400b4f16d9 , Owner: Immutable
+  - ID: 0x59a85fbef4bc17cd73f8ff89d227fdcd6226c885 , Owner: Immutable
+  - ID: 0xe364474bd00b7544b9393f0a2b0af2dbea143fd3 , Owner: Account Address ( 0xa3e46ec682bb5082849c240d2f2d20b0f6e054aa )
+  - ID: 0xe4ffefc480e20129ff7893d7fd550b17fda0ab0f , Owner: Shared
+  - ID: 0xe572b53c8fa93602ae97baca3a94e231c2917af6 , Owner: Account Address ( 0xefbb0d3f2dc566f1f4fa844621bee76b43c9579a )
+Mutated Objects:
+  - ID: 0x0942e72397f46a831ce61003601cbb05697e7a83 , Owner: Account Address ( 0xefbb0d3f2dc566f1f4fa844621bee76b43c9579a )
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;可以通过交易哈希 &lt;code&gt;5FZi4YxiiBJsCj67JSSzkVZvHdJjKKPtMMMrfGbmPXvH&lt;/code&gt; 在 sui explorer 中查看部署的合约信息：&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/215304390-507211a2-638c-4c97-ae58-56ea419e8fcd.png" alt="Untitled 1" /&gt;&lt;/p&gt;
+&lt;p&gt;通过 &lt;code&gt;sui client object &amp;lt;object_id&amp;gt;&lt;/code&gt; 可以查看创建的 object 的属性，可以知道：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;0x17db4feb4652b8b5ce9ebf6dc7d29463b08e234e&lt;/code&gt; 为代币 EGG 的 TreasuryCap 的 ObjectId&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;0x1d525318e381f93dd2b2f043d2ed96400b4f16d9&lt;/code&gt; 为 EGG 的 CoinMetadata&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;0x59a85fbef4bc17cd73f8ff89d227fdcd6226c885&lt;/code&gt; 为部署的地址&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;0xe364474bd00b7544b9393f0a2b0af2dbea143fd3&lt;/code&gt; 为 TimeManagerCap&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;0xe4ffefc480e20129ff7893d7fd550b17fda0ab0f&lt;/code&gt; 为 Global 对象&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;0xe572b53c8fa93602ae97baca3a94e231c2917af6&lt;/code&gt; 为 FoCManagerCap 对象&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这些对象将在之后的命令行调用和前端项目中使用到。其他省略的创建的对象为 Trait 对象，在之后不会使用到。&lt;/p&gt;
+&lt;h3&gt;3.2 合约命令行调用&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;设置环境变量&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;export fox_game=0x59a85fbef4bc17cd73f8ff89d227fdcd6226c885
+export global=0xe4ffefc480e20129ff7893d7fd550b17fda0ab0f
+export egg_treasury=0x17db4feb4652b8b5ce9ebf6dc7d29463b08e234e
+export time_cap=0xe364474bd00b7544b9393f0a2b0af2dbea143fd3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;设置时间戳&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;# 需要切换到时间戳的管理地址 0xa3e46ec682bb5082849c240d2f2d20b0f6e054aa
+sui client switch --address 0xa3e46ec682bb5082849c240d2f2d20b0f6e054aa
+# 设置时间戳
+sui client call --function set_timestamp --module fox --package ${fox_game} --args ${time_cap} ${global} \&amp;quot;$(date +%s)\&amp;quot; --gas-budget 30000
+
+# 查看当前时间戳
+curl https://fullnode.devnet.sui.io:443 -H &amp;quot;Content-Type: application/json&amp;quot; -d '{
+  &amp;quot;jsonrpc&amp;quot;: &amp;quot;2.0&amp;quot;,
+  &amp;quot;id&amp;quot;: 1,
+  &amp;quot;method&amp;quot;: &amp;quot;sui_getObject&amp;quot;,
+  &amp;quot;params&amp;quot;:[
+      &amp;quot;0xe4ffefc480e20129ff7893d7fd550b17fda0ab0f&amp;quot;
+  ]
+}' | jq .result.details.data.fields.barn_registry
+
+# 输出结果，可以看到时间戳已经被设置为 1674831518
+{
+  &amp;quot;type&amp;quot;: &amp;quot;0x59a85fbef4bc17cd73f8ff89d227fdcd6226c885::barn::BarnRegistry&amp;quot;,
+  &amp;quot;fields&amp;quot;: {
+    &amp;quot;egg_per_alpha&amp;quot;: &amp;quot;0&amp;quot;,
+    &amp;quot;id&amp;quot;: {
+      &amp;quot;id&amp;quot;: &amp;quot;0x48136d916ea8a148ab864fdb1fc668f6e6dcf3ff&amp;quot;
+    },
+    &amp;quot;last_claim_timestamp&amp;quot;: &amp;quot;0&amp;quot;,
+    &amp;quot;timestamp&amp;quot;: &amp;quot;1674831518&amp;quot;,
+    &amp;quot;total_alpha_staked&amp;quot;: &amp;quot;0&amp;quot;,
+    &amp;quot;total_chicken_staked&amp;quot;: &amp;quot;0&amp;quot;,
+    &amp;quot;total_egg_earned&amp;quot;: &amp;quot;0&amp;quot;,
+    &amp;quot;unaccounted_rewards&amp;quot;: &amp;quot;8518518&amp;quot;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;之后的每一步操作前都需要同步一次时间戳，保证数据正确。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;铸造 NFT&lt;/p&gt;
+&lt;p&gt;使用以下命令进行铸造：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;# 查看当前gas
+sui client switch --address 0x659f89084673bf4a993cdea89a94dabf93a2ddb4
+sui client gas
+
+# 输出结果
+Object ID                  |  Gas Value 
+----------------------------------------------------------------------
+ 0x0bd32adfbfc73e8daa42eef21b4e4e6cc7081240 |    25219   
+ 0x2ad1e472502aefd87c3767157391ebc1f169c6b5 |   9928743  
+ 0x3cd2bb1e03326e5141203cc008e6d2eb44a0df05 |  10000000  
+ 0x5f2c80c89bedddf92f0dc32cfa16b0ecf76a4680 |  10000000  
+ 0x635ce8d2e9a9c0056ff1cd8591baee16fe010911 |  10000000
+
+# Mint 1 个 NFT
+sui client call --function mint --module fox --package ${fox_game} --args ${global} ${egg_treasury} \&amp;quot;1\&amp;quot; false \[0x3cd2bb1e03326e5141203cc008e6d2eb44a0df05\] \[\] --gas-budget 100000
+
+# 结果
+----- Certificate ----
+Transaction Hash: 7p1nmTPYE9884gBCJL6sah2t6Vzh9P59MUeFVURXaEFx
+Transaction Signature: AA==@TNx7guUd7EjEg4s8jyOf+kTkuhVqmzrZWGKzcJNM3iHqcCRk0+pzITmFth8dYM6qKnYAvT3eeSkKNDUaQF2LAA==@oC1nequkpzyJfYuKx7DqIZFNUfF66e+6DEF1Urqo/EM=
+Signed Authorities Bitmap: RoaringBitmap&amp;lt;[1, 2, 3]&amp;gt;
+Transaction Kind : Call
+Package ID : 0x59a85fbef4bc17cd73f8ff89d227fdcd6226c885
+Module : fox
+Function : mint
+Arguments : [&amp;quot;0xe4ffefc480e20129ff7893d7fd550b17fda0ab0f&amp;quot;, &amp;quot;0x17db4feb4652b8b5ce9ebf6dc7d29463b08e234e&amp;quot;, [1,0,0,0,0,0,0,0], &amp;quot;&amp;quot;, [&amp;quot;0x3cd2bb1e03326e5141203cc008e6d2eb44a0df05&amp;quot;], []]
+Type Arguments : []
+Sender: 0x659f89084673bf4a993cdea89a94dabf93a2ddb4
+Gas Payment: Object ID: 0x2ad1e472502aefd87c3767157391ebc1f169c6b5, version: 0x215, digest: 0x197c624ca59151af7cd968b985062fa3e0dbf21711777d7b4602215664233c5b
+Gas Price: 1
+Gas Budget: 100000
+----- Transaction Effects ----
+Status : Success
+Created Objects:
+  - ID: 0x185aa8a244c74ddfe83c38618b46c744425cd7f5 , Owner: Object ID: ( 0x2ba674fcac290baa2927ff26110463f337237f0d )
+  - ID: 0x6917cbcf0e6e58184a98e05ad6bbc70a75755d28 , Owner: Object ID: ( 0x2ed343ceebf792a36b2ff0e918b801e34399f4ed )
+  - ID: 0x84fe8e597bcb9387b2911b5ef39b90bb111e71a2 , Owner: Account Address ( 0x659f89084673bf4a993cdea89a94dabf93a2ddb4 )
+Mutated Objects:
+  - ID: 0x17db4feb4652b8b5ce9ebf6dc7d29463b08e234e , Owner: Shared
+  - ID: 0x2ad1e472502aefd87c3767157391ebc1f169c6b5 , Owner: Account Address ( 0x659f89084673bf4a993cdea89a94dabf93a2ddb4 )
+  - ID: 0x3cd2bb1e03326e5141203cc008e6d2eb44a0df05 , Owner: Account Address ( 0x659f89084673bf4a993cdea89a94dabf93a2ddb4 )
+  - ID: 0xe4ffefc480e20129ff7893d7fd550b17fda0ab0f , Owner: Shared
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;\&amp;quot;1\&amp;quot;&lt;/code&gt; 表示铸造的数量为 1；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;false&lt;/code&gt; 表示不质押，如果要铸造的同时进行质押，可以修改为 &lt;code&gt;true&lt;/code&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;\[0x3cd2bb1e03326e5141203cc008e6d2eb44a0df05\]&lt;/code&gt; 是用于支付 0.0099 SUI 铸造费用的 SUI 对象；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;\[\]&lt;/code&gt; 表示用于支付 &lt;code&gt;EGG&lt;/code&gt; 的对象。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;可以看到生成的对象中， &lt;code&gt;0x84fe8e597bcb9387b2911b5ef39b90bb111e71a2&lt;/code&gt; 在地址 &lt;code&gt;0x659f89084673bf4a993cdea89a94dabf93a2ddb4&lt;/code&gt; 之下，查看属性可以看到对应的 type 为 &lt;code&gt;0x59a85fbef4bc17cd73f8ff89d227fdcd6226c885::token_helper::FoxOrChicken&lt;/code&gt; ，这个就是我们铸造得到的 NFT，相应的其他属性也可以查看到，命令输出结果可以查看此 &lt;a href="https://gist.github.com/qiwihui/86e7385c635f88b539ed2f032018ca28"&gt;gist&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;或者，我们可以通过 &lt;code&gt;sui_getObjectsOwnedByAddress&lt;/code&gt; RPC 接口可以查看地址所拥有的对象，比如对于地址 &lt;code&gt;0x659f89084673bf4a993cdea89a94dabf93a2ddb4&lt;/code&gt; ，可以查看所有对象，过滤即可找到创建的对象。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;$ curl https://fullnode.devnet.sui.io:443 -H &amp;quot;Content-Type: application/json&amp;quot; -d '{
+  &amp;quot;jsonrpc&amp;quot;: &amp;quot;2.0&amp;quot;,
+  &amp;quot;id&amp;quot;: 1,
+  &amp;quot;method&amp;quot;: &amp;quot;sui_getObjectsOwnedByAddress&amp;quot;,
+  &amp;quot;params&amp;quot;:[
+      &amp;quot;0x659f89084673bf4a993cdea89a94dabf93a2ddb4&amp;quot;
+  ]
+}'
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;质押 NFT&lt;/p&gt;
+&lt;p&gt;通过以下命令对前一步铸造的 NFT 进行质押：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;sui client call --function add_many_to_barn_and_pack --module fox --package ${fox_game} --args ${global} \[0x84fe8e597bcb9387b2911b5ef39b90bb111e71a2\] --gas-budget 100000
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;获取收益和 提取 NFT&lt;/p&gt;
+&lt;p&gt;通过以下命令获取质押收益 EGG：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;sui client call --function claim_many_from_barn_and_pack --module fox --package ${fox_game} --args ${global} ${egg_treasury} '[&amp;quot;0x84fe8e597bcb9387b2911b5ef39b90bb111e71a2&amp;quot;]' false --gas-budget 100000
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;等 48 小时之后，将 &lt;code&gt;false&lt;/code&gt; 变为 &lt;code&gt;true&lt;/code&gt;，可以进行 Unstake，将质押的 NFT 提取出来。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;至此，命令行操作完成。&lt;/p&gt;
+&lt;h2&gt;0x4 前端开发&lt;/h2&gt;
+&lt;h3&gt;4.1 scaffold-move 开发脚手架&lt;/h3&gt;
+&lt;p&gt;这个项目基于 NonceGeek DAO 的 scaffold-move 开发脚手架，这个脚手架目前包含 Aptos 和 Sui 两个公链的前端开发实例，可以可以在这个基础上快速进行 Sui 的前端部分开发。&lt;/p&gt;
+&lt;p&gt;通过运行以下步骤可以设置开发环境：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-bash"&gt;git clone https://github.com/NonceGeek/scaffold-move.git
+cd scaffold-move/scaffold-sui/
+yarn
+yarn dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;4.2 项目页面结构&lt;/h3&gt;
+&lt;p&gt;项目页面主要包括三部分，位于 &lt;code&gt;src/pages&lt;/code&gt; 目录：index，game 和 whitepapers：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;index：入口页面，做为游戏的引导页面；&lt;/li&gt;
+&lt;li&gt;game：主要的逻辑页面，涉及铸造，质押和提取；&lt;/li&gt;
+&lt;li&gt;whitepaper：白皮书页面，介绍游戏机制和玩法。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我们之后的部分主要聚焦在 game 页面。game 页面功能主要包括三部分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;菜单栏：包含logo，页面导航以及链接钱包；&lt;/li&gt;
+&lt;li&gt;左侧 Mint 栏：主要当前 mint 状态和 mint 操作；&lt;/li&gt;
+&lt;li&gt;右侧 Stake 栏：主要是 Stake，Unstale 和 Collect EGG 的操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/215304399-47738ec4-8dc2-4063-9d1a-fa5ab05f963b.png" alt="Untitled 2" /&gt;&lt;/p&gt;
+&lt;p&gt;其中，质押和提取时进行的多选操作，可以通过设置选择变量进行过滤来实现：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-tsx"&gt;  const [unstakedSelected, setUnstakedSelected] = useState&amp;lt;Array&amp;lt;string&amp;gt;&amp;gt;([])
+  const [stakedSelected, setStakedSelected] = useState&amp;lt;Array&amp;lt;string&amp;gt;&amp;gt;([]);
+    
+    // 设置添加和删除操作
+    function addStaked(item: string) {
+    setUnstakedSelected([])
+    setStakedSelected([...stakedSelected, item])
+  }
+
+  function removeStaked(item: string) {
+    setUnstakedSelected([])
+    setStakedSelected(stakedSelected.filter(i =&amp;gt; i !== item))
+  }
+
+  function addUnstaked(item: string) {
+    setStakedSelected([])
+    setUnstakedSelected([...unstakedSelected, item])
+  }
+
+  function removeUnstaked(item: string) {
+    setStakedSelected([])
+    setUnstakedSelected(unstakedSelected.filter(i =&amp;gt; i !== item))
+  }
+    // 之后添加元素的点击事件
+    // 处理未质押的
+  function renderUnstaked(item: any, type: string) {
+    const itemIn = unstakedSelected.includes(item.objectId);
+    return &amp;lt;div key={item.objectId} style={{ marginRight: &amp;quot;5px&amp;quot;, marginLeft: &amp;quot;5px&amp;quot;, border: itemIn ? &amp;quot;2px solid red&amp;quot; : &amp;quot;2px solid rgb(0,0,0,0)&amp;quot;, overflow: 'hidden', display: &amp;quot;inline-block&amp;quot; }}&amp;gt;
+      &amp;lt;div className=&amp;quot;flex flex-col items-center&amp;quot;&amp;gt;
+        &amp;lt;div style={{ fontSize: &amp;quot;0.75rem&amp;quot;, height: &amp;quot;1rem&amp;quot; }}&amp;gt;#{item.index}&amp;lt;/div&amp;gt;
+        &amp;lt;Image src={`${item.url}`} width={48} height={48} alt={`${item.objectId}`} onClick={() =&amp;gt; itemIn ? removeUnstaked(item.objectId) : addUnstaked(item.objectId)} /&amp;gt;
+      &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+  }
+  // 处理质押的
+  function renderStaked(item: any, type: string) {
+    const itemIn = stakedSelected.includes(item.objectId);
+    return &amp;lt;div key={item.objectId} style={{ marginRight: &amp;quot;5px&amp;quot;, marginLeft: &amp;quot;5px&amp;quot;, border: itemIn ? &amp;quot;2px solid red&amp;quot; : &amp;quot;2px solid rgb(0,0,0,0)&amp;quot;, overflow: 'hidden', display: &amp;quot;inline-block&amp;quot; }}&amp;gt;
+      &amp;lt;div className=&amp;quot;flex flex-col items-center&amp;quot;&amp;gt;
+        &amp;lt;div style={{ fontSize: &amp;quot;0.75rem&amp;quot;, height: &amp;quot;1rem&amp;quot; }}&amp;gt;#{item.index}&amp;lt;/div&amp;gt;
+        &amp;lt;Image src={`${item.url}`} width={48} height={48} alt={`${item.objectId}`} onClick={() =&amp;gt; itemIn ? removeStaked(item.objectId) : addStaked(item.objectId)} /&amp;gt;
+      &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+  }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;4.3 连接钱包&lt;/h3&gt;
+&lt;p&gt;我们使用 Suiet 钱包开发的 &lt;code&gt;@suiet/wallet-kit&lt;/code&gt; 包连接 Sui 钱包，从包对应的 WalletContextState 可以看出， &lt;code&gt;useWallet&lt;/code&gt; 包含了我们在构建 App 时会使用到的基本信息和功能，比如钱包信息，链信息，连接状态信息，以及发送交易，签名信息等。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-tsx"&gt;export interface WalletContextState {
+    configuredWallets: IWallet[];
+    detectedWallets: IWallet[];
+    allAvailableWallets: IWallet[];
+    chains: Chain[];
+    chain: Chain | undefined;
+    name: string | undefined;
+    adapter: IWalletAdapter | undefined;
+    account: WalletAccount | undefined;
+    address: string | undefined;
+    connecting: boolean;
+    connected: boolean;
+    status: &amp;quot;disconnected&amp;quot; | &amp;quot;connected&amp;quot; | &amp;quot;connecting&amp;quot;;
+    select: (walletName: string) =&amp;gt; void;
+    disconnect: () =&amp;gt; Promise&amp;lt;void&amp;gt;;
+    getAccounts: () =&amp;gt; readonly WalletAccount[];
+    signAndExecuteTransaction(transaction: SuiSignAndExecuteTransactionInput): Promise&amp;lt;SuiSignAndExecuteTransactionOutput&amp;gt;;
+    signMessage: (input: {
+        message: Uint8Array;
+    }) =&amp;gt; Promise&amp;lt;ExpSignMessageOutput&amp;gt;;
+    on: &amp;lt;E extends WalletEvent&amp;gt;(event: E, listener: WalletEventListeners[E]) =&amp;gt; () =&amp;gt; void;
+}
+export declare const WalletContext: import(&amp;quot;react&amp;quot;).Context&amp;lt;WalletContextState&amp;gt;;
+export declare function useWallet(): WalletContextState;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在 &lt;code&gt;src/components/SuiConnect.tsx&lt;/code&gt; 中，我们可以很方便的设置钱包连接功能：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-tsx"&gt;import {
+  ConnectButton,
+} from '@suiet/wallet-kit';
+
+export function SuiConnect() {
+  return (
+      &amp;lt;ConnectButton&amp;gt;Connect Wallet&amp;lt;/ConnectButton&amp;gt;
+  );
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;之后，我们将需要使用的信息在 &lt;code&gt;src/pages/game.tsx&lt;/code&gt; 中引入：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-tsx"&gt;import {
+  useWallet,
+} from '@suiet/wallet-kit';
+
+export default function Home() {
+
+  const { signAndExecuteTransaction, connected, account, status } = useWallet();
+
+    // 省略
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其中， &lt;code&gt;signAndExecuteTransaction&lt;/code&gt; 方法用来签名并执行交易，支持 &lt;code&gt;moveCall&lt;/code&gt; ， &lt;code&gt;transferSui&lt;/code&gt;， &lt;code&gt;transferObject&lt;/code&gt; 等交易。&lt;/p&gt;
+&lt;h3&gt;4.4 RPC 接口调用&lt;/h3&gt;
+&lt;p&gt;我们使用官方提供的 &lt;code&gt;@mysten/sui.js&lt;/code&gt; 库调用 Sui 的 RPC 接口，这个库支持了大部分 &lt;a href="https://docs.sui.io/sui-jsonrpc"&gt;Sui JSON-RPC&lt;/a&gt;，同时，还提供了一些额外的方法方便开发，例如：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;selectCoinsWithBalanceGreaterThanOrEqual&lt;/code&gt; ：获取大于等于指定数量的coin对象ID数组&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;selectCoinSetWithCombinedBalanceGreaterThanOrEqual&lt;/code&gt;：获取总和大于等于指定数量的coin对象ID数组&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这两个方法在需要在 NFT 铸造时支付 SUI 或者其他代币时十分有用。我们在 &lt;code&gt;game.tsx&lt;/code&gt; 中引入 JsonProvider 进行初始化：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-tsx"&gt;// 文件: src/pages/game.tsx
+import { JsonRpcProvider } from '@mysten/sui.js';
+
+export default function Home() {
+    // 操作 client
+  const provider = new JsonRpcProvider();
+    // 调用
+    const suiObjects = await provider.selectCoinSetWithCombinedBalanceGreaterThanOrEqual(account!.address, suiCost)
+// 其他省略
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其他方法的介绍可以参考库的文档，这里不多赘述。&lt;/p&gt;
+&lt;h3&gt;4.5 铸造 NFT 等 entry 方法&lt;/h3&gt;
+&lt;p&gt;我们首先看到如何铸造 NFT：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-tsx"&gt;// 文件: src/pages/game.tsx 
+  async function mint_nft() {
+    let suiObjectIds = [] as Array&amp;lt;string&amp;gt;
+    let eggObiectIds = [] as Array&amp;lt;string&amp;gt;
+        // 获取足够的 SUI 或者 EGG 代币的对象ID
+    if (collectionSupply &amp;lt; PAID_TOKENS) {
+      const suiObjects = await provider.selectCoinSetWithCombinedBalanceGreaterThanOrEqual(account!.address, suiCost)
+      suiObjectIds = suiObjects.filter(item =&amp;gt; item.status === &amp;quot;Exists&amp;quot;).map((item: any) =&amp;gt; item.details.data.fields.id.id)
+    } else {
+      const eggObjects = await provider.selectCoinSetWithCombinedBalanceGreaterThanOrEqual(account!.address, eggCost, `${PACKAGE_ID}::egg::EGG`)
+      eggObiectIds = eggObjects.filter(item =&amp;gt; item.status === &amp;quot;Exists&amp;quot;).map((item: any) =&amp;gt; item.details.data.fields.id.id)
+    }
+    try {
+            // 调用 moveCall 方法，构造交易并签名
+      const resData = await signAndExecuteTransaction({
+        transaction: {
+          kind: 'moveCall',
+          data: mint(false, suiObjectIds, eggObiectIds),
+        },
+      });
+            // 检查结果
+      if (resData.effects.status.status !== &amp;quot;success&amp;quot;) {
+        console.log('failed', resData);
+      }
+      // 设置 Mint 交易
+      setMintTx('https://explorer.sui.io/transaction/' + resData.certificate.transactionDigest)
+    } catch (e) {
+      console.error('failed', e);
+    }
+  }
+    
+    // 构造 mint 方法所需要的参数
+  function mint(stake: boolean, sui_objects: Array&amp;lt;string&amp;gt;, egg_objects: Array&amp;lt;string&amp;gt;) {
+    return {
+      packageObjectId: PACKAGE_ID,
+      module: 'fox',
+      function: 'mint',
+      typeArguments: [],
+      arguments: [
+        GLOBAL, EGG_TREASUTY, mintAmount.toString(), stake, sui_objects, egg_objects
+      ],
+      gasBudget: 1000000,
+    };
+  }
+
+  return (
+        // 其他部分省略
+        &amp;lt;div className=&amp;quot;text-center font-console pt-1&amp;quot; onClick={() =&amp;gt; mint_nft()}&amp;gt;Mint&amp;lt;/div&amp;gt;
+    )
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其中 &lt;code&gt;arguments&lt;/code&gt; 参数对应 mint 方法所需要的参数。&lt;/p&gt;
+&lt;p&gt;同理，其他的 entry 方法的调用和签名也与 Mint 方法类似，分别为：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-tsx"&gt;// 铸造并质押
+async function mint_nft_stake()
+// 质押
+async function stake_nft()
+// 提取
+async function unstake_nft()
+// 收集 EGG
+async function claim_egg()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;4.6 合约数据读取&lt;/h3&gt;
+&lt;p&gt;对于 Sui 公链，除了调用合约，另一块难点是合约数据的读取。相对于 EVM 合约，Move的合约数据结构更复杂，更难读取。由于在 Sui 中，Object 对象被包装后可能无法进行追踪（详情可以参考官方 &lt;a href="https://docs.sui.io/build/programming-with-objects"&gt;Object 教程系列&lt;/a&gt;），因此在之前的数据结构设计中，Pack 和 Barn 中存储的 NFT 需要使用能进行追踪的数据结构。因此，ObjectTable 被做为基本的键值存储结构区别于不可追踪的 Table 数据类型。相应地，可以使用  &lt;code&gt;sui_getDynamicFieldObject&lt;/code&gt; 来读取其中的数据，例如，通过读取保存在 PackStaked 中的 NFT 对象质押列表，从而通过 &lt;code&gt;getObjectBatch&lt;/code&gt; 可以获取当前地址所有的质押的 NFT。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-tsx"&gt;        // 读取 Pack 中质押的 Fox NFT
+        const objects: any = await sui_client.getDynamicFieldObject(packStakedObject, account!.address);
+          if (objects != null) {
+            const fox_staked = objects.details.data.fields.value
+            const fox_stakes = await provider.getObjectBatch(fox_staked)
+            const staked = fox_stakes.filter(item =&amp;gt; item.status === &amp;quot;Exists&amp;quot;).map((item: any) =&amp;gt; {
+              let foc = item.details.data.fields.item
+              return {
+                objectId: foc.fields.id.id,
+                index: parseInt(foc.fields.index),
+                url: foc.fields.url,
+              }
+            })
+            setStakedFox(staked)
+          }
+        }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其中， &lt;code&gt;packStakedObject&lt;/code&gt; 对象ID通过 &lt;code&gt;GLOBAL&lt;/code&gt; 对象 ID 获取得到。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-tsx"&gt;            const globalObject: any = await provider.getObject(GLOBAL)
+
+      const pack_staked = globalObject.details.data.fields.pack.fields.id.id
+      setPackStakedObject(pack_staked)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;对于当前地址所拥有的未质押的NFT，需要通过读取全部对象ID后进行类型过滤才能得到：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-tsx"&gt;                // 获取所有对象
+                const objects = await provider.getObjectsOwnedByAddress(account!.address)
+        // 过滤 FoxOrChicken 对象
+                const foc = objects
+          .filter(item =&amp;gt; item.type === `${PACKAGE_ID}::token_helper::FoxOrChicken`)
+          .map(item =&amp;gt; item.objectId)
+        const foces = await provider.getObjectBatch(foc)
+                // 过滤并读取信息，然后排序
+        const unstaked = foces.filter(item =&amp;gt; item.status === &amp;quot;Exists&amp;quot;).map((item: any) =&amp;gt; {
+          return {
+            objectId: item.details.data.fields.id.id,
+            index: parseInt(item.details.data.fields.index),
+            url: item.details.data.fields.url,
+            is_chicken: item.details.data.fields.is_chicken,
+          }
+        }).sort((n1, n2) =&amp;gt; n1.index - n2.index)
+                // 存储
+        setUnstakedFox(unstaked.filter(item =&amp;gt; !item.is_chicken))
+        setUnstakedChicken(unstaked.filter(item =&amp;gt; item.is_chicken))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;最后，对于当前地址中包含的 EGG 代币的余额，可以通过 &lt;code&gt;getCoinBalancesOwnedByAddress&lt;/code&gt; 获得所有余额对象并进行求和得到。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="language-tsx"&gt;        const balanceObjects = await provider.getCoinBalancesOwnedByAddress(account!.address, `${PACKAGE_ID}::egg::EGG`)
+        const balances = balanceObjects.filter(item =&amp;gt; item.status === 'Exists').map((item: any) =&amp;gt; parseInt(item.details.data.fields.balance))
+        const initialValue = 0;
+        const sumWithInitial = balances.reduce(
+          (accumulator, currentValue) =&amp;gt; accumulator + currentValue,
+          initialValue
+        )
+        setEggBalance(sumWithInitial);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;总结&lt;/h2&gt;
+&lt;p&gt;至此，我们完成了狐狸游戏合约和前端代码的介绍。我们实现的狐狸游戏虽然功能上只有铸造，质押和提取这几个主要的功能，但是涉及 NFT 创建以及 Sui Move 的诸多语法，整体项目具有一定的难度。&lt;/p&gt;
+&lt;p&gt;这篇文章希望对有兴趣于 Sui 上的 NFT 的操作的同学有所帮助，也希望大家提出宝贵的建议和意见。项目目前只完成了初步的逻辑功能，还需要继续补充测试和形式验证，欢迎有兴趣的同学提交 Pull Request。&lt;/p&gt;
+&lt;h2&gt;参考文档&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://docs.sui.io/"&gt;https://docs.sui.io/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://zhuanlan.zhihu.com/p/439236444"&gt;https://zhuanlan.zhihu.com/p/439236444&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a href="https://github.com/qiwihui/blog/issues/171"&gt;View on GitHub&lt;/a&gt;&lt;/p&gt;
+</content></entry><entry><title>Uniswap v3 无常损失分析</title><id>blogs/qiwihui-blog-165.md</id><updated>2024-08-18T03:45:14+00:00</updated><author><name>qiwihui</name><email>qwh005007@gmail.com</email></author><link href="https://qiwihui.com/blogs/qiwihui-blog-165.html" rel="self"/><published>2024-05-25T09:37:50+00:00</published><content type="html">&lt;h1&gt;Uniswap v3 无常损失分析&lt;/h1&gt;
+&lt;h1&gt;Uniswap v3 无常损失分析&lt;/h1&gt;
+&lt;h2&gt;目标&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;对 Uniswap v3 无常损失的定量分析；&lt;/li&gt;
+&lt;li&gt;如何使用策略让 Uniswap v3 LP 获得更大的收益。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;!--more--&gt;
+&lt;h2&gt;Uniswap 概览&lt;/h2&gt;
+&lt;p&gt;基于恒定乘积的自动化做市商（AMM），去中心化交易所。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;v1 版本:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;2018年11月&lt;/li&gt;
+&lt;li&gt;解决了什么问题：传统交易所 order book 买卖双方不活跃导致的长时间挂单，交易效率低下&lt;/li&gt;
+&lt;li&gt;功能：ETH ←→ ERC20 token 兑换&lt;/li&gt;
+&lt;li&gt;带来的问题：
+&lt;ul&gt;
+&lt;li&gt;token1 与 token2 之间的兑换需要借助 ETH
+&lt;ul&gt;
+&lt;li&gt;USDT → ETH → USDC&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;v2 版本:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;2020年5月&lt;/li&gt;
+&lt;li&gt;新功能
+&lt;ul&gt;
+&lt;li&gt;自由组合交易对：token1 ←→ token2
+&lt;ul&gt;
+&lt;li&gt;token1-token2 交易池&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;LPers 提供流动性并赚取费用&lt;/li&gt;
+&lt;li&gt;价格预言机（时间加权平均价格，TWAP）、闪电贷、最优化交易路径等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;带来的问题
+&lt;ul&gt;
+&lt;li&gt;资金利用率低：
+&lt;ul&gt;
+&lt;li&gt;在 &lt;code&gt;x*y=k&lt;/code&gt; 的情况下，做市的价格区间在 (0, +∞) 的分布，当用户交易时，交易的量相比我们的流动性来说是很小的&lt;/li&gt;
+&lt;li&gt;假设 ETH/DAI 交易对的实时价格为 1500 DAI/ETH，交易对的流动性池中共有资金：4500 DAI 和 3 ETH，根据 &lt;code&gt;x⋅y=k&lt;/code&gt;，可以算出池内的 k 值： &lt;code&gt;k=4500×3=13500&lt;/code&gt;。假设 x 表示 DAI，y 表示 ETH，即初始阶段 x1=4500，y1=3，当价格下降到 1300 DAI/ETH 时： &lt;code&gt;x2⋅y2=13500, x2/y2=1300&lt;/code&gt;，得出 &lt;code&gt;x2=4192.54, y2=3.22&lt;/code&gt;，资金利用率为： &lt;code&gt;Δx/x1=6.84%&lt;/code&gt;。同样的计算方式，当价格变为 2200 DAI/ETH 时，资金利用率约为 &lt;code&gt;21.45%&lt;/code&gt;。也就是说，在大部分的时间内池子中的资金利用与低于 25%，这个问题对于稳定币池来说更加严重。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/190839344-efc05df3-293a-422e-bc22-b26311154b12.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;v3版本:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;2021年5月&lt;/li&gt;
+&lt;li&gt;考虑风险
+&lt;ol&gt;
+&lt;li&gt;价格影响（Price impact）：
+&lt;ul&gt;
+&lt;li&gt;是指一笔交易对价格的影响程度，取决于池子深度。 更高的价格影响意味着：流动性提供者提供的流动性不足，向交易者提供更差的比率（滑点高）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;存货风险（Inventory risk）：
+&lt;ul&gt;
+&lt;li&gt;LP 的主要目标是随着时间的推移增加其总库存价值&lt;/li&gt;
+&lt;li&gt;在价格变化过程中，相对于首选价值存储的资产而言，LP 拥有的资产数量更少，比如对于 ETH-DAI，用户更倾向于 ETH（ETH价格升高），相对于 ETH而言，LP 拥有越多的 DAI，存货风险越高；&lt;/li&gt;
+&lt;li&gt;比如 100% ETH 和 50%-50% ETH-DAI 的对比，ETH价格上涨，更多人将 DAI 换成 ETH，相对应LP手中 ETH就少了，风险加大。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;无常损失
+&lt;ul&gt;
+&lt;li&gt;提供流动性时发生的资金暂时损失/非永久性损失；&lt;/li&gt;
+&lt;li&gt;只要代币相对价格恢复到其初始状态，该损失就消失了；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;新功能
+&lt;ul&gt;
+&lt;li&gt;集中流动性 →  提升资金利用率&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/190839359-483c9ed2-e79f-4be9-b489-0af0d86c62b6.png" alt="Untitled 1" /&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;- 多层级手续费率（0.05%，0.3%，1%），升级的预言机，区间订单（range order）等。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;带来的问题：
+&lt;ul&gt;
+&lt;li&gt;相对于v2而言
+&lt;ul&gt;
+&lt;li&gt;无常损失（Impermanent Loss）仍然存在，而且更大；&lt;/li&gt;
+&lt;li&gt;LP 的权衡
+&lt;ul&gt;
+&lt;li&gt;价格区间越大，所获得的费用收益就越低，(0, +∞)时和 v2一致。&lt;/li&gt;
+&lt;li&gt;但如果选择一个更小的价格区间，就会有更高的无常损失。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;无常损失分析&lt;/h2&gt;
+&lt;h3&gt;Uniswap v2&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;例子：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;假设 ETH/DAI 交易对的实时价格为 1500 DAI/ETH，交易对的流动性池中共有资金：4500 DAI 和 3 ETH，根据 &lt;code&gt;x⋅y=k&lt;/code&gt;，可以算出池内的 k 值： &lt;code&gt;k=4500×3=13500&lt;/code&gt;。假设 x 表示 DAI，y 表示 ETH，即初始阶段 x1=4500，y1=3。&lt;/p&gt;
+&lt;p&gt;当价格下降到 1300 DAI/ETH 时： &lt;code&gt;x2⋅y2=13500, x2/y2=1300&lt;/code&gt;，得出 &lt;code&gt;x2=4192.54, y2=3.22&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;如果用户选择HODL，则 &lt;code&gt;x2'=4500，y2'=3&lt;/code&gt;，我们分别计算两种情况下的资产价值（DAI）：&lt;/p&gt;
+&lt;p&gt;LP: 4192.54 + 3.22 * 1300 = 8378.54&lt;/p&gt;
+&lt;p&gt;HODL: 4500 + 3 * 1300 = 8400&lt;/p&gt;
+&lt;p&gt;资产减少：8400 - 8378.54 = 21.46 → 无常损失&lt;/p&gt;
+&lt;p&gt;无常损失率：21.46 / 8400 = 0.26%&lt;/p&gt;
+&lt;p&gt;当价格变为 2200 DAI/ETH时，x2=5449.77, y2=2.48，资产减少 194.23，损失率为 1.75%。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;模型分析：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;根据恒定乘积公式 $xy=k$，令 $k=L^2$，其中 L 表示流动性，则有 $xy=L^2$，再根据价格 $S=x/y$，可以得到 $x=L/\sqrt{S}$，$y=L\sqrt{S}$。&lt;/p&gt;
+&lt;p&gt;考虑 LP 在流动性池 X-Y 中添加流动性 $L$，池的初始价格为 $S_0$，所以 LP 需要向流动性池中提供 $x_0=L/\sqrt{S_0}$的 X 代币和 $y_0=L\sqrt{S_0}$ 的 Y 代币。&lt;/p&gt;
+&lt;p&gt;当池的价格变为 $S_1$时，LP 的资产价值为&lt;/p&gt;
+&lt;p&gt;$$
+V_{v2,pos}(L, S_1)=S_1 \cdot x_1+y_1=\frac{L}{\sqrt{S_1}}S_1+L\sqrt{S_1}=2L\sqrt{S_1}
+$$&lt;/p&gt;
+&lt;p&gt;其中 $x_1$和 $y_1$是LP在池中的资产。&lt;/p&gt;
+&lt;p&gt;LP 初始时的资产如果一直拿手里，则价值为&lt;/p&gt;
+&lt;p&gt;$$
+V_{v2,hold}(L,S_0,S_1)=S_1 \cdot x_0 + y_0=\frac{L}{\sqrt{S_0}}S_1+L\sqrt{S_0}
+$$&lt;/p&gt;
+&lt;p&gt;所以，无常损失为：&lt;/p&gt;
+&lt;p&gt;$$
+\begin{aligned}
+\mathrm{IL}&lt;em&gt;{\mathrm{v} 2}\left(S_0, S_1\right) &amp;amp;=\frac{V&lt;/em&gt;{\mathrm{v} 2, \text { pos }}-V_{\mathrm{v} 2, \text { hold }}}{V_{\mathrm{v} 2, \text { hold }}} \
+&amp;amp;=\frac{2 L \sqrt{S_1}-\left(\frac{L}{\sqrt{S_0}} S_1+L \sqrt{S_0}\right)}{\frac{L}{\sqrt{S_0}} S_1+L \sqrt{S_0}} \
+&amp;amp;=\left(\frac{2 \cdot \sqrt{\frac{S_1}{S_0}}}{1+\frac{S_1}{S_0}}-1\right)
+\end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;令 $r=S_1/S_0$，则有：&lt;/p&gt;
+&lt;p&gt;$$
+\mathrm{IL}_{v2} = \frac{2 \cdot \sqrt{r}}{1+r}-1
+$$&lt;/p&gt;
+&lt;p&gt;用之前的例子计算，r=1300/1500=0.87时，IL=0.0026=0.26%，r=2200/1500=1.47时，IL=0.018=1.8%，与上述计算相符合。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;图像：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/190839374-f568b419-7536-44d0-b988-13dd4982972a.png" alt="Untitled 2" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.desmos.com/calculator/aza5py3g95"&gt;https://www.desmos.com/calculator/aza5py3g95&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;可以看到，当 $S_0=S_1$时无常损失为0，其他时候无常损失都为负数。列一个表：&lt;/p&gt;
+&lt;p&gt;| 价格变化 | 无常损失 |
+| --- | --- |
+| 0.25x | 20.0% |
+| 0.5x | 5.7% |
+| 0.75x | 1.0% |
+| 1 | 0 |
+| 1.25x | 0.6% |
+| 1.5x | 2.0% |
+| 1.75x | 3.8% |
+| 2x | 5.7% |
+| 3x | 13.4% |
+| 4x | 20.0% |
+| 5x | 25.5% |&lt;/p&gt;
+&lt;h3&gt;Uniswap v3&lt;/h3&gt;
+&lt;p&gt;用同样的过程，我们分析 Uniswap v3的无常损失。假设 LP 向价格区间 $[P_a,P_b]$提供流动性  $L$，初始价格为 $P_0(\in[P_a,P_b])$，之后价格变为 $P_1(\in[P_a,P_b])$。&lt;/p&gt;
+&lt;p&gt;首先我们从Uniswap v3 的白皮书中可以知道，集中流动性的资产储备曲线（橙色）的公式为：&lt;/p&gt;
+&lt;p&gt;$$
+\left(x+\frac{L}{\sqrt{p_b}}\right)\left(y+L \sqrt{p_a}\right)=L^2
+$$&lt;/p&gt;
+&lt;p&gt;（推导：曲线相当于v2的曲线向左向下平移动）&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/190839406-4880142e-70e3-4073-973f-1f9d8830449c.png" alt="Untitled 1" /&gt;&lt;/p&gt;
+&lt;p&gt;对于虚拟曲线: $x_{virtual} \cdot y_{virtual} = L^2$，可以得到：&lt;/p&gt;
+&lt;p&gt;$$
+\begin{aligned}&amp;amp;y=y_{\text {virtual }}-L \sqrt{p_a}=L\left(\sqrt{P}-\sqrt{p_a}\right) \&amp;amp;x=x_{\text {virtual }}-\frac{L}{\sqrt{p_b}}=L\left(\frac{1}{\sqrt{P}}-\frac{1}{\sqrt{p_b}}\right)\end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;初始时资产价值为：&lt;/p&gt;
+&lt;p&gt;$$
+\begin{aligned}V_{v3}(P_0) &amp;amp;=y_0+x_0 \cdot P_0 \&amp;amp;=L\left(\sqrt{P_0}-\sqrt{p_a}\right)+L\left(\sqrt{P_0}-\frac{P_0}{\sqrt{p_b}}\right) \&amp;amp;=2 L \sqrt{P_0}-L\left(\sqrt{p_a}+\frac{P_0}{\sqrt{p_b}}\right)\end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;同样，则在价格 $P_1$时流动池中的资产价值为（令 $r=P_1/P_0$）：&lt;/p&gt;
+&lt;p&gt;$$
+\begin{aligned}V_{v3,pos}(P_1) &amp;amp;=2 L \sqrt{P_1}-L\left(\sqrt{p_a}+\frac{P_1}{\sqrt{p_b}}\right) \ &amp;amp;=2 L \sqrt{rP_0}-L\left(\sqrt{p_a}+\frac{rP_0}{\sqrt{p_b}}\right)\end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;在价格为 $P_1$ 时的，选择 HODL 的资产价值为：&lt;/p&gt;
+&lt;p&gt;$$
+\begin{aligned}
+V_{\text {v3,hold}}(P_1) &amp;amp;=y_0+x_0 P_1 \
+&amp;amp;=L\left(\sqrt{P_0}-\sqrt{p_a}\right)+P_1 \cdot L\left(\frac{1}{\sqrt{P_0}}-\frac{1}{\sqrt{p_b}}\right) \&amp;amp;=L\left(\sqrt{P_0}-\sqrt{p_a}\right)+L \cdot rP _0\left(\frac{1}{\sqrt{P_0}}-\frac{1}{\sqrt{p_b}}\right) \
+&amp;amp;=L \sqrt{P_0}(1+r)-L\left(\sqrt{p_a}+\frac{rP_0 }{\sqrt{p_b}}\right)
+\end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;所以无常损失为（不失一般性，取 $P_0$为 $P$）：&lt;/p&gt;
+&lt;p&gt;$$
+\begin{aligned}\mathrm{IL}&lt;em&gt;{a, b}(r) &amp;amp;=\frac{V&lt;/em&gt;{pos}-V_{\text {hold }}}{V_{\text {hold }}} \&amp;amp;=\frac{2 L \sqrt{rP}-L \sqrt{P}(1+r)}{L \sqrt{P}(1+r)-L\left(\sqrt{p_a}+\frac{rP}{\sqrt{p_b}}\right)} \&amp;amp;=\frac{2 \sqrt{r}-1-r}{1+r-\sqrt{\frac{p_a}{P}}-r \sqrt{\frac{P}{p_b}}} \&amp;amp;=\operatorname{IL}(r) \cdot\left(\frac{1}{1-\frac{\sqrt{\frac{p_a}{P}}+r \sqrt{\frac{P}{p_b}}}{1+r}}\right)\end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;（ $P_1$ 在价格区间 $[0,P_b]$，$[P_a,+\infty]$时的无常损失也同样可以计算。）&lt;/p&gt;
+&lt;p&gt;我们可以通过价格区间 $[P_a, P_b]$ 的变化看到：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;在 $P_a=P_b=P$时， IL = 0；&lt;/li&gt;
+&lt;li&gt;当 $r=1$ 时， IL = 0；&lt;/li&gt;
+&lt;li&gt;与 v2 的联系：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;$$
+p_a=0, p_b \rightarrow \infty, \mathrm{IL}&lt;em&gt;{v3}=\frac{2 \cdot \sqrt{r} -1-r}{1+r}=\mathrm{IL}&lt;/em&gt;{v2}
+$$&lt;/p&gt;
+&lt;p&gt;趋近于 $\mathrm{IL}_{v2}$。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;画图&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/190839418-ebe47fa1-2446-431d-bceb-1e01ddd454a4.png" alt="Untitled 3" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.desmos.com/calculator/ha322rtufc"&gt;https://www.desmos.com/calculator/ha322rtufc&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;同样我们可以看到：当价格区间越小时，无常损失越大：&lt;/p&gt;
+&lt;p&gt;（这是一个动图）&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/190839425-25812665-4d4c-4b3a-bb0e-38378036b31d.gif" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;p&gt;数值&lt;strong&gt;比较&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;我们比较在不同的价格区间下 Uniswap v3的无常损失：&lt;/p&gt;
+&lt;img width="757" alt="Screen_Shot_2022-08-31_at_09 56 06" src="https://user-images.githubusercontent.com/3297411/190839436-dc4969bd-51d7-4a30-a86e-9d50930fdc85.png"&gt;
+&lt;p&gt;具体数据（）：&lt;/p&gt;
+&lt;p&gt;| 价格区间% | -20% | Initial | +20% |
+| --- | --- | --- | --- |
+| [0%,Inf]( Uniswap v2 ) | -0.56% | 0 | -0.46% |
+| [0%, 200%] | -0.86% | 0 | -0.70% |
+| [25%, 175%] | -1.5% | 0 | -1.22% |
+| [50%, 150%] | -2.34% | 0 | -1.91% |
+| [75%, 125%] | -4.75% | 0 | -3.8% |&lt;/p&gt;
+&lt;p&gt;提问：既然无常损失总是为负，为什么还是会有人愿意做 LP？&lt;/p&gt;
+&lt;p&gt;我们的计算忽略了两个问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;手续费（fee）：不同的池子提供不同的手续费，需要在原来的计算上加上手续费。&lt;/li&gt;
+&lt;li&gt;集中流动性增加了池的深度：
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;例如：ETH-USDC-0.3%池的流动性&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/190839469-259db8d9-b51e-47c9-8444-06399598866e.png" alt="Untitled 4" /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;一些流行的 token 对的深度比中心化交易所（Binance, Coinbase）更高。&lt;a href="https://uniswap.org/blog/uniswap-v3-dominance"&gt;link&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;large-cap: ETH/dollar&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;mid-cap - cross-chain pairs&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/190839462-ae80daf8-398c-4dac-bc90-482a62fd3388.png" alt="Untitled 5" /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;稳定币与稳定币对: USDC/USDT&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;&lt;strong&gt;从资产价值的角度&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;比较以下五种资产持有策略&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;100% 持有 ETH&lt;/li&gt;
+&lt;li&gt;100% 持有 USDC&lt;/li&gt;
+&lt;li&gt;50% 持有 ETH，50% 持有 USDC&lt;/li&gt;
+&lt;li&gt;使用 50%ETH 与 50%USDC 参与做市 - Uniswap v2&lt;/li&gt;
+&lt;li&gt;使用 50%ETH 与 50%USDC 参与做市 - Uniswap v3&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;比较这五种策略的资产价值。（使用 &lt;a href="https://defi-lab.xyz/uniswapv3simulator"&gt;https://defi-lab.xyz/uniswapv3simulator&lt;/a&gt;）&lt;/p&gt;
+&lt;p&gt;无手续费时：&lt;/p&gt;
+&lt;img width="838" alt="Untitled 6" src="https://user-images.githubusercontent.com/3297411/190839480-ae2dbd81-24c7-4692-8ec5-c682b28937ea.png"&gt;
+&lt;p&gt;包含手续费时：&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/190839487-0004de8e-9500-42e6-95dd-3cf5dca0e737.png" alt="Untitled 7" /&gt;&lt;/p&gt;
+&lt;p&gt;Uniswap V3 既是投资者收益的放大器，也是风险的放大器。在享受更高投资收益的同时，也必然要承担当价格脱离安全范围时更多的无常损失。&lt;/p&gt;
+&lt;h2&gt;如何通过策略降低损失，或者说增加收益？&lt;/h2&gt;
+&lt;h3&gt;策略0：在不主动调整的情况下选择比v2表现更好的池子&lt;/h3&gt;
+&lt;p&gt;在不主动调整情况下，全范围（full range）的 Uniswap v3 头寸和价格限定的稳定币头寸的手续费回报平均比 Uniswap v2 好约 54%。其中&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;100 基点手续费的全范围 v3 头寸比 v2 平均&lt;strong&gt;好&lt;/strong&gt; ~80%。&lt;/li&gt;
+&lt;li&gt;1 基点，范围限定的 v3 稳定币对，v2 ，平均&lt;strong&gt;好&lt;/strong&gt; ~160%.&lt;/li&gt;
+&lt;li&gt;30 基点，全范围 v3 头寸， v2 平均&lt;strong&gt;好&lt;/strong&gt; ~16%.&lt;/li&gt;
+&lt;li&gt;5 基点，全范围 v3 头寸，v2  平均&lt;strong&gt;差&lt;/strong&gt; ~68%.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;通常建议 LPers 选择 v3。&lt;a href="https://uniswap.org/blog/fee-returns"&gt;link&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;选择哪个池？&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/190839496-8d41b11a-d26a-479c-8441-c481f3aa26e9.png" alt="Untitled 8" /&gt;&lt;/p&gt;
+&lt;p&gt;v3 表现更好的是 100 基点费率或 1 基点费率的稳定币对。&lt;/p&gt;
+&lt;p&gt;100 bps 的 token 对通常流动性较差，部署时间较晚且波动性较大。 对于 1-bp 费用等级，代币对价格波动较小，但 Uniswap v3 的交易量远高于 v2。 1-bp 池上的集中流动性实现了超过 v2 的高回报。&lt;/p&gt;
+&lt;h3&gt;策略一：主动的被动策略&lt;/h3&gt;
+&lt;p&gt;如果初始投入是 50%ETH 和50%USDC，当价格变化时，池中剩余的资产比例可能变成 80%ETH 和 20%USDC，这时你需要手动调整库存来防止出现一种资产在一侧耗尽，可以持续提供两边的库存。&lt;/p&gt;
+&lt;p&gt;根据价格变动周期性地再平衡（rebalance）两种资产之间的比例。&lt;/p&gt;
+&lt;p&gt;利用范围订单（range order）被动执行的，在现在价格的预测方向放置一个窄的订单，这样就避免了swap费用和价格影响。如果主动使用 swap 达到 50/50，会有 0.3%的费用。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;如何操作：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;对于 Uniswap 上为某个矿池，例如 ETH/USDC，它有两个主要参数：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;B（基本阈值）&lt;/li&gt;
+&lt;li&gt;R（再平衡阈值）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;该策略始终保持两个有效的范围订单：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;基本定单：以当前价格 X 为中心，范围 [X-B, X+B]。 如果 B 较低，它将从交易费用中获得更高的收益。&lt;/li&gt;
+&lt;li&gt;再平衡订单：刚好高于或低于当前价格。在 [X-R, X] 或 [X, X+R] 范围内，具体取决于在基本订单下达后它持有的更多的代币是哪一种。 此订单有助于策略重新平衡并接近 50/50 以降低库存风险。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;每24小时，进行再平衡，根据价格和token数量提交订单。如果策略表现优秀，则时间区间可以被减少。再平衡并不能保证完全50/50。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;举例：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/190839504-426e6004-c3f3-4101-8a08-c507915c9d20.png" alt="Untitled 9" /&gt;&lt;/p&gt;
+&lt;p&gt;比如，ETH目前价格 150USDC，B=50，R=20，策略拥有资金 1ETH 和160USDC。则在 [100, 200] 放置一个基础订单，使用 1ETH 和 150 USDC。剩余的 10 USDC 用来在 [130,150] 放置一个在平衡订单，用来购买ETH以达到50/50。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/190839510-80e1e8bd-3204-4566-a11c-b4c268246038.png" alt="Untitled 10" /&gt;&lt;/p&gt;
+&lt;p&gt;如果价格提升到 180， 再平衡之后，基础订单为 [130, 230]，若此时策略有 1.2 ETH 和 90USDC，则策略会使用 0.5EHT 和 90USDC 放入基础订单中，剩余 0.7ETH 会用于在 [180, 200] 之间的再平衡订单。&lt;/p&gt;
+&lt;p&gt;实际操作：&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://dune.com/queries/78325/155734?Number%20of%20days=200"&gt;https://dune.com/queries/78325/155734?Number of days=200&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;效果&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;蓝色曲线&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/190839522-c5c425e6-a397-4809-a96e-3a36c20ee8b5.png" alt="Untitled 11" /&gt;&lt;/p&gt;
+&lt;p&gt;实际效果：&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://dune.com/mxwtnb/Alpha-Vaults-Performance?Number+of+days=200&amp;amp;Number+of+days_t4072e=500"&gt;https://dune.com/mxwtnb/Alpha-Vaults-Performance?Number+of+days=200&amp;amp;Number+of+days_t4072e=500&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;策略二：预期价格范围策略（expected price range strategies）&lt;/h3&gt;
+&lt;p&gt;从历史数据中预测未来10分钟的价格走势，得到一个价格范围区间，在这个价格范围区间中提供流动性。直到当前价格超出价格范围，重复上述过程，重新预测价格范围并添加流动性。这个价格范围称为“预期价格范围”。同时我们可以在当前价格没有完全超出预期价格范围时调整价格区间，称这个价格范围为“移动策略范围（move strategy ranges）”，这个范围指示了什么时候需要移动。&lt;/p&gt;
+&lt;img width="479" alt="Untitled 12" src="https://user-images.githubusercontent.com/3297411/190839530-f02eb060-6daf-4545-8166-35ecf2e34270.png"&gt;
+&lt;p&gt;&lt;strong&gt;如何设置&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;2018年3月~2020年4月的十分钟数据得出价格移动分布在 [-3%, 3%] 之间。可以设置百分比作为价格波动区间。&lt;/p&gt;
+&lt;img width="501" alt="Untitled 13" src="https://user-images.githubusercontent.com/3297411/190839533-07b08d89-e42d-471c-84c3-85444226f677.png"&gt;
+&lt;p&gt;&lt;strong&gt;进一步策略&lt;/strong&gt;：在预期价格范围内不采用一致的流动性，而是采用多个连续的流动性多头，每个多头存入不同数量的资产。&lt;/p&gt;
+&lt;p&gt;三种策略：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;均匀策略：在价格区间内均匀分布，Uniswap v3 默认；&lt;/li&gt;
+&lt;li&gt;比例策略：在价格区间内分成子价格区间，权重对应价格可能的变化概率放置；&lt;/li&gt;
+&lt;li&gt;最优策略：使用决策理论（比如马尔可夫决策过程），计算一个模型来估算“最佳”范围来提供流动性，使用 LP 的“风险规避”程度作为参数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;比例策略：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Ba: 预期价格范围&lt;/li&gt;
+&lt;li&gt;Bt: 移动策略范围&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;蓝线为概率分布，使用小的价格区间实现&lt;/p&gt;
+&lt;img width="509" alt="Untitled 14" src="https://user-images.githubusercontent.com/3297411/190839543-c3e52671-e05b-4f1b-8e8a-dfeed7f886d1.png"&gt;
+&lt;p&gt;&lt;strong&gt;结论：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对于厌恶风险的投资者，均匀策略最优，对于其他所有人来说是次优的；&lt;/li&gt;
+&lt;li&gt;比例策略对于大部分厌恶风险的投资者来说的接近最优的；&lt;/li&gt;
+&lt;li&gt;对于最厌恶风险的投资者而言，均匀策略可获利。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/190839545-ec74a8e6-e5bb-4ed2-8712-630db12c2226.png" alt="Untitled 15" /&gt;&lt;/p&gt;
+&lt;p&gt;比例策略对于风险偏向 LP 提供者是最优的（ $\alpha$大 ），而均匀分配对于风险规避LP提供者是最优的（ $\alpha$ 小）。&lt;/p&gt;
+&lt;p&gt;这意味着，在 Uniswap v3 中被动管理的头寸可能不足以以资本效率和平衡风险赚取费用，积极的流动性提供策略既是机遇也是挑战。&lt;/p&gt;
+&lt;h3&gt;其他主动的流动性管理&lt;/h3&gt;
+&lt;p&gt;其他主动策略 dapp&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://xtoken.market/app/invest"&gt;xToken project&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.gelato.network/"&gt;Gelato Network&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.visor.finance/"&gt;Visor Finance team&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Charm.fi’s &lt;a href="https://alpha.charm.fi/"&gt;Alpha Vaults&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://mellow.finance/vault"&gt;Mellow Protocol&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/190839551-e149cbf3-10fb-46c1-9a58-5507499ac6ea.png" alt="Untitled 16" /&gt;&lt;/p&gt;
+&lt;h2&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://newsletter.banklesshq.com/p/how-to-avoid-impermanent-loss"&gt;How to avoid Impermanent Loss&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://newsletter.banklesshq.com/p/10-going-bankless-with-uniswap-caleb"&gt;Going Bankless with Uniswap&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://newsletter.banklesshq.com/p/how-to-make-money-with-uniswap-v3"&gt;How to make money with Uniswap V3&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://newsletter.banklesshq.com/p/a-guide-to-uniswap-on-optimism"&gt;A Guide to Uniswap on Optimism&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;strong&gt;Uniswap Liquidity Provision: Is the Yield Worth the Risk?：&lt;/strong&gt;&lt;/strong&gt;&lt;a href="https://medium.com/gammaswap-labs/uniswap-liquidity-provision-is-the-yield-worth-the-risk-c45a4a850700"&gt;https://medium.com/gammaswap-labs/uniswap-liquidity-provision-is-the-yield-worth-the-risk-c45a4a850700&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://betterprogramming.pub/uniswap-v2-in-depth-98075c826254"&gt;https://betterprogramming.pub/uniswap-v2-in-depth-98075c826254&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://liaoph.com/uniswap-v3-1/"&gt;https://liaoph.com/uniswap-v3-1/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.theblockbeats.info/news/24654"&gt;https://www.theblockbeats.info/news/24654&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://medium.com/charmfinance/introducing-alpha-vaults-an-lp-strategy-for-uniswap-v3-ebf500b67796"&gt;https://medium.com/charmfinance/introducing-alpha-vaults-an-lp-strategy-for-uniswap-v3-ebf500b67796&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://medium.com/@DeFiScientist/rebalancing-vs-passive-strategies-for-uniswap-v3-liquidity-pools-754f033bdabc"&gt;https://medium.com/@DeFiScientist/rebalancing-vs-passive-strategies-for-uniswap-v3-liquidity-pools-754f033bdabc&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://uniswap.org/blog/fee-returns"&gt;https://uniswap.org/blog/fee-returns&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://uniswapv3.flipsidecrypto.com/"&gt;https://uniswapv3.flipsidecrypto.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://newsletter.banklesshq.com/p/how-to-automate-uniswap-v3-liquidity"&gt;https://newsletter.banklesshq.com/p/how-to-automate-uniswap-v3-liquidity&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://kydo.substack.com/p/palm-protocol-owned-active-liquidity"&gt;https://kydo.substack.com/p/palm-protocol-owned-active-liquidity&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a href="https://github.com/qiwihui/blog/issues/165"&gt;View on GitHub&lt;/a&gt;&lt;/p&gt;
+</content></entry><entry><title>Tornado Cash 基本原理</title><id>blogs/qiwihui-blog-164.md</id><updated>2024-08-18T03:45:14+00:00</updated><author><name>qiwihui</name><email>qwh005007@gmail.com</email></author><link href="https://qiwihui.com/blogs/qiwihui-blog-164.html" rel="self"/><published>2024-05-25T09:37:50+00:00</published><content type="html">&lt;h1&gt;Tornado Cash 基本原理&lt;/h1&gt;
+&lt;p&gt;假设地址 A 发送了 100 ETH 给地址 B，由于在区块链上所有的数据都是公开的，所以全世界都知道地址 A 和地址 B 进行了一次交易，如果地址A和地址 B 属于同一个用户 Alice，则大家知道Alice仍然拥有 100 ETH，如果地址B属于用户 Bob，则大家知道 Bob 现在有 100ETH 了。一个问题就是：如何在交易的过程中保持隐蔽呢，或者说隐藏发送用户与接收用户之前的练习？那就要用到 Tornado Cash。&lt;/p&gt;
+&lt;p&gt;用户将资金存入Tornado Cash，然后将资金提取到另一个地址中，在区块链上记录上，这两个地址之间的联系就大概率断开了。那 Tornado Cash 是如何做到的呢？&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;h2&gt;存款（deposit）过程&lt;/h2&gt;
+&lt;p&gt;首先我们看一下存款过程。用户在存款时需要生产两个随机数 secret 和 nullifier，并计算这两个数的一个哈希 commitment = hash(secret, nullifier)，然后用户将需要混币的金额（比如 1 ETH）和 commitment 发送给 TC 合约的 deposit 函数，TC合约将保存这两个数据，commitment之后会用于提取存入的资金。&lt;/p&gt;
+&lt;p&gt;同时，用户会得到一个凭证，通过这个凭证，用户（或者任何人）就可以提取存入的资金。&lt;/p&gt;
+&lt;h3&gt;为什么存入 1 ETH？&lt;/h3&gt;
+&lt;p&gt;如果不同的用户会存入不同的金额，比如 Alice 和 Bob 存入 1 ETH，Chris 存入 73 ETH，当取出存款时，某个地址提取了 73 ETH，我们会有很大程度怀疑这个地址属于 Chris。因此，在TC 合约中规定了每次存入的金额为 1 ETH，这样就不会有地址与其他地址不一致。&lt;/p&gt;
+&lt;p&gt;实际上，TC 有不同金额的 ETH 存款池，分别为 0.1，1，10，100，以满足不同数量的存取款需求。&lt;/p&gt;
+&lt;h2&gt;取款（withdraw）过程&lt;/h2&gt;
+&lt;p&gt;当进行取款时，一种错误方法是将之前随机生成的 secret 和 nullifier 作为参数发送给合约的取款函数，合约检查 hash(secret,nullifier) 是否等于之前保存的 commitment，如果相等就发送 1 ETH给取款者。但是这个过程就使得取款者的身份暴露了，因为 hash 过程是不可逆的，当我们从存款日志中找到相等的commitment时，我们就可以通过 commitment 建立存款者和取款者之间的联系，因为只有这个存款者知道获得 commitment 的 secret 和 nullifier。&lt;/p&gt;
+&lt;p&gt;如果解决这个过程呢？如果有人有一种方法可以证明他知道一组(secret, nullifier) 使得 hash(secret, nullifier) 在合约记录的commitment列表中，但是却不公开这组(secret, nullifier) ，那这个人就可以只用发送这个证明给合约进行验证，就可以证明他拥有之前存入过资金，当却不知道对应于哪一组存入的资金，所以仍然保持匿名。&lt;/p&gt;
+&lt;p&gt;这个证明就是零知识证明，它可以证明你知道某个信息但却不用公开这个信息。TC 使用的零知识证明称为 zk-SNARK。&lt;/p&gt;
+&lt;p&gt;我们注意到当用户存款和取款时，使用了两个随机数 secret 和 nullifier，nullifier 的作用是什么呢？当用户取款时，合约其实不知道到底是谁在取款，为了避免用户存入 1 ETH 然后进行多次提取，TC要求当用户发送证明的同时发送 nullifier 的哈希nullifierHash，在zk-SNARK的证明中，他会检查两件事情：一是检查 hash(secret, nullifier) 在 commitment 的列表中，二是 nullifierHash 等于 hash(nullifier)，一旦验证成功，合约就会记录这个哈希。当同一个证明第二次被提交时就会失败，因为对应的 nullifier 哈希已经使用过了，这样就避免了二次提款。&lt;/p&gt;
+&lt;h3&gt;Tornado Cash 如何保存 commitment 呢&lt;/h3&gt;
+&lt;p&gt;使用 Merkle 树。Merkle树具体参见之前的介绍文章。&lt;/p&gt;
+&lt;p&gt;TC 会首先初始化一组叶子节点为 &lt;code&gt;keccak256(&amp;quot;tornado&amp;quot;)&lt;/code&gt;，并以这些叶子节点构建一颗 Merkle 树。当用户存款时，对应的 commitment 存入 Merkle 树的第一个叶子节点，然后合约更新整棵 Merkle 树，然后是第二个用户的commitment 存入第二个叶子节点并更新整棵 Merkle 树，依次类推。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/188539564-5178bafe-dd46-4409-8de5-fdcc194e88e4.png" alt="Untitled" /&gt;&lt;/p&gt;
+&lt;p&gt;如何证明 commitment 在这棵 Merkle 树中呢？&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/188539594-233fbff1-9cc8-43c9-99a2-86a7045f3efe.png" alt="Untitled 1" /&gt;&lt;/p&gt;
+&lt;p&gt;假设需要证明c3在这棵Merkel中，我们需要找到从叶子节点 c3 到根的路径过程中的哈希，使得他们与 c3 依次进行 hash 可以得到根哈希，即图中绿色节点的哈希列表。&lt;/p&gt;
+&lt;p&gt;Tornado Cash 中，我们需要提供这些节点哈希，并通过 zk-SNARK 生成零知识证明，以此证明 c3 在这棵以 root（&lt;code&gt;=h(h(h(c0,c1),h(c2,c3)),h(h(c4,c5), z1))&lt;/code&gt;）为根的 Merkle 中，但却不用告诉大家 c3 的值。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://user-images.githubusercontent.com/3297411/188539613-fe0ccd14-c7e7-4143-847a-e71d3b475e1f.png" alt="Untitled 2" /&gt;&lt;/p&gt;
+&lt;p&gt;因此我们将证明 proof 和 Merkle 树根 root 发送给合约，一旦合约验证成功，我们就可以取出之前存入的存款。&lt;/p&gt;
+&lt;h2&gt;solidity 中的 zk-SNARK 实现&lt;/h2&gt;
+&lt;p&gt;TC 合约包含三个部分：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;存款和取款合约，用于与用户交互；&lt;/li&gt;
+&lt;li&gt;Merkle 树，用于记录存款哈希；&lt;/li&gt;
+&lt;li&gt;zk-SNARK 验证器合约，用于验证取款时证明合法。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;zk-SNARK 验证器合约由 circom 编写的验证电路通过 snarkjs 库生成。&lt;/p&gt;
+&lt;h2&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.youtube.com/watch?v=z_cRicXX1jI"&gt;Tornado Cash - How it Works | DeFi + Zero Knowledge Proof&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a href="https://github.com/qiwihui/blog/issues/164"&gt;View on GitHub&lt;/a&gt;&lt;/p&gt;
+</content></entry></feed>
