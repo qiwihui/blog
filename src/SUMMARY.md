@@ -1,6 +1,9 @@
 # Summary
 
 [About Me](./README.md)
+[Tornado Cash 代码实践系列 | Tornado Cash in practice](./blogs/qiwihui-blog-178.md)
+[写一个 pump.fun 智能合约，创建以太坊上的Meme发售平台](./blogs/qiwihui-blog-177.md)
+[Babylon 协议脚本模拟 | Babylon script simulation](./blogs/qiwihui-blog-176.md)
 [Verkle Trie 从 0 到 1](./blogs/qiwihui-blog-175.md)
 [Babylon 质押协议](./blogs/qiwihui-blog-174.md)
 [Bitcoin 铭文原理](./blogs/qiwihui-blog-173.md)
