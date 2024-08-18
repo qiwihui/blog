@@ -76,5 +76,5 @@ with open(summary_file, "w", encoding="utf-8") as file:
     for issue in all_issues:
         if "TODO" in get_labels(issue):
             continue
-        file.write(f"[{issue['title']}](./blogs/qiwihui-blog-{issue['number']}.md)\n")
+        file.write(f"[{issue['number']}. {issue['title']}](./blogs/qiwihui-blog-{issue['number']}.md)\n")
     file.write("\n")
