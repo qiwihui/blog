@@ -13,11 +13,8 @@
 4. [Tornado Cash 代码实践（4）：默克尔树](https://youtu.be/CBjdLpT22hI)
 5. [Tornado Cash 代码实践（5）：证明生成和验证](https://youtu.be/DPJ4ko_kvmk)
 6. [Tornado Cash 代码实践（6）：用 chatGPT 帮我生成交互页面](https://youtu.be/RKJ7C5jAtgY)
-7. Tornado Cash 代码实践（7）：测试网部署（TODO）
+7. [Tornado Cash 代码实践（7）：测试网部署](https://www.youtube.com/watch?v=QjnlYnl8950)
 
 视频中的文档： https://qiwihui.notion.site/Tornado-cash-92055ce981ea46668aa72d836085fd35
 
-
 [View on GitHub](https://github.com/qiwihui/blog/issues/178)
-
-
