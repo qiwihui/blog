@@ -1,7 +1,6 @@
 [book]
 authors = ["qiwihui"]
 language = "cn"
-multilingual = false
 src = "src"
 title = "Qiwihui's blog"
 description = "blog, Crypto, 区块链"
@@ -28,14 +27,11 @@ max-level = 4
 [preprocessor.admonish]
 command = "mdbook-admonish"
 assets_version = "3.0.0" # do not edit: managed by `mdbook-admonish install`
-after = ["gettext"]
+after = ["links"]
 
 [preprocessor.open-on-gh]
 command = "mdbook-open-on-gh"
 renderer = ["html"]
-
-[preprocessor.gettext]
-after = ["links"]
 
 [preprocessor.mermaid]
 command = "mdbook-mermaid"
