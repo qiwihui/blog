@@ -2,8 +2,8 @@ name: Sync issues to src markdown
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 2 * * *"
+  issues:
+    types: [opened, edited, reopened, closed, labeled, unlabeled]
 
 permissions:
   contents: write
