@@ -1,0 +1,49 @@
+name: Sync issues to src markdown
+
+on:
+  workflow_dispatch:
+  issues:
+    types: [opened, edited, reopened, closed, labeled, unlabeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Export all issues to src/blogs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          python export_issues.py --repo "$GITHUB_REPOSITORY"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: sync issues to src markdown by issue number"
+          title: "chore: sync issues into src markdown files"
+          body: |
+            This PR syncs GitHub issues into `src/blogs/*.md` and regenerates `src/SUMMARY.md`.
+
+            - Source: repository issues (excluding PRs)
+            - File naming: `qiwihui-blog-<issue_number>.md`
+            - Ordering: sorted by issue number (desc) in `src/SUMMARY.md`
+          branch: automation/sync-issues-to-src
+          delete-branch: true
