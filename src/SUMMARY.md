@@ -1,6 +1,7 @@
 # Summary
 
 [About Me](./README.md)
+[184. 从 0 搭建 OpenClaw Agent（Node 安装 + ChatGPT 配置 + 实战）](./blogs/qiwihui-blog-184.md)
 [178. Tornado Cash 代码实践系列 | Tornado Cash in practice](./blogs/qiwihui-blog-178.md)
 [177. 写一个 pump.fun 智能合约，创建以太坊上的Meme发售平台](./blogs/qiwihui-blog-177.md)
 [176. Babylon 协议脚本模拟 | Babylon script simulation](./blogs/qiwihui-blog-176.md)
