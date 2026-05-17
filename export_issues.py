@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import sys
 from pathlib import Path
 from typing import Dict, Iterable, List
 
@@ -122,6 +123,15 @@ def main() -> None:
         for i in issues
         if "pull_request" not in i and args.skip_label not in labels_of(i)
     ]
+
+    if not filtered:
+        print(
+            f"ERROR: fetched {len(issues)} items from API but 0 passed the filter "
+            f"(skip_label={args.skip_label!r}). Refusing to overwrite {args.summary_file} "
+            "with empty content — check token permissions and repo name.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
 
     output_dir = Path(args.output_dir)
     summary_file = Path(args.summary_file)
