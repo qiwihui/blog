@@ -10,6 +10,10 @@ permissions:
   pull-requests: write
   issues: read
 
+concurrency:
+  group: sync-issues-to-src
+  cancel-in-progress: true
+
 jobs:
   sync-issues:
     runs-on: ubuntu-latest
