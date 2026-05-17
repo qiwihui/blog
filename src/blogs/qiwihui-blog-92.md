@@ -1,5 +1,8 @@
 # GitHub Actions 第9天：部署到GitHub Packages
 
+> Issue: #92  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/92](https://github.com/qiwihui/blog/issues/92)
 
 本月到目前为止，我们已经研究了许多执行构建并运行一些测试的方案。这些都是很棒的工作流程──它们确保进入你的项目的pull request是高质量的，并且你的主分支是健康的。
 
@@ -26,8 +29,4 @@
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/92)
-
 

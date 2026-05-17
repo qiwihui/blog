@@ -1,5 +1,8 @@
 # 07. Itertools — Python 进阶
 
+> Issue: #124  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/124](https://github.com/qiwihui/blog/issues/124)
 
 Python `itertools` 模块是用于处理迭代器的工具集合。 简而言之，迭代器是可以在for循环中使用的数据类型。 Python中最常见的迭代器是列表。
 
@@ -180,8 +183,4 @@ for i in repeat("A", 3):
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/124)
-
 

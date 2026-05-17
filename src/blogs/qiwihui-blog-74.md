@@ -1,5 +1,8 @@
 # HMM理解思路
 
+> Issue: #74  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/74](https://github.com/qiwihui/blog/issues/74)
 
 HMM
 ====
@@ -70,8 +73,4 @@ HMM
 
 1. 《统计学习方法》，李航
 2. [隐马尔科夫模型（HMM）及其Python实现](https://applenob.github.io/hmm.html)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/74)
-
 

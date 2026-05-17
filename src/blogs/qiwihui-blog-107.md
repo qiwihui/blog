@@ -1,5 +1,8 @@
 # 用 Rust Actix-web 写一个 Todo 应用（三）── migrations 和错误处理
 
+> Issue: #107  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/107](https://github.com/qiwihui/blog/issues/107)
 
 ## 使用 diesel 管理数据库变化
 
@@ -201,8 +204,4 @@ impl From<PoolError> for Error {
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/107)
-
 

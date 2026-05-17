@@ -1,5 +1,8 @@
 # 14. 生成器 — Python 进阶
 
+> Issue: #128  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/128](https://github.com/qiwihui/blog/issues/128)
 
 生成器是可以在运行中暂停和恢复的函数，返回可以迭代的对象。 与列表不同，它们是懒惰的，因此一次仅在被询问时才产生一项。 因此，在处理大型数据集时，它们的内存效率更高。
 
@@ -200,8 +203,4 @@ print(sum(firstn_object))
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/128)
-
 

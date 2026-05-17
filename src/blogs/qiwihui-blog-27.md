@@ -1,5 +1,8 @@
 # 用Homebrew 安装 v2ray 以及 Homebrew-cask 安装 V2RayX
 
+> Issue: #27  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/27](https://github.com/qiwihui/blog/issues/27)
 
 最近开始转向使用 v2ray 作为主要的翻墙工具，在 macOS 上安装和使用都需要下载编译好的软件包然后解包使用，不是很方便，联系到 macOS 下常用的包管理 Homebrew，何不自己提交一个？
 <!--more-->
@@ -60,7 +63,3 @@ brew cask install v2rayx
 ```
 
 不过GUI毕竟不能覆盖命令行的全部功能，所以能用命令行v2ray的话，就尽量不使用V2RayX吧。
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/27)
-
-

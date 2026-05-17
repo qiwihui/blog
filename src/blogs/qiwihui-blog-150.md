@@ -1,5 +1,8 @@
 # CPython Internals 笔记 ── Python 语言和语法
 
+> Issue: #150  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/150](https://github.com/qiwihui/blog/issues/150)
 
 编译器的目的是将一种语言转换成另一种语言。把编译器想象成一个翻译器。
 比如你会雇一个翻译来听你说英语，然后翻译成日语。
@@ -547,8 +550,4 @@ COLONEQUAL              ':='
 一旦 PEP 达成共识，并且草案已定稿，指导委员会必须接受或拒绝它。
 [PEP 13](https://www.python.org/dev/peps/pep-0013/) 中定义的指导委员会的任务规定，
 他们应努力“维护 Python 语言和 CPython 解释器的质量和稳定性”。
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/150)
-
 

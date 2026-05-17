@@ -1,5 +1,8 @@
 # 在 “Deploy to Heroku” 之后手动更新Heroku应用
 
+> Issue: #69  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/69](https://github.com/qiwihui/blog/issues/69)
 
 这个tips以RSSHub为例子。我在Heroku上部署了RSSHub用以日常RSS需求，这个已经部署很久了（2018年11月），准备更新一版，记录如下。
 
@@ -119,8 +122,4 @@ HEROKU_SLUG_COMMIT: a8066bd
 前往相应的页面验证，可以看到在Debug中的 githash值已经是当前最新的hash值了。
 
 ![githash](https://user-images.githubusercontent.com/3297411/57205060-5b873d00-6fee-11e9-893f-14b2978d3b92.png)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/69)
-
 

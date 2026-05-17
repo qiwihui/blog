@@ -1,5 +1,8 @@
 # 年度总结 - 2017年
 
+> Issue: #7  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/7](https://github.com/qiwihui/blog/issues/7)
 
 工作:
 
@@ -29,7 +32,3 @@
 4. 架构
 5. 生活：自我认知，恋爱，惰性
 6. 情绪影响工作
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/7)
-
-

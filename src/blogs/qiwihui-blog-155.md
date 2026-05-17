@@ -1,5 +1,8 @@
 # 如何创建一个代币承销商 dApp
 
+> Issue: #155  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/155](https://github.com/qiwihui/blog/issues/155)
 
 这篇教程我们来完成 scaffold-eth 项目的第二个挑战：[代币承销商](https://speedrunethereum.com/challenge/token-vendor)，我们可以在网站 [speedrunethereum.com](http://speedrunethereum.com/) 中查看或者直接查看对应的 Github 连接：[scaffold-eth/scaffold-eth-typescript-challenges](https://github.com/scaffold-eth/scaffold-eth-typescript-challenges)。
 
@@ -674,7 +677,3 @@ Congratulations! 你已经完成了这个教程
 5. 在 [Surge.sh](http://Surge.sh) 上部署前端项目；
 6. 在 etherscan 上查看合约以及验证合约；
 7. 以及关于 web3 开发的知识，包括 hardhat，react 等。
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/155)
-
-

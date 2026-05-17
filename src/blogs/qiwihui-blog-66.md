@@ -1,5 +1,8 @@
 # word2vec理解思路
 
+> Issue: #66  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/66](https://github.com/qiwihui/blog/issues/66)
 
 本文归纳整理了一些论文和博客对word2vec的理解，以期理解word2vec。
 
@@ -102,8 +105,4 @@ CBOW和Skip-gram：
 - [基于 word2vec 和 CNN 的文本分类 ：综述 & 实践](https://zhuanlan.zhihu.com/p/29076736)
 - [word2vec在工业界的应用场景](https://x-algo.cn/index.php/2016/03/12/281/)
 - [word2vec有什么应用？ - orangeprince的回答 - 知乎](https://www.zhihu.com/question/25269336/answer/49188284)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/66)
-
 

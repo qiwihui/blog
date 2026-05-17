@@ -1,5 +1,8 @@
 # Across 跨链桥合约解析
 
+> Issue: #158  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/158](https://github.com/qiwihui/blog/issues/158)
 
 ## 什么是 Across
 
@@ -879,7 +882,3 @@ deploy/
 Across 协议整体结构简单，流程清晰，支持了 Across 协议安全，快速的从 L2 向 L1 的资金转移。
 
 代码中调用了 Optimistic Oracle 的接口来出和解决争议，对应的逻辑有空之后详说。
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/158)
-
-

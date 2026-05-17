@@ -1,5 +1,8 @@
 # 19. 星号操作符 — Python 进阶
 
+> Issue: #130  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/130](https://github.com/qiwihui/blog/issues/130)
 
 星号（ `*` ）可用于Python中的不同情况：
 
@@ -214,8 +217,4 @@ print(dict_c)
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/130)
-
 

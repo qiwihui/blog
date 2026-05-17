@@ -1,5 +1,8 @@
 # 使用 Merkle 树做 NFT 白名单验证
 
+> Issue: #151  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/151](https://github.com/qiwihui/blog/issues/151)
 
 Merkle 树现在普遍用来做线上数据验证。这篇文章主要解释和实现使用 Merkle 树做 NFT 白名单验证。
 
@@ -202,9 +205,5 @@ console.log('Bad proof of 0xc12ae5Ba30Da6eB11978939379D383beb5Df9b33: ', badProo
 1. [Using Merkle Trees for NFT Whitelists](https://medium.com/@ItsCuzzo/using-merkle-trees-for-nft-whitelists-523b58ada3f9)
 2. [Understanding Merkle pollards](https://medium.com/@jgm.orinoco/understanding-merkle-pollards-1547fc7efaa)
 3. [Litentry this week: NFT pallet and Merkle airdrop](https://litentry.medium.com/litentry-weekly-report-nft-pallet-and-merkle-airdrop-f0fe7a32a7da)
-
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/151)
 
 

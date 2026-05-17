@@ -1,5 +1,8 @@
 # Sui 数据类型讲解
 
+> Issue: #172  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/172](https://github.com/qiwihui/blog/issues/172)
 
 这篇文章中，我们将介绍 Sui 中常见的数据结构，这些结构包含 Sui Move 和 Sui Framework 中提供的基础类型和数据结构，理解和熟悉这些数据结构对于 Sui Move 的理解和应用大有裨益。
 
@@ -1036,7 +1039,3 @@ sui client call \
 ```
 
 至此，我们介绍完了 Sui Move 中主要的数据类型及其使用方法，希望大家学习和理解 Sui Move 有一定的帮助。
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/172)
-
-

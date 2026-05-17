@@ -1,5 +1,8 @@
 # 21. 上下文管理器 — Python 进阶
 
+> Issue: #132  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/132](https://github.com/qiwihui/blog/issues/132)
 
 上下文管理器是资源管理的绝佳工具。 它们使你可以在需要时精确地分配和释放资源。 一个著名的例子是 `with open()` 语句：
 
@@ -199,8 +202,4 @@ with open_managed_file('notes.txt') as f:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/132)
-
 

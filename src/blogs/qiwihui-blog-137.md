@@ -1,5 +1,8 @@
 # 10. 日志记录 — Python 进阶
 
+> Issue: #137  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/137](https://github.com/qiwihui/blog/issues/137)
 
 Python中的日志记录模块是功能强大的内置模块，因此你可以快速将日志记录添加到应用程序中。
 
@@ -284,8 +287,4 @@ logger.addHandler(logHandler)
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/137)
-
 

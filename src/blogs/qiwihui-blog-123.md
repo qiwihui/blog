@@ -1,5 +1,8 @@
 # 06. collections — Python 进阶
 
+> Issue: #123  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/123](https://github.com/qiwihui/blog/issues/123)
 
 Python 中的 `collections` 模块实现了专门的容器数据类型，提供了 Python 通用内置容器dict，list，set和tuple的替代方案。
 
@@ -214,8 +217,4 @@ print(d)
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/123)
-
 

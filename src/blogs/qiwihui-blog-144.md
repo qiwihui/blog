@@ -1,5 +1,8 @@
 # 六月小结（2021.06）
 
+> Issue: #144  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/144](https://github.com/qiwihui/blog/issues/144)
 
 记录一下六月发生的事情
 
@@ -46,8 +49,4 @@
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/144)
-
 

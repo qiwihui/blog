@@ -1,5 +1,8 @@
 # 树莓派启动时自动连接wifi
 
+> Issue: #16  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/16](https://github.com/qiwihui/blog/issues/16)
 
 这篇文章的目的是为了配置树莓派，使其在启动时自动获取静态IP.
 <!--more-->
@@ -104,8 +107,4 @@ network={
 - `auth_alg` 常为 `OPEN`, 其他可选为 `LEAP` 和 `SHARED`
 
 重启树莓派，之后就会自动连上wifi了.
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/16)
-
 

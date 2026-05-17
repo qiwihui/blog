@@ -1,5 +1,8 @@
 # 《数据密集型应用的设计》读书笔记──第一章：可靠性，可扩展性，可维护性
 
+> Issue: #143  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/143](https://github.com/qiwihui/blog/issues/143)
 
 # 第一章：可靠性，可扩展性，可维护性
 
@@ -170,8 +173,4 @@
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/143)
-
 

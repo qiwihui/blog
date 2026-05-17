@@ -1,6 +1,7 @@
 # Summary
 
 [About Me](./README.md)
+[187. alt.fun 平台机制全面分析报告](./blogs/qiwihui-blog-187.md)
 [184. 从 0 搭建 OpenClaw Agent（Node 安装 + ChatGPT 配置 + 实战）](./blogs/qiwihui-blog-184.md)
 [178. Tornado Cash 代码实践系列 | Tornado Cash in practice](./blogs/qiwihui-blog-178.md)
 [177. 写一个 pump.fun 智能合约，创建以太坊上的Meme发售平台](./blogs/qiwihui-blog-177.md)
@@ -112,6 +113,7 @@
 [32. 一个关于数学概率的问题](./blogs/qiwihui-blog-32.md)
 [29. 使用 Travis CI 自动更新博客](./blogs/qiwihui-blog-29.md)
 [27. 用Homebrew 安装 v2ray 以及 Homebrew-cask 安装 V2RayX](./blogs/qiwihui-blog-27.md)
+[26. 极路由免开发者权限开启SSH](./blogs/qiwihui-blog-26.md)
 [23. 使用免费的let’s encrypt证书为网站开启https（已过时）](./blogs/qiwihui-blog-23.md)
 [22. Nginx服务器设置HTTP/2](./blogs/qiwihui-blog-22.md)
 [21. 极路由+shadowsocks翻墙](./blogs/qiwihui-blog-21.md)
@@ -135,4 +137,3 @@
 [3. 年度总结 - 过去的2013年](./blogs/qiwihui-blog-3.md)
 [2. One problem at Haidian Book City](./blogs/qiwihui-blog-2.md)
 [1. Hello World!](./blogs/qiwihui-blog-1.md)
-

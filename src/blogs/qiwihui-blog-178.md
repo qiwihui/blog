@@ -1,5 +1,8 @@
 # Tornado Cash 代码实践系列 | Tornado Cash in practice
 
+> Issue: #178  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/178](https://github.com/qiwihui/blog/issues/178)
 
 这个系列的视频将从零到一实现 Tornado Cash 的功能，包括零知识证明电路，智能合约以及证明验证。希望你能从中学习到 Tornado Cash 的所用到的技术，并知道如何构建一个零知识证明应用。
 
@@ -13,8 +16,7 @@
 4. [Tornado Cash 代码实践（4）：默克尔树](https://youtu.be/CBjdLpT22hI)
 5. [Tornado Cash 代码实践（5）：证明生成和验证](https://youtu.be/DPJ4ko_kvmk)
 6. [Tornado Cash 代码实践（6）：用 chatGPT 帮我生成交互页面](https://youtu.be/RKJ7C5jAtgY)
-7. [Tornado Cash 代码实践（7）：测试网部署](https://www.youtube.com/watch?v=QjnlYnl8950)
+7. Tornado Cash 代码实践（7）：测试网部署（TODO）
 
 视频中的文档： https://qiwihui.notion.site/Tornado-cash-92055ce981ea46668aa72d836085fd35
 
-[View on GitHub](https://github.com/qiwihui/blog/issues/178)

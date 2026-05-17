@@ -1,5 +1,8 @@
 # 使用 Travis CI 自动更新博客
 
+> Issue: #29  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/29](https://github.com/qiwihui/blog/issues/29)
 
 Travis CI 自动检测代码变化，拉取，编译博客并部署到 GitHub Pages
 
@@ -107,8 +110,4 @@ notifications:
 - [Hexo 自动部署到 Github](http://lotabout.me/2016/Hexo-Auto-Deploy-to-Github/)
 - [Easier builds and deployments using Git over HTTPS and OAuth](https://blog.github.com/2012-09-21-easier-builds-and-deployments-using-git-over-https-and-oauth/)
 - [Publicizing or hiding organization membership](https://help.github.com/articles/publicizing-or-hiding-organization-membership/)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/29)
-
 

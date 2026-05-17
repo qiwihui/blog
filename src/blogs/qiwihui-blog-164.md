@@ -1,5 +1,8 @@
 # Tornado Cash 基本原理
 
+> Issue: #164  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/164](https://github.com/qiwihui/blog/issues/164)
 
 假设地址 A 发送了 100 ETH 给地址 B，由于在区块链上所有的数据都是公开的，所以全世界都知道地址 A 和地址 B 进行了一次交易，如果地址A和地址 B 属于同一个用户 Alice，则大家知道Alice仍然拥有 100 ETH，如果地址B属于用户 Bob，则大家知道 Bob 现在有 100ETH 了。一个问题就是：如何在交易的过程中保持隐蔽呢，或者说隐藏发送用户与接收用户之前的练习？那就要用到 Tornado Cash。
 
@@ -62,8 +65,4 @@ zk-SNARK 验证器合约由 circom 编写的验证电路通过 snarkjs 库生成
 ## 参考
 
 - [Tornado Cash - How it Works | DeFi + Zero Knowledge Proof](https://www.youtube.com/watch?v=z_cRicXX1jI)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/164)
-
 

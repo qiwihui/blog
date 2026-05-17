@@ -1,5 +1,8 @@
 # 网络故障透露中国互联网接入现状
 
+> Issue: #71  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/71](https://github.com/qiwihui/blog/issues/71)
 
 原文：[Internet Outage Reveals Reach of China’s Connectivity](https://blog.thousandeyes.com/internet-outage-reveals-reach-of-chinas-connectivity/)
 
@@ -68,7 +71,3 @@
 ## 立即获得可见性
 
 主要的互联网中断是企业团队关注企业所依赖的大量外部依赖关系的警钟。如果你无法深入了解四面墙以外的应用和网络层条件，那么当你的云和互联网生态系统发生不可预测的事情时，您将陷入困境。
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/71)
-
-

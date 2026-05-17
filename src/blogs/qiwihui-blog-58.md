@@ -1,5 +1,8 @@
 # 使用 TensorFlow Serving 和 Docker 快速部署机器学习服务
 
+> Issue: #58  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/58](https://github.com/qiwihui/blog/issues/58)
 
 从实验到生产，简单快速部署机器学习模型一直是一个挑战。这个过程要做的就是将训练好的模型对外提供预测服务。在生产中，这个过程需要可重现，隔离和安全。这里，我们使用基于Docker的TensorFlow Serving来简单地完成这个过程。TensorFlow 从1.8版本开始支持Docker部署，包括CPU和GPU，非常方便。
 
@@ -360,9 +363,5 @@ $ docker build -t $USER/tensorflow-serving --build-arg TF_SERVING_BUILD_IMAGE=$U
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 > 
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/58)
 
 

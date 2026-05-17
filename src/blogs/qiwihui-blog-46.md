@@ -1,5 +1,8 @@
 # 如何阅读苹果开发文档
 
+> Issue: #46  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/46](https://github.com/qiwihui/blog/issues/46)
 
 ![coding-woman-5](https://user-images.githubusercontent.com/3297411/51306754-16f48780-1a79-11e9-9959-b6f94a4cae45.jpg)
 
@@ -193,8 +196,4 @@ open class SCNAnimation : NSObject, SCNAnimationProtocol, NSCopying, NSSecureCod
 - [我有一本全书使用项目教授 Swift 和 iOS](https://www.hackingwithswift.com/read)，它专门用于在逻辑流程中引入概念。
 
 您认为阅读Apple文档最有效的方法是什么？ 在Twitter上发送你的提示：[@twostraws](https://twitter.com/twostraws)。
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/46)
-
 

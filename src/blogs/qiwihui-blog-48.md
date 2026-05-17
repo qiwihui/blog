@@ -1,5 +1,8 @@
 # 在 OS X 上使用 sed 命令的一些注意
 
+> Issue: #48  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/48](https://github.com/qiwihui/blog/issues/48)
 
 在 OS X 上使用 `sed` 会和 GNU 上不太一致，在此记录。
 
@@ -59,7 +62,3 @@ perl -i -pe's/foo/bar/g' target
 ### 参考
 
 - [sed command with -i option failing on Mac, but works on Linux](https://stackoverflow.com/a/4247319/3218128)
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/48)
-
-

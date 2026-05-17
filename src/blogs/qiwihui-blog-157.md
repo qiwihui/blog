@@ -1,5 +1,8 @@
 # CS251 - final 2021 - 问题 4
 
+> Issue: #157  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/157](https://github.com/qiwihui/blog/issues/157)
 
 **问题4. [16 分]: Hashmasks 重入缺陷**
 
@@ -119,7 +122,3 @@ contract Attacker is IERC721Receiver {
 验证交易： https://rinkeby.etherscan.io/tx/0xa5f70a226c5fd64132eee800f8902ddb9b4ff562ff7f37820d11746fbde52acb
 
 感谢 discord **yyczz#5837** 对于这个问题的指导。
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/157)
-
-

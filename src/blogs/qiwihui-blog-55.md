@@ -1,5 +1,8 @@
 # 如何在 Titanic Kaggle Challenge 中获得0.8134分
 
+> Issue: #55  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/55](https://github.com/qiwihui/blog/issues/55)
 
 原文：[How to score 0.8134 in Titanic Kaggle Challenge](https://ahmedbesbes.com/how-to-score-08134-in-titanic-kaggle-challenge.html)
 
@@ -2496,8 +2499,4 @@ predictions_df.to_csv('./predictions/blending_base_models.csv', index=False)
 * 运行 auto-ML 框架
 
 如果你能找到改善我的解决方案的方法，我会非常高兴。这可以让我更新文章，绝对给你信任。所以请随时发表评论。
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/55)
-
 

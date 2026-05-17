@@ -1,5 +1,8 @@
 # 02. Tuple — Python 进阶
 
+> Issue: #119  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/119](https://github.com/qiwihui/blog/issues/119)
 
 元组（Tuple）是对象的集合，它有序且不可变。 元组类似于列表，主要区别在于不可变性。 在Python中，元组用圆括号和逗号分隔的值书写。
 
@@ -253,8 +256,4 @@ print(timeit.timeit(stmt="(0, 1, 2, 3, 4, 5)", number=1000000))
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/119)
-
 

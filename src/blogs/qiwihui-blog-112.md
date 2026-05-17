@@ -1,5 +1,8 @@
 # Google codelabs 模板
 
+> Issue: #112  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/112](https://github.com/qiwihui/blog/issues/112)
 
 项目地址：https://github.com/qiwihui/codelabs-site-template
 
@@ -17,8 +20,4 @@
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/112)
-
 

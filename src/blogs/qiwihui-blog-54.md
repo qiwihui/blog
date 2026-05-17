@@ -1,5 +1,8 @@
 # 重命名本地和远程 Git 分支名称
 
+> Issue: #54  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/54](https://github.com/qiwihui/blog/issues/54)
 
 如果不小心写错了分支名称又将分支推送到了远端，这时可以使用以下步骤进行修正：
 
@@ -28,7 +31,3 @@
     ```shell
     git push origin -u new-name
     ```
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/54)
-
-

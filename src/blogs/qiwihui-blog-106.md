@@ -1,5 +1,8 @@
 # 用 Rust Actix-web 写一个 Todo 应用（二）── 请求获取和日志记录
 
+> Issue: #106  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/106](https://github.com/qiwihui/blog/issues/106)
 
 ## 如何获取路径参数
 
@@ -298,8 +301,4 @@ pub async fn check_todo(
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/106)
-
 

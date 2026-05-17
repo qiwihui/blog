@@ -1,5 +1,8 @@
 # GitHub Actions 第6天：快速失败的矩阵工作流
 
+> Issue: #89  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/89](https://github.com/qiwihui/blog/issues/89)
 
 因此，关于 GitHub Actions 的这些帖子甚至还不到一周，我已经写了很多有关 [矩阵工作流](https://qiwihui.com/qiwihui-blog-85/) 的文章。如你还没猜到，我是忠实粉丝。 😍
 
@@ -45,8 +48,4 @@ strategy:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/89)
-
 

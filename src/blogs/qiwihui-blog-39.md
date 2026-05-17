@@ -1,5 +1,8 @@
 # Elasticsearch cheat sheet
 
+> Issue: #39  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/39](https://github.com/qiwihui/blog/issues/39)
 
 ### 1
 
@@ -61,7 +64,3 @@ doc['my_field'].value和_source.my_field之间的不同:
 - [elasticsearch guide chinese](https://endymecy.gitbooks.io/elasticsearch-guide-chinese/)
 - https://gist.github.com/ruanbekker/e8a09604b14f37e8d2f743a87b930f93
 - https://gist.github.com/stephen-puiszis/212b8a8b37f67c670422
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/39)
-
-

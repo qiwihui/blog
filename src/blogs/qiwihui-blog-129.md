@@ -1,5 +1,8 @@
 # 18. 函数参数 — Python 进阶
 
+> Issue: #129  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/129](https://github.com/qiwihui/blog/issues/129)
 
 在本文中，我们将详细讨论函数形参（parameters）和函数实参（arguments）。 我们将学习：
 
@@ -323,8 +326,4 @@ print('my_list after bar():', my_list)
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/129)
-
 

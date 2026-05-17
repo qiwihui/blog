@@ -1,5 +1,10 @@
 # 从 0 搭建 OpenClaw Agent（Node 安装 + ChatGPT 配置 + 实战）
 
+> Issue: #184  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/184](https://github.com/qiwihui/blog/issues/184)
+
+
 > 目标：30 分钟内搭出一个可用的 OpenClaw agent，能接消息、能调用工具、能持续工作。
 
 ## 1. OpenClaw 是什么？
@@ -244,3 +249,4 @@ openclaw gateway restart
 3. **打通路由（agent + channel + binding）**
 
 这三层跑通后，你就有了一个可持续运营的 agent 基座。
+

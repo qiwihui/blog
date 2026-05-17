@@ -1,5 +1,8 @@
 # GitHub Actions 第20天：容器服务
 
+> Issue: #103  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/103](https://github.com/qiwihui/blog/issues/103)
 
 很难低估容器在DevOps实践中的重要性。通常，你会将容器部署到生产环境中──因此很自然地开始使用容器进行本地开发，并管理依赖项。我们研究了如何利用它[在容器内部](https://qiwihui.com/qiwihui-blog-88/)进行构建。但是，我们也可以使用[容器服务](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idservices)，将正在运行的容器用作构建和测试工作流程的一部分。
 
@@ -32,8 +35,4 @@ services:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/103)
-
 

@@ -1,5 +1,8 @@
 # 12. 随机数 — Python 进阶
 
+> Issue: #139  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/139](https://github.com/qiwihui/blog/issues/139)
 
 Python定义了一组用于生成或操作随机数的函数。 本文介绍：
 
@@ -207,8 +210,4 @@ print(arr)
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/139)
-
 

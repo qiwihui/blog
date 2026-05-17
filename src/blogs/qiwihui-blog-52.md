@@ -1,5 +1,8 @@
 # 在 Mac OS X 上使用 hans 配置 ICMP 隧道
 
+> Issue: #52  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/52](https://github.com/qiwihui/blog/issues/52)
 
 最近因为电信白名单，高端口基本无法使用，解决办法就是将翻墙服务启动在80，443等可访问端口。但是最近防火墙又一次升级，国外的服务器基本只能 ping 通，TCP 请求无法完成，能访问世界的方式越来越困难。本文介绍一种方法，将数据包封装在 ping 包中进行传输。本方法中使用 [hans](http://code.gerade.org/hans/) 这个项目结合 shadowsocks-libev 翻墙。
 
@@ -100,8 +103,4 @@ listening on ens3, link-type EN10MB (Ethernet), capture size 262144 bytes
 ```
 
 以上就是使用 TCP over ICMP 的方法进行数据传输的配置过程。
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/52)
-
 

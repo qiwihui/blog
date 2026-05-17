@@ -1,5 +1,8 @@
 # 姜汁撞奶小记
 
+> Issue: #72  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/72](https://github.com/qiwihui/blog/issues/72)
 
 上周陪着看《向往的生活》，黄磊在节目中给大家做了一次姜汁撞奶，看着大家都吃得都开了花似的，于是决定我也要做一次。
 
@@ -27,8 +30,4 @@
 ## 总结
 
 做一件事要了解原理，掌握每一步的技术细节和对结果的影响，这样才能做好一件事！这就是两次姜汁撞奶的总结。
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/72)
-
 

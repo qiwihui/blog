@@ -1,5 +1,8 @@
 # Sui 类狼羊游戏项目开发实践
 
+> Issue: #171  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/171](https://github.com/qiwihui/blog/issues/171)
 
 这篇文章将向你介绍 Sui Move 版本的类狼羊游戏的合约和前端编写过程。阅读前，建议先熟悉以下内容：
 
@@ -1189,7 +1192,3 @@ async function claim_egg()
 
 - [https://docs.sui.io/](https://docs.sui.io/)
 - [https://zhuanlan.zhihu.com/p/439236444](https://zhuanlan.zhihu.com/p/439236444)
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/171)
-
-

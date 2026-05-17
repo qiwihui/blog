@@ -1,5 +1,8 @@
 # 使用 Python 集成 GitHub App 和 GitHub Check API，构建持续集成服务
 
+> Issue: #111  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/111](https://github.com/qiwihui/blog/issues/111)
 
 这篇博客的起因是在做项目的过程中要求使用 Python 完成相应功能，现在将这部份代码按教程的流程发布出来。
 
@@ -338,8 +341,4 @@ def take_requested_action():
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/111)
-
 

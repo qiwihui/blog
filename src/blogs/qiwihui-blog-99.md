@@ -1,5 +1,8 @@
 # GitHub Actions 第16天：共享数据的条件
 
+> Issue: #99  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/99](https://github.com/qiwihui/blog/issues/99)
 
 昨天，我们研究了如何在工作流步骤之一中[设置自定义数据](https://qiwihui.com/qiwihui-blog-98/)，以便在后续步骤中使用。我们通过向[env上下文](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#contexts)添加数据来做到这一点，它是一个你可以读写的属性包。
 
@@ -30,8 +33,4 @@
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/99)
-
 

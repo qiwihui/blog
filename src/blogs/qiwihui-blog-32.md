@@ -1,5 +1,8 @@
 # 一个关于数学概率的问题
 
+> Issue: #32  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/32](https://github.com/qiwihui/blog/issues/32)
 
 ## 题目--百万英雄
 
@@ -121,7 +124,3 @@ print(avg2)
 
 三门问题（Monty Hall Problem）
 电影《决胜21点》
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/32)
-
-

@@ -1,5 +1,8 @@
 # 在 Mac OS X 上使用 iodine 配置 DNS 隧道
 
+> Issue: #53  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/53](https://github.com/qiwihui/blog/issues/53)
 
 > DNS 隧道，是隐蔽信道的一种，通过将其他协议封装在DNS协议中传输建立通信。
 
@@ -132,8 +135,4 @@ round-trip min/avg/max/stddev = 230.201/239.232/268.602/14.751 ms
 - [DNS Tunneling及相关实现](https://cloud.tencent.com/developer/article/1040276)
 - [iodine - IP over DNS](http://jeremy5189.logdown.com/posts/263029-iodine-ip-over-dns)
 - [Tunnel IP through DNS](http://wiki.attie.co.uk/wiki/Tunnel_IP_through_DNS)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/53)
-
 

@@ -1,5 +1,8 @@
 # 09. 异常和错误 — Python 进阶
 
+> Issue: #126  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/126](https://github.com/qiwihui/blog/issues/126)
 
 Python程序在遇到错误后立即终止。在Python中，错误可以是语法错误或异常。 在本文中，我们将关注以下内容：
 
@@ -241,8 +244,4 @@ except ValueTooLowError as e:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/126)
-
 
