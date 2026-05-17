@@ -1,5 +1,8 @@
 # 年度总结 - 过去的2013年
 
+> Issue: #3  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/3](https://github.com/qiwihui/blog/issues/3)
 
 写在2013年到2014年还有不到一个月的时候, 对我第一年工作的状态有一个简单的描述, 每年都要给自己写一个年终总结。
 <!--more-->
@@ -27,8 +30,4 @@
    - [Facebook](https://www.facebook.com/weihui.qiu), [Twitter](https://twitter.com/QiuWeihui1), [G+](https://plus.google.com/+WeihuiQiu/), QQ, Wechat...分散了我的精力，有社交依赖了。
    - 没能把Google Glass的购买码送出去，人品。
    - 我不想扯到关于买房买车的问题。
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/3)
-
 

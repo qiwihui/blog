@@ -1,5 +1,8 @@
 # GitHub Actions 第13天：条件
 
+> Issue: #96  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/96](https://github.com/qiwihui/blog/issues/96)
 
 昨天我们看到，当你运行工作流程时，有许多可用数据。你可以在run步骤中使用这些数据，并将其与构建脚本，部署步骤或存储库自动化一起使用。但是你也可以在工作流本身中使用它。
 
@@ -28,8 +31,4 @@
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/96)
-
 

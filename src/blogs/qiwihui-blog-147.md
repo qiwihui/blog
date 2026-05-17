@@ -1,5 +1,8 @@
 # CSS 基础──样式篇
 
+> Issue: #147  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/147](https://github.com/qiwihui/blog/issues/147)
 
 《[前端小课──用好HTML](https://lefex.github.io/books/html-book/introduction.html)》的读书笔记。
 
@@ -485,8 +488,4 @@ less，sass
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/147)
-
 

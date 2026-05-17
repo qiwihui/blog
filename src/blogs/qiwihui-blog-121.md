@@ -1,5 +1,8 @@
 # 04. 集合 — Python 进阶
 
+> Issue: #121  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/121](https://github.com/qiwihui/blog/issues/121)
 
 集合是无序的容器数据类型，它是无索引的，可变的并且没有重复的元素。 集合用大括号创建。
 
@@ -319,8 +322,4 @@ print(odds.difference(evens))
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/121)
-
 

@@ -1,5 +1,8 @@
 # 《平凡的世界》与平凡的世界
 
+> Issue: #10  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/10](https://github.com/qiwihui/blog/issues/10)
 
 我今天要去两个书店淘书，万圣园和蓝羊书坊，便就想起了去年八月读过的小说《平凡的
 世界》。小说是万学教育的老师推荐的，在刚开始工作的第二个月了就发奋四个星期读完
@@ -37,8 +40,4 @@
 
 我喜欢书中提到的叶赛宁的一首诗：不惋惜，不呼唤，我也不啼哭……金黄的落叶堆满我心间，
 我已经不再是青春少年…… 
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/10)
-
 

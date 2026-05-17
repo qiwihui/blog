@@ -1,5 +1,8 @@
 # GitHub Actions 第4天：安装工具
 
+> Issue: #87  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/87](https://github.com/qiwihui/blog/issues/87)
 
 昨天我提到 GitHub Actions 提供了 [Linux，Windows 和 macOS 虚拟环境](https://qiwihui.com/qiwihui-blog-86/)，你可以在其中运行工作流。
 
@@ -49,8 +52,4 @@ run: brew install ninja
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/87)
-
 

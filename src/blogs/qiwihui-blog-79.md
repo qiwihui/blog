@@ -1,5 +1,8 @@
 # 《编写高质量Python代码的59个有效方法》笔记
 
+> Issue: #79  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/79](https://github.com/qiwihui/blog/issues/79)
 
 ### 1. Python版本
 
@@ -287,8 +290,4 @@ CPyhton：引用计数，gc
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/79)
-
 

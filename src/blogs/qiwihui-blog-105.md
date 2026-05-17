@@ -1,5 +1,8 @@
 # 用 Rust Actix-web 写一个 Todo 应用（一）── Hello world 和 REST 接口
 
+> Issue: #105  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/105](https://github.com/qiwihui/blog/issues/105)
 
 ## Actix
 
@@ -490,8 +493,4 @@ pub async fn get_todos(client: &Client) -> Result<Vec<TodoList>, Error> {
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/105)
-
 

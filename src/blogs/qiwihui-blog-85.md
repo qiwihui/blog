@@ -1,5 +1,8 @@
 # GitHub Actions 第2天：矩阵工作流
 
+> Issue: #85  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/85](https://github.com/qiwihui/blog/issues/85)
 
 拥有 CI/CD 系统的最大优势之一是，它使你可以高效地构建和测试多种配置。在推送之前，你在机器上进行构建和测试当然是必要的，但这几乎是不够的。毕竟，你可能只安装了一个版本的节点。但是，在各种平台上构建将使你充满信心和洞察力，使你的更改可以在你支持的整个生态系统中发挥作用。
 
@@ -46,8 +49,4 @@ matrix:
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/85)
-
 

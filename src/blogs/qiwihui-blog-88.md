@@ -1,5 +1,8 @@
 # GitHub Actions 第5天：在容器中构建
 
+> Issue: #88  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/88](https://github.com/qiwihui/blog/issues/88)
 
 昨天我讨论了如何 [在GitHub Actions虚拟环境上安装工具和依赖项](https://qiwihui.com/qiwihui-blog-87/)。 但是，如果你需要更多控制权怎么办？ 或者，如果你根本不想在 Ubuntu 上运行，该怎么办？ 这是容器发光的地方。
 
@@ -33,8 +36,4 @@
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/88)
-
 

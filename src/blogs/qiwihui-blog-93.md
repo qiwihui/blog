@@ -1,5 +1,8 @@
 # GitHub Actions 第10天：路径触发器
 
+> Issue: #93  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/93](https://github.com/qiwihui/blog/issues/93)
 
 前面我们看到可以限制[基于分支过滤器的](https://qiwihui.com/qiwihui-blog-84/)工作流运行。对于由 `push` 或 `pull_request` 触发的工作流，你可以对其进行限制，以使其仅在推送到特定分支或针对特定分支打开 pull request 时才触发。
 
@@ -22,8 +25,4 @@
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/93)
-
 

@@ -1,5 +1,8 @@
 # One problem at Haidian Book City
 
+> Issue: #2  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/2](https://github.com/qiwihui/blog/issues/2)
 
 Today, I just came by Haidian Book City as usual at Haidian dist in
     Beijing. and I found the problem hung on the wall nearby. It is very
@@ -666,8 +669,4 @@ Those 92 subsequence is so basic that is constructs every member in the look-and
 That is perfect from the begining to the end. Many thanks to the problem
     maker, and the screenwriters, also every
     excellent actors in Breaking Bad.
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/2)
-
 

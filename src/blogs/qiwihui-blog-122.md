@@ -1,5 +1,8 @@
 # 05. 字符串 — Python 进阶
 
+> Issue: #122  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/122](https://github.com/qiwihui/blog/issues/122)
 
 字符串是字符序列。 Python中的字符串用双引号或单引号引起来。
 
@@ -300,8 +303,4 @@ print(b)
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/122)
-
 

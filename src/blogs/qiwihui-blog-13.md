@@ -1,5 +1,8 @@
 # Git 小结
 
+> Issue: #13  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/13](https://github.com/qiwihui/blog/issues/13)
 
 整理自[手把手教你用git](http://www.cnblogs.com/tugenhua0707/p/4050072.html).
 <!--more-->
@@ -41,8 +44,4 @@
     + `git push origin —delete <branch_name>`
 10. get remote branch locally
     + `git branch --set-upstream dev origin/dev`
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/13)
-
 

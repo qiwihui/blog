@@ -1,5 +1,8 @@
 # 在 Github 上“连续”提交187天
 
+> Issue: #76  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/76](https://github.com/qiwihui/blog/issues/76)
 
 这也是我关于自己在Github上连续提交173天的过程。准确说这并不是我连续173天在Github提交代码，在整个过程中总共中断了两次，第一次是在农历大年三十，和家人吃完年夜饭聊天完已经过了提交时间点了，第二次是在3月2号，家里的猫因为生病照顾了一个晚上。总得来讲这是一次非常有挑战但是却收获很大的过程。
 
@@ -44,8 +47,4 @@
 4. 好的想法也算是提交，对一篇文章的想法也可以包含在内。
 
 我最后的建议是进行一次这样的挑战，可以给自己带来一个好的习惯。
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/76)
-
 

@@ -1,5 +1,8 @@
 # 年度总结 - 我的2015, 做了很多事, 欠了很多债
 
+> Issue: #5  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/5](https://github.com/qiwihui/blog/issues/5)
 
 一句话总结2015年: 做了很多事, 欠了很多债。
 <!--more-->
@@ -48,8 +51,4 @@
  - [年度总结 - 2014年的点点滴滴](/posts/3)
  - [年度总结 - 过去的2013年](/posts/4)
  
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/5)
-
 

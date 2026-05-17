@@ -1,5 +1,8 @@
 # 没有智能手机的第一天
 
+> Issue: #12  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/12](https://github.com/qiwihui/blog/issues/12)
 
 在停止博客的一个多月时间里，我除了上班的五天白天，再加上周末出去爬山的两天，
 剩下的时间很多都花在了我那只智能手机上，微信，QQ，G+，以及一些有节操和没节操
@@ -37,8 +40,4 @@
 ## **目标**
 
  > 尽最大的诚意，但不知道何时会消失，如果可以，就不要**再试一次**。
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/12)
-
 

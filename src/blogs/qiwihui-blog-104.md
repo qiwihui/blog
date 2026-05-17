@@ -1,5 +1,8 @@
 # Shadowsocks 和 V2ray 共用443端口
 
+> Issue: #104  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/104](https://github.com/qiwihui/blog/issues/104)
 
 ## 配置过程
 
@@ -73,8 +76,4 @@ stream {
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/104)
-
 

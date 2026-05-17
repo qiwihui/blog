@@ -1,5 +1,8 @@
 # 03. 字典 — Python 进阶
 
+> Issue: #120  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/120](https://github.com/qiwihui/blog/issues/120)
 
 字典是无序，可变和可索引的集合。 字典由键值对的集合组成。 每个键值对将键映射到其关联值。 字典用大括号书写。 每对键值均以冒号（ `:` ）分隔，并且各项之间以逗号分隔。
 
@@ -238,8 +241,4 @@ print(nested_dict)
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/120)
-
 

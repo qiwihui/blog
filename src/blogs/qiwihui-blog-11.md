@@ -1,5 +1,8 @@
 # Seek, think then speak
 
+> Issue: #11  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/11](https://github.com/qiwihui/blog/issues/11)
 
 “Seek, think then speak”，这是我在我的[Twitter](https://twitter.com/Weihui_Q)
 上的签名，也是我在日常生活和工作中一个做事的基本准则。当自己得到一个消息，或者开始一个
@@ -33,8 +36,4 @@
 
 Speak, 在这个容易因为言获罪的时期，发言和行动变得愈加重要。沉默是金，那是因为真理，对于非正义，
 speak才是真理。
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/11)
-
 

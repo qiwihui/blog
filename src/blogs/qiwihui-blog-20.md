@@ -1,5 +1,8 @@
 # 在VirtualBox安装Arch Liux初步指南
 
+> Issue: #20  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/20](https://github.com/qiwihui/blog/issues/20)
 
 简单地写一下在VirtualBox上安装Arch Linux的过程，以此为在PC上安装做准备。在PC上安装的过程和下面描述的基本一致。
 <!--more-->
@@ -348,8 +351,4 @@
 - [Arch Linux Beginners' guide](https://wiki.archlinux.org/index.php/Beginners%27_guide)
 - [Arch Linux Installation Guide](https://wiki.archlinux.org/index.php/Installation_guide)
 - [A Guide to Installing Arch in VirtualBox](http://wideaperture.net/blog/?p=3851)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/20)
-
 

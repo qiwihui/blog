@@ -1,5 +1,8 @@
 # 七月小结（2021.07）
 
+> Issue: #145  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/145](https://github.com/qiwihui/blog/issues/145)
 
 ### 七月发生了什么事情
 
@@ -36,8 +39,4 @@
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/145)
-
 

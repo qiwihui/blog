@@ -1,5 +1,8 @@
 # 赴日单次旅行签证申请记录
 
+> Issue: #59  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/59](https://github.com/qiwihui/blog/issues/59)
 
 这次赴日旅行，计划大阪奈良和东京，简单记录行前准备。
 
@@ -43,8 +46,4 @@
 5. 车票基本都在当地购买了，没有提前预订。
 
 最后，最最重要的，就是开心就好，不用太拘泥于景点有没有都游览一遍。
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/59)
-
 

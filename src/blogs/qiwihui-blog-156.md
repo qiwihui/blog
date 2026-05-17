@@ -1,5 +1,8 @@
 # CS251 - final 2021 - 问题 3
 
+> Issue: #156  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/156](https://github.com/qiwihui/blog/issues/156)
 
 ***问题3（20分）: Automated market maker (AMM).***
 
@@ -46,7 +49,3 @@ $x'=\sqrt{\frac{k}{M_p’}}=\sqrt{\frac{k}{2M_p}}=\frac{1}{\sqrt{2}}x$，$y’=\
 *E)      假设10个不同的套利者，为捕获Bob的交易创造的套利机会， 在同一时间执行了相同的尾随操作策略。他们都使用了你在(D)部分中所描述的相同机制，那么这10个中的哪一个会获胜呢？*
 
 **答：** 由于以太坊中矿工在打包交易时是根据交易的 gas 价格高低进行的，因此对于所有 gas 价格和Bob的交易的 Gas 价格一致的交易，都有能被排序在Bob交易之后，所以这些交易中处在 Bob 交易之后的第一个交易将获利，对应的套利者获胜。
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/156)
-
-

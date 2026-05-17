@@ -1,5 +1,8 @@
 # Cocoapods 和 Carthage 使用笔记
 
+> Issue: #44  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/44](https://github.com/qiwihui/blog/issues/44)
 
 ## Carthage 和 CoaoaPods 的区别
 
@@ -230,7 +233,3 @@ brew install carthage
 
 - [解决Cocoapods贼慢问题](https://www.jianshu.com/p/f024ca2267e3)
 - [Carthage 包管理工具，另一种敏捷轻快的 iOS & MAC 开发体验](http://swiftcafe.io/2015/10/25/swift-daily-carthage-package)
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/44)
-
-

@@ -1,5 +1,8 @@
 # GitHub Actions 第7天：入门工作流程
 
+> Issue: #90  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/90](https://github.com/qiwihui/blog/issues/90)
 
 如果你仅创建了一个或两个GitHub Actions工作流，则可能对如何起步不太关注，但是GitHub Actions团队关注如何起步，他们努力工作，以使你能尽可能轻松地开始使用Actions。
 
@@ -29,8 +32,4 @@ GitHub Actions不仅具有构建和测试项目的能力，还有工作流可以
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/90)
-
 

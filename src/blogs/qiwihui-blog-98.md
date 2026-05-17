@@ -1,5 +1,8 @@
 # GitHub Actions 第15天：在步骤之间共享数据
 
+> Issue: #98  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/98](https://github.com/qiwihui/blog/issues/98)
 
 在 GitHub Actions 的任务中，你可以有多个步骤 ，一个接一个地运行。每个步骤可能是调用一个操作（例如，[检出存储库中的代码](https://github.com/actions/checkout)或[安装特定版本的Node.js](https://github.com/actions/setup-node)），也可能是一个 `run`，仅运行你提供的脚本的步骤。
 
@@ -45,8 +48,4 @@ GitHub Actions将这些步骤作为单独的脚本运行──这意味着在单
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/98)
-
 

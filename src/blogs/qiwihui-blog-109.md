@@ -1,5 +1,8 @@
 # 编码面试学习手册（Coding Interview University）
 
+> Issue: #109  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/109](https://github.com/qiwihui/blog/issues/109)
 
 > 原文地址： https://github.com/jwasham/coding-interview-university
 > 基于2020年10月30日的原文版本翻译和校对
@@ -1890,8 +1893,4 @@
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/109)
-
 

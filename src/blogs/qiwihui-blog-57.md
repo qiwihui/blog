@@ -1,5 +1,8 @@
 # 使用 Sphinx 撰写技术文档并生成 PDF 总结
 
+> Issue: #57  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/57](https://github.com/qiwihui/blog/issues/57)
 
 这几天准备编排部分翻译的书籍和文档，找了好些工具，最终定格在 Sphinx 上，并基于 [ReadTheDocs](https://readthedocs.org) 提供的 SaaS 服务进行分发和分享。本篇博客是对整个过程的一次记录和总结。
 
@@ -385,8 +388,4 @@ $ fc-list :lang=zh
 ## 总结
 
 简单过了一下整个文档的流程，总体来说，Sphinx非常适合用来编写项目文档，reStructuredText 比起 Markdown 也有太多的优势，值得推荐。
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/57)
-
 

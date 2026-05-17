@@ -1,5 +1,8 @@
 # GitHub Actions Advent Calendar 系列文章 - Index
 
+> Issue: #83  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/83](https://github.com/qiwihui/blog/issues/83)
 
 最近我在做项目 [codedays.app](https://codedays.app) 过程中，发现 Github 推出的 Github Actions 可以很方便地用来做CI/CD之类的工作，所以决定将 [GitHub Actions Advent Calendar](https://www.edwardthomson.com/blog/github_actions_advent_calendar.html) 这个系列的文章做个简单的翻译和整理。这篇文章是所有文章的索引。
 
@@ -43,8 +46,4 @@
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/83)
-
 

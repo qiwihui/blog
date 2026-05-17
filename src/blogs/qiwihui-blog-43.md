@@ -1,5 +1,8 @@
 # 年度总结 - 2018年全年复盘
 
+> Issue: #43  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/43](https://github.com/qiwihui/blog/issues/43)
 
 2019年一月已经过半，本该在年底十二月完成的总结又到现在才开始着笔。2018年发生了很多事，从年初比特币大涨至最高到现在互联网寒冬已至，不断变化的是环境，不变的是每年一次的年终总结。（误）
 
@@ -182,8 +185,4 @@ Trello [卡片](https://trello.com/c/Qw446FEY) 上记录这个过程。理论上
 ## 写在最后
 
 人生需要有目标，需要一个积极乐观的心态，和一群志同道合的同伴。
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/43)
-
 

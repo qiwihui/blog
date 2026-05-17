@@ -1,5 +1,8 @@
 # 极路由+shadowsocks翻墙
 
+> Issue: #21  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/21](https://github.com/qiwihui/blog/issues/21)
 
 翻墙折腾无止境.
 使用路由器翻墙的一个好处在于，对于一些翻墙配置很繁琐的设备，只需要简单地连上路由wifi就可以实现翻墙，
@@ -81,9 +84,5 @@ cd /tmp && curl -k -o shadow.sh https://raw.githubusercontent.com/qiwihui/hiwifi
 ## 总结
 
 翻墙在于不断折腾.
-
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/21)
 
 

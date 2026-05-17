@@ -1,5 +1,8 @@
 # Uniswap v3 无常损失分析
 
+> Issue: #165  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/165](https://github.com/qiwihui/blog/issues/165)
 
 # Uniswap v3 无常损失分析
 
@@ -417,7 +420,3 @@ v3 表现更好的是 100 基点费率或 1 基点费率的稳定币对。
 - [https://uniswapv3.flipsidecrypto.com/](https://uniswapv3.flipsidecrypto.com/)
 - [https://newsletter.banklesshq.com/p/how-to-automate-uniswap-v3-liquidity](https://newsletter.banklesshq.com/p/how-to-automate-uniswap-v3-liquidity)
 - [https://kydo.substack.com/p/palm-protocol-owned-active-liquidity](https://kydo.substack.com/p/palm-protocol-owned-active-liquidity)
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/165)
-
-

@@ -1,5 +1,8 @@
 # GitHub Actions 第18天：文件
 
+> Issue: #101  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/101](https://github.com/qiwihui/blog/issues/101)
 
 当你构建执行pull request验证或持续集成构建的工作流时，你通常希望获取该构建输出并保存它，以便以后使用。有时创建一个软件包并将其发布到[GitHub packages](https://qiwihui.com/qiwihui-blog-92/)之类的软件包仓库中是有意义的 。但是有时你只想将其存储为构建输出的一部分，以后可以下载。GitHub Actions允许你将文件上传为工作流的一部分，以供日后下载。
 
@@ -24,8 +27,4 @@
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/101)
-
 

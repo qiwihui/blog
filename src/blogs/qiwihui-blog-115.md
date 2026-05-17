@@ -1,5 +1,8 @@
 # 项目：文章转博客 Podcastx
 
+> Issue: #115  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/115](https://github.com/qiwihui/blog/issues/115)
 
 这个项目是对之前使用谷歌文章转语音（TTS）功能后的一个实验性产品，项目目前的功能是将博客文章转成语音进行收听。
 
@@ -33,8 +36,4 @@
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/115)
-
 

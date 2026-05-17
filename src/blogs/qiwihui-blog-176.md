@@ -1,5 +1,8 @@
 # Babylon 协议脚本模拟 | Babylon script simulation
 
+> Issue: #176  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/176](https://github.com/qiwihui/blog/issues/176)
 
 视频链接： <https://youtu.be/LoVpMH8-CiQ>
 
@@ -7,7 +10,3 @@ Babylon 是一个比特币链上的质押协议，可实现在比特币主网锁
 用 Python 脚本模拟了 Babylon 协议的质押，timelock，unbonding 和 slashing 的过程。
 
 Jupyter notebook: https://github.com/qiwihui/taproot-workshop/blob/master/babylon.ipynb
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/176)
-
-

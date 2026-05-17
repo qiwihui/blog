@@ -1,5 +1,8 @@
 # 用 Rust Actix-web 写一个 Todo 应用（四）── 测试
 
+> Issue: #108  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/108](https://github.com/qiwihui/blog/issues/108)
 
 对程序进行集成测试。
 
@@ -352,8 +355,4 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/108)
-
 

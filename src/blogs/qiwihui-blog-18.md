@@ -1,5 +1,8 @@
 # 使用 Git Hooks 实现项目自动部署
 
+> Issue: #18  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/18](https://github.com/qiwihui/blog/issues/18)
 
 自动化部署解放双手，发展生产力，更重要的是可以减少部署过程中的错误操作。
 <!--more-->
@@ -166,8 +169,4 @@ git reset --hard origin/master
 即`git reset`把HEAD 指向了新下载的未合并的节点，也就是在local machine上reset之后的。
 
 参考：[git 放弃本地修改 强制更新](http://blog.csdn.net/a06062125/article/details/11727273)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/18)
-
 

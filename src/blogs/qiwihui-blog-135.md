@@ -1,5 +1,8 @@
 # 17. 多进程 — Python 进阶
 
+> Issue: #135  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/135](https://github.com/qiwihui/blog/issues/135)
 
 在本文中，我们讨论了如何在Python中使用 `multiprocessing` 模块。
 
@@ -350,8 +353,4 @@ if __name__ == "__main__":
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/135)
-
 

@@ -1,5 +1,8 @@
 # GitHub Actions 第19天：下载文件
 
+> Issue: #102  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/102](https://github.com/qiwihui/blog/issues/102)
 
 昨天，我们研究了如何在工作流运行过程中[上传文件](https://qiwihui.com/qiwihui-blog-101/)，然后手动下载它们。这在许多情况下都非常有用，但是我认为使用文件的更强大的部分是使用工件在不同步骤之间传输文件。
 
@@ -26,8 +29,4 @@
 > Follow me: [@qiwihui](https://github.com/qiwihui)
 >
 > Site: [QIWIHUI](https://qiwihui.com)
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/102)
-
 

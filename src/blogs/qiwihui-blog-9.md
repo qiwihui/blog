@@ -1,5 +1,8 @@
 # 扇贝300天小记：坚持的力量
 
+> Issue: #9  
+> State: open  
+> Source: [https://github.com/qiwihui/blog/issues/9](https://github.com/qiwihui/blog/issues/9)
 
 到今天，我已经在[扇贝](http://www.shanbay.com)网上完成了300+天的背单词和阅读文章
 , 单词量虽然不算很多，但是在这过程中的感想还是值得分享的。
@@ -52,8 +55,4 @@
 
 在这样的坚持了300+天以后，我觉得在更多的地方都体会到了一个坚持力量（很鸡汤的一
 句话），但是确实是，坚持锻炼，或者开始每天/每两天更新一千字博客。
-
-
-[View on GitHub](https://github.com/qiwihui/blog/issues/9)
-
 
