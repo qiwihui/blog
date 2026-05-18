@@ -7,3 +7,6 @@ DS_Store
 
 # Rust
 */*/target/
+
+# Python
+__pycache__/
