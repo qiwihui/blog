@@ -15,12 +15,19 @@ import os
 import sys
 from pathlib import Path
 from typing import Dict, Iterable, List
+from xml.sax.saxutils import escape as xml_escape
 
+import markdown as md
 import requests
 
 DEFAULT_REPO = "qiwihui/blog"
 DEFAULT_OUTPUT_DIR = Path("src/blogs")
 DEFAULT_SUMMARY_FILE = Path("src/SUMMARY.md")
+DEFAULT_ATOM_FILE = Path("src/atom.xml")
+DEFAULT_SITE_URL = "https://qiwihui.com"
+DEFAULT_FEED_TITLE = "Qiwihui's blog"
+DEFAULT_AUTHOR_NAME = "qiwihui"
+DEFAULT_AUTHOR_EMAIL = "qwh005007@gmail.com"
 
 
 def github_headers(token: str | None) -> Dict[str, str]:
@@ -107,6 +114,76 @@ def write_summary(issues: Iterable[Dict], summary_file: Path, output_dir: Path) 
     summary_file.write_text("\n".join(lines), encoding="utf-8")
 
 
+def write_atom_feed(
+    issues: Iterable[Dict],
+    atom_file: Path,
+    site_url: str = DEFAULT_SITE_URL,
+    feed_title: str = DEFAULT_FEED_TITLE,
+    author_name: str = DEFAULT_AUTHOR_NAME,
+    author_email: str = DEFAULT_AUTHOR_EMAIL,
+) -> None:
+    """Generate an Atom feed from issues, sorted by created_at desc."""
+    sorted_issues = sorted(
+        issues, key=lambda x: x.get("created_at", ""), reverse=True
+    )
+
+    site_url = site_url.rstrip("/")
+    feed_id = f"{site_url}/atom.xml"
+    feed_updated = (
+        max((i.get("updated_at", "") for i in sorted_issues), default="")
+        or "1970-01-01T00:00:00Z"
+    )
+
+    parts: List[str] = []
+    parts.append('<?xml version="1.0" encoding="UTF-8"?>')
+    parts.append('<feed xmlns="http://www.w3.org/2005/Atom">')
+    parts.append(f"<title>{xml_escape(feed_title)}</title>")
+    parts.append(f"<id>{xml_escape(feed_id)}</id>")
+    parts.append(f"<updated>{xml_escape(feed_updated)}</updated>")
+    parts.append(
+        f'<link href="{xml_escape(site_url + "/")}" rel="alternate"/>'
+    )
+    parts.append(f'<link href="{xml_escape(feed_id)}" rel="self"/>')
+    parts.append(
+        f"<author><name>{xml_escape(author_name)}</name>"
+        f"<email>{xml_escape(author_email)}</email></author>"
+    )
+
+    for issue in sorted_issues:
+        number = issue["number"]
+        title = issue.get("title", "") or ""
+        body = issue.get("body") or ""
+        created = issue.get("created_at", "") or feed_updated
+        updated = issue.get("updated_at", "") or created
+        entry_url = f"{site_url}/blogs/qiwihui-blog-{number}.html"
+        html = md.markdown(
+            body,
+            extensions=["fenced_code", "tables"],
+            output_format="html",
+        )
+        parts.append("<entry>")
+        parts.append(f"<title>{xml_escape(title)}</title>")
+        parts.append(f"<id>{xml_escape(entry_url)}</id>")
+        parts.append(f"<updated>{xml_escape(updated)}</updated>")
+        parts.append(f"<published>{xml_escape(created)}</published>")
+        parts.append(
+            f"<author><name>{xml_escape(author_name)}</name>"
+            f"<email>{xml_escape(author_email)}</email></author>"
+        )
+        parts.append(
+            f'<link href="{xml_escape(entry_url)}" rel="alternate"/>'
+        )
+        parts.append(
+            f'<content type="html">{xml_escape(html)}</content>'
+        )
+        parts.append("</entry>")
+
+    parts.append("</feed>")
+    parts.append("")
+
+    atom_file.write_text("\n".join(parts), encoding="utf-8")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Export all GitHub issues to mdBook src markdown files")
     parser.add_argument("--repo", default=os.getenv("GITHUB_REPOSITORY", DEFAULT_REPO), help="owner/repo")
@@ -114,6 +191,8 @@ def main() -> None:
     parser.add_argument("--skip-label", default="TODO", help="Label name to skip")
     parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR), help="Output directory for markdown files")
     parser.add_argument("--summary-file", default=str(DEFAULT_SUMMARY_FILE), help="Path of SUMMARY.md")
+    parser.add_argument("--atom-file", default=str(DEFAULT_ATOM_FILE), help="Path of atom.xml")
+    parser.add_argument("--site-url", default=DEFAULT_SITE_URL, help="Site base URL for the atom feed")
     args = parser.parse_args()
 
     issues = fetch_all_issues(args.repo, args.token or None)
@@ -136,10 +215,15 @@ def main() -> None:
     output_dir = Path(args.output_dir)
     summary_file = Path(args.summary_file)
 
+    atom_file = Path(args.atom_file)
+
     write_issue_files(filtered, output_dir)
     write_summary(filtered, summary_file, output_dir)
+    write_atom_feed(filtered, atom_file, site_url=args.site_url)
 
-    print(f"Synced {len(filtered)} issues into {output_dir} and {summary_file}")
+    print(
+        f"Synced {len(filtered)} issues into {output_dir}, {summary_file} and {atom_file}"
+    )
 
 
 if __name__ == "__main__":
