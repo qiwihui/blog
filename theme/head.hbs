@@ -8,15 +8,16 @@
 
   gtag('config', 'G-VM8FXQ87H5');
 </script>
+<!-- Warm up connections used by AdSense so the first ad renders sooner. -->
+<link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
+<link rel="preconnect" href="https://googleads.g.doubleclick.net" crossorigin>
+<link rel="preconnect" href="https://tpc.googlesyndication.com" crossorigin>
+<!-- AdSense loader; Auto ads placement is managed in AdSense. -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8935595858652656"
      crossorigin="anonymous"></script>
-<!-- blog article -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-8935595858652656"
-     data-ad-slot="2188805090"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+<style>
+  /* Collapse slots AdSense could not fill instead of leaving a gap. */
+  ins.adsbygoogle[data-ad-status="unfilled"] { display: none !important; }
+  .article-end-ad { margin: 32px 0 8px; }
+  @media print { ins.adsbygoogle, .google-auto-placed, .article-end-ad { display: none !important; } }
+</style>

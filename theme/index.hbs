@@ -192,6 +192,18 @@
                     <main>
                         <div class="sidetoc"><nav class="pagetoc"></nav></div>
                         {{{ content }}}
+                        {{#unless is_print}}
+                        <!-- blog article: end-of-article unit -->
+                        <div class="article-end-ad">
+                            <ins class="adsbygoogle"
+                                 style="display:block"
+                                 data-ad-client="ca-pub-8935595858652656"
+                                 data-ad-slot="2188805090"
+                                 data-ad-format="auto"
+                                 data-full-width-responsive="true"></ins>
+                            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                        </div>
+                        {{/unless}}
                         <hr>
                         <div class="giscus"></div>
                     </main>
